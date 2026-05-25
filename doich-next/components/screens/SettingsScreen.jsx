@@ -1,9 +1,9 @@
 'use client';
 
-import { LogOut } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 import { LEVELS } from '@/lib/vocab';
 
-export default function SettingsScreen({ t, state, update }) {
+export default function SettingsScreen({ t, state, update, user, onLogout }) {
   const totalDone = Object.keys(state.completedStages || {}).length;
 
   const STATS = [
@@ -69,10 +69,29 @@ export default function SettingsScreen({ t, state, update }) {
           ))}
         </div>
 
+        {user && (
+          <div style={{ background: t.bgCard, borderRadius: 20, padding: '14px 16px', boxShadow: t.shadow, display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 19, background: t.pinkBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <User size={18} color={t.pink} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em' }}>НЭВТЭРСЭН ХЭРЭГЛЭГЧ</div>
+              <div style={{ color: t.text, fontSize: 13, fontWeight: 700, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
+            </div>
+          </div>
+        )}
+
         <button onClick={handleReset}
           style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${t.darkMode ? '#4A1F25' : '#FFD0D5'}`, color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
           <LogOut size={16} /> Бүх өгөгдлийг устгах
         </button>
+
+        {onLogout && (
+          <button onClick={() => { if (confirm('Гарах уу?')) onLogout(); }}
+            style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${t.border}`, color: t.textMid, fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
+            <LogOut size={16} /> Гарах (Sign out)
+          </button>
+        )}
       </div>
     </div>
   );

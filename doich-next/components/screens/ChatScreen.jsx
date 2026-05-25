@@ -9,13 +9,16 @@ const EXAMPLES = [
   { t: 'der/die/das яаж тогтоох вэ?',         e: '🎯' },
 ];
 
-export default function ChatScreen({ t, state }) {
-  const [msgs, setMsgs]     = useState([]);
-  const [input, setInput]   = useState('');
+export default function ChatScreen({ t, state, onUpdateHistory }) {
+  const [msgs, setMsgs]       = useState(() => state.chatHistory || []);
+  const [input, setInput]     = useState('');
   const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => { ref.current?.scrollIntoView({ behavior: 'smooth' }); }, [msgs]);
+
+  // Persist history to app state whenever msgs changes
+  useEffect(() => { onUpdateHistory(msgs); }, [msgs]);
 
   const send = async () => {
     if (!input.trim() || loading) return;
@@ -40,9 +43,17 @@ export default function ChatScreen({ t, state }) {
 
   return (
     <div className="af" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 98px)' }}>
-      <div style={{ marginBottom: 14 }}>
-        <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>AI БАГШ 💬</div>
-        <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Юу асуух вэ?</div>
+      <div style={{ marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>AI БАГШ 💬</div>
+          <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Юу асуух вэ?</div>
+        </div>
+        {msgs.length > 0 && (
+          <button onClick={() => setMsgs([])}
+            style={{ background: t.bgCard, border: `1px solid ${t.border}`, borderRadius: 12, padding: '6px 12px', fontSize: 12, fontWeight: 700, color: t.textMid, cursor: 'pointer' }}>
+            Цэвэрлэх
+          </button>
+        )}
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 12 }}>

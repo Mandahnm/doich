@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Key } from 'lucide-react';
-import { speak } from '@/lib/speak';
 import SessionHeader from './SessionHeader';
-import SpeakButton from './SpeakButton';
 
 export default function GenderCard({ t, stage, word, progress, onContinue, onQuit }) {
   const [sel, setSel]             = useState(null);
@@ -14,7 +12,6 @@ export default function GenderCard({ t, stage, word, progress, onContinue, onQui
 
   useEffect(() => {
     setSel(null); setRevealed(false); setIsCorrect(null); setClueShown(false);
-    speak(word.de);
   }, [word]);
 
   const choose = g => {
@@ -38,7 +35,6 @@ export default function GenderCard({ t, stage, word, progress, onContinue, onQui
           <div className="fd" style={{ fontSize: word.de.length > 12 ? 28 : 48, fontWeight: 800, color: t.text, lineHeight: 1 }}>
             {word.de}
           </div>
-          <SpeakButton text={word.de} t={t} size={22} />
         </div>
         <div style={{ color: t.textMid, fontSize: 14, fontWeight: 600 }}>{word.mn}</div>
         {(clueShown || revealed) && (

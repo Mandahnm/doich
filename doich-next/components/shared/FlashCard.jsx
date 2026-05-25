@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Check, X, Key } from 'lucide-react';
 import { VOCAB } from '@/lib/vocab';
-import { speak } from '@/lib/speak';
 import SessionHeader from './SessionHeader';
-import SpeakButton from './SpeakButton';
 
 const TYPE_LABEL = { noun: 'нэр үг', verb: 'үйл үг', adj: 'тэмдэг нэр', adv: 'дайвар үг' };
 
@@ -20,7 +18,6 @@ export default function FlashCard({ t, stage, word, progress, onContinue, onQuit
     const wrongs = VOCAB.filter(w => w.id !== word.id).sort(() => Math.random() - 0.5).slice(0, 3);
     setOpts([word, ...wrongs].sort(() => Math.random() - 0.5));
     setSel(null); setRevealed(false); setIsCorrect(null); setClueShown(false);
-    speak(word.de);
   }, [word]);
 
   const choose = opt => {
@@ -39,7 +36,6 @@ export default function FlashCard({ t, stage, word, progress, onContinue, onQuit
             {word.gender && <span style={{ color: t.pink }}>{word.gender} </span>}
             {word.de}
           </div>
-          <SpeakButton text={word.de} t={t} size={22} />
         </div>
         {(clueShown || revealed) && (
           <div className="af" style={{ marginTop: 14 }}>

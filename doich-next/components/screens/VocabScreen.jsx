@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, Search, X } from 'lucide-react';
 import { VOCAB, LEVELS, CEFR_META } from '@/lib/vocab';
 import MultiChips from '@/components/shared/MultiChips';
-import SpeakButton from '@/components/shared/SpeakButton';
 
 const TYPE_LABEL = { noun: 'Нэр үг', verb: 'Үйл үг', adj: 'Тэмдэг нэр', adv: 'Дайвар үг' };
 const TYPES      = ['noun', 'verb', 'adj', 'adv'];
@@ -14,9 +13,10 @@ function toggle(arr, item) {
 }
 
 export default function VocabScreen({ t, state, toggleLearned }) {
-  const [lF,  setLF]  = useState([]);
-  const [tF,  setTF]  = useState([]);
-  const [stF, setStF] = useState('all');
+  const [lF,    setLF]    = useState([]);
+  const [tF,    setTF]    = useState([]);
+  const [stF,   setStF]   = useState('all');
+  const [query, setQuery] = useState('');
 
   const filtered = VOCAB.filter(w => {
     if (lF.length > 0 && !lF.includes(w.level)) return false;
@@ -24,6 +24,10 @@ export default function VocabScreen({ t, state, toggleLearned }) {
     const learned = state.learnedWords.includes(w.id);
     if (stF === 'learned' && !learned) return false;
     if (stF === 'new'     && learned)  return false;
+    if (query) {
+      const q = query.toLowerCase();
+      if (!w.de.toLowerCase().includes(q) && !w.mn.toLowerCase().includes(q)) return false;
+    }
     return true;
   });
 
@@ -48,6 +52,21 @@ export default function VocabScreen({ t, state, toggleLearned }) {
         <div className="fd" style={{ fontSize: 30, fontWeight: 800, color: t.text }}>{filtered.length} үг</div>
       </div>
 
+      <div style={{ position: 'relative', marginBottom: 12 }}>
+        <Search size={16} color={t.textSoft} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+        <input
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Үг хайх... (герман эсвэл монгол)"
+          style={{ width: '100%', boxSizing: 'border-box', background: t.bgCard, border: `2px solid ${query ? t.pink : t.border}`, borderRadius: 16, padding: '11px 40px 11px 38px', fontSize: 14, color: t.text, outline: 'none', boxShadow: t.shadow }}
+        />
+        {query && (
+          <button onClick={() => setQuery('')} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+            <X size={16} color={t.textSoft} />
+          </button>
+        )}
+      </div>
+
       <MultiChips label="ТҮВШИН" t={t} opts={LEVELS} selected={lF} onToggle={v => setLF(toggle(lF, v))} onClear={() => setLF([])} rLabel={v => v} />
       <MultiChips label="ТӨРӨЛ"  t={t} opts={TYPES}  selected={tF} onToggle={v => setTF(toggle(tF, v))} onClear={() => setTF([])} rLabel={v => TYPE_LABEL[v] || v} />
       <StatusChips />
@@ -67,7 +86,6 @@ export default function VocabScreen({ t, state, toggleLearned }) {
                 </div>
                 <div style={{ color: t.textMid, fontSize: 13, marginTop: 2 }}>{w.mn}</div>
               </div>
-              <SpeakButton text={w.de} t={t} size={18} />
               <button onClick={() => toggleLearned(w.id)}
                 style={{ width: 40, height: 40, borderRadius: 20, background: learned ? t.pinkBg : t.bgTag, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
                 className={learned ? 'ap' : ''}>
