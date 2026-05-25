@@ -45,8 +45,20 @@ export default function GenderCard({ t, stage, word, progress, onContinue, onQui
           </div>
         )}
         {revealed && (
-          <div className="af" style={{ marginTop: 10, fontWeight: 800, fontSize: 14, color: t.correct }}>
-            Зөв хариулт: <span style={{ fontSize: 18 }}>{word.gender} {word.de}</span>
+          <div className="af" style={{ marginTop: 10 }}>
+            <div style={{
+              fontWeight: 800, fontSize: 15,
+              color: isCorrect ? '#22C55E' : '#EF4444',
+              background: isCorrect ? (t.darkMode ? '#14532D44' : '#F0FDF4') : (t.darkMode ? '#7F1D1D44' : '#FEF2F2'),
+              borderRadius: 12, padding: '8px 16px', marginBottom: 6,
+            }}>
+              {isCorrect ? '✓ Зөв!' : '✗ Буруу!'}
+            </div>
+            {!isCorrect && (
+              <div style={{ fontWeight: 700, fontSize: 13, color: t.textMid }}>
+                Зөв хариулт: <span style={{ fontWeight: 800, fontSize: 15, color: t.text }}>{word.gender} {word.de}</span>
+              </div>
+            )}
           </div>
         )}
       </div>
