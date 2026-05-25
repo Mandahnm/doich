@@ -1,0 +1,46 @@
+* {
+  font-family: var(--font-nunito), sans-serif;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fd {
+  font-family: var(--font-lexend), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-5px); }
+  75%       { transform: translateX(5px); }
+}
+@keyframes pop {
+  0%   { transform: scale(0.92); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.au { animation: fadeUp  0.35s ease-out both; }
+.af { animation: fadeIn  0.35s ease-out; }
+.as { animation: shake   0.38s; }
+.ap { animation: pop     0.35s ease-out; }
+.su { animation: slideUp 0.4s  ease-out; }
+
+::-webkit-scrollbar { width: 0; height: 0; }
+textarea { resize: none; }

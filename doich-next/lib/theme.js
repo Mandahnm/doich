@@ -1,0 +1,46 @@
+export function getTheme(dark) {
+  const base = dark
+    ? {
+        bgMain:   '#15121E',
+        bgCard:   '#211C30',
+        bgInput:  '#1A1628',
+        bgTag:    '#2A2440',
+        text:     '#F0EAFB',
+        textMid:  '#A89DC0',
+        textSoft: '#665E80',
+        border:   'rgba(255,255,255,0.08)',
+        shadow:   '0 4px 18px rgba(0,0,0,0.4)',
+        shadowLg: '0 10px 36px rgba(0,0,0,0.5)',
+        pink:     '#FF6FA8',
+        pinkBg:   '#38182C',
+        pinkBtn:  'linear-gradient(135deg,#E8457A,#C2356A)',
+        correct:  '#34C77A', correctBg: '#18322A',
+        wrong:    '#FF5A6A', wrongBg:   '#32181C',
+        sky:      '#4AABDA', skyBg:     '#18303E',
+        rose:     '#FF6FA8', roseBg:    '#38182C',
+        mint:     '#3ECFA0', mintBg:    '#183630',
+        navBg:    'rgba(21,18,30,0.97)',
+      }
+    : {
+        bgMain:   '#FFF8F3',
+        bgCard:   '#FFFFFF',
+        bgInput:  '#FFF8F3',
+        bgTag:    '#F5F0FF',
+        text:     '#2D2A38',
+        textMid:  '#6B6878',
+        textSoft: '#B0ADBD',
+        border:   'rgba(255,150,180,0.13)',
+        shadow:   '0 4px 16px rgba(255,150,180,0.11),0 1px 3px rgba(0,0,0,0.04)',
+        shadowLg: '0 10px 30px rgba(255,150,180,0.17)',
+        pink:     '#E84080',
+        pinkBg:   '#FFF0F5',
+        pinkBtn:  'linear-gradient(135deg,#F5709A,#E03070)',
+        correct:  '#1E9A60', correctBg: '#EDFAF3',
+        wrong:    '#D03040', wrongBg:   '#FFEEEE',
+        sky:      '#2080C0', skyBg:     '#E8F3FF',
+        rose:     '#D84060', roseBg:    '#FFF0F3',
+        mint:     '#189A70', mintBg:    '#EDFAF5',
+        navBg:    'rgba(255,255,255,0.97)',
+      };
+  return { ...base, darkMode: dark };
+}
