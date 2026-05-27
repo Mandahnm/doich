@@ -16,12 +16,17 @@ export function buildDailyQueue(userLevel) {
   const conjExs     = buildConjugationExercises(userLevel).slice(0, 4);
   const adjExs      = buildAdjectiveExercises(userLevel).slice(0, 4);
 
+  const listenWords   = pick(words, 3);
+  const sentenceWords = pick(words, 3);
+
   return [
-    ...flashWords.map(w  => ({ type: 'flashcard',   word: w })),
-    ...genderWords.map(w => ({ type: 'gender',       word: w })),
+    ...flashWords.map(w    => ({ type: 'flashcard',   word: w })),
+    ...genderWords.map(w   => ({ type: 'gender',       word: w })),
     matchWords.length >= 2 ? { type: 'match', words: matchWords } : null,
-    ...fillWords.map(w   => ({ type: 'fillblank',   word: w })),
-    ...conjExs.map(e     => ({ type: 'conjugation', exercise: e })),
-    ...adjExs.map(e      => ({ type: 'adjective',   exercise: e })),
+    ...fillWords.map(w     => ({ type: 'fillblank',   word: w })),
+    ...listenWords.map(w   => ({ type: 'listening',   word: w })),
+    ...sentenceWords.map(w => ({ type: 'sentence',    word: w })),
+    ...conjExs.map(e       => ({ type: 'conjugation', exercise: e })),
+    ...adjExs.map(e        => ({ type: 'adjective',   exercise: e })),
   ].filter(Boolean);
 }

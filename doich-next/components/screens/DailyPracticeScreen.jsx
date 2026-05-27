@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import FlashCard       from '@/components/shared/FlashCard';
-import GenderCard      from '@/components/shared/GenderCard';
-import MatchCard       from '@/components/shared/MatchCard';
-import FillBlankCard   from '@/components/shared/FillBlankCard';
-import ConjugationCard from '@/components/shared/ConjugationCard';
+import FlashCard            from '@/components/shared/FlashCard';
+import GenderCard           from '@/components/shared/GenderCard';
+import MatchCard            from '@/components/shared/MatchCard';
+import FillBlankCard        from '@/components/shared/FillBlankCard';
+import ConjugationCard      from '@/components/shared/ConjugationCard';
+import ListeningCard        from '@/components/shared/ListeningCard';
+import SentenceBuilderCard  from '@/components/shared/SentenceBuilderCard';
 import { buildDailyQueue } from '@/lib/daily';
 import { calcStageXP } from '@/lib/xp';
 
@@ -13,6 +15,8 @@ const STAT_KEY = {
   flashcard:   'flashcards',
   gender:      'gender',
   fillblank:   'fillblank',
+  listening:   'listening',
+  sentence:    'sentence',
   conjugation: 'conjugation',
   adjective:   'adjective',
 };
@@ -88,6 +92,14 @@ export default function DailyPracticeScreen({ t, state, recordStat, addXP, check
   }
   if (item.type === 'fillblank') {
     return <FillBlankCard t={t} stage={mockStage} word={item.word} progress={progress}
+      onContinue={handleContinue} onQuit={onQuit} />;
+  }
+  if (item.type === 'listening') {
+    return <ListeningCard t={t} stage={mockStage} word={item.word} progress={progress}
+      onContinue={handleContinue} onQuit={onQuit} />;
+  }
+  if (item.type === 'sentence') {
+    return <SentenceBuilderCard t={t} stage={mockStage} word={item.word} progress={progress}
       onContinue={handleContinue} onQuit={onQuit} />;
   }
   if (item.type === 'conjugation') {

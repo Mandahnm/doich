@@ -9,6 +9,8 @@ import GenderCard      from '@/components/shared/GenderCard';
 import MatchCard       from '@/components/shared/MatchCard';
 import FillBlankCard   from '@/components/shared/FillBlankCard';
 import ConjugationCard from '@/components/shared/ConjugationCard';
+import ListeningCard        from '@/components/shared/ListeningCard';
+import SentenceBuilderCard  from '@/components/shared/SentenceBuilderCard';
 import { getConjugationStages } from '@/lib/conjugation';
 import { getAdjectiveStages }   from '@/lib/adjective';
 import ResultScreen from '@/components/shared/ResultScreen';
@@ -22,15 +24,19 @@ const GAME_SUBTITLE = {
   fillblank:   'Цоорхой бөглөх',
   conjugation: 'Үйл үг хувилах',
   adjective:   'Тэмдэг нэр хувилах',
+  listening:   'Сонсох дасгал',
+  sentence:    'Өгүүлбэр зохиох',
 };
 
 const STAT_KEY = {
-  flashcard: 'flashcards',
-  gender:    'gender',
-  match:     'match',
-  fillblank: 'fillblank',
+  flashcard:   'flashcards',
+  gender:      'gender',
+  match:       'match',
+  fillblank:   'fillblank',
   conjugation: 'conjugation',
   adjective:   'adjective',
+  listening:   'listening',
+  sentence:    'sentence',
 };
 
 // ─── Main coordinator ──────────────────────────────────────
@@ -121,9 +127,11 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
         label="ТЭМДЭГ НЭРИЙН ТӨГСГӨЛИЙГ БИЧНЭ ҮҮ"
         onContinue={handleContinue} onQuit={() => setView('stages')} />;
     }
-    if (gameType === 'flashcard') return <FlashCard     t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'gender')    return <GenderCard    t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'fillblank') return <FillBlankCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    if (gameType === 'flashcard')  return <FlashCard     t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    if (gameType === 'gender')     return <GenderCard    t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    if (gameType === 'fillblank')  return <FillBlankCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    if (gameType === 'listening')  return <ListeningCard       t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    if (gameType === 'sentence')   return <SentenceBuilderCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
   }
 
   if (view === 'result') {
@@ -165,6 +173,8 @@ function GamesHub({ t, state, onSelect }) {
     { type: 'fillblank',   icon: '✍️', title: 'Цоорхой бөглөх',     sub: 'Өгүүлбэрийн цоорхойг зөв үгээр гүйцээ',  color: '#F59E0B', doneKey: 'fillblank'   },
     { type: 'conjugation', icon: '🔤', title: 'Үйл үг хувилах',     sub: 'Үйл үгийн зөв хэлбэрийг бичих',           color: '#06B6D4', doneKey: 'conjugation' },
     { type: 'adjective',   icon: '🔡', title: 'Тэмдэг нэр хувилах', sub: 'Тэмдэг нэрийн зөв төгсгөлийг бичих',      color: '#8B5CF6', doneKey: 'adjective'   },
+    { type: 'listening',   icon: '🎧', title: 'Сонсох дасгал',       sub: 'Аудио сонсоод герман үгийг бич',           color: '#EC4899', doneKey: 'listening'   },
+    { type: 'sentence',    icon: '🔀', title: 'Өгүүлбэр зохиох',    sub: 'Холилдсон үгсийг зөв дарааллаар байрлуул', color: '#10B981', doneKey: 'sentence'    },
   ];
 
   return (

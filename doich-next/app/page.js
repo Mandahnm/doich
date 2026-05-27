@@ -9,14 +9,17 @@ import PasswordResetScreen  from '@/components/screens/PasswordResetScreen';
 import WelcomeScreen        from '@/components/screens/WelcomeScreen';
 import HomeScreen        from '@/components/screens/HomeScreen';
 import ReviewScreen      from '@/components/screens/ReviewScreen';
-import MistakeScreen     from '@/components/screens/MistakeScreen';
 import ChatScreen        from '@/components/screens/ChatScreen';
 import GrammarScreen     from '@/components/screens/GrammarScreen';
 import GamesScreen       from '@/components/screens/GamesScreen';
 import VocabScreen       from '@/components/screens/VocabScreen';
 import SettingsScreen    from '@/components/screens/SettingsScreen';
-import DailyPracticeScreen from '@/components/screens/DailyPracticeScreen';
-import BottomNav         from '@/components/shared/BottomNav';
+import DailyPracticeScreen   from '@/components/screens/DailyPracticeScreen';
+import AchievementsScreen    from '@/components/screens/AchievementsScreen';
+import AchievementToast      from '@/components/shared/AchievementToast';
+import BottomNav             from '@/components/shared/BottomNav';
+import { ACHIEVEMENTS, getUnlockedIds } from '@/lib/achievements';
+import { initSrsEntry, updateSrsEntry } from '@/lib/srs';
 
 const DEFAULT_STATE = {
   userLevel: null,
@@ -24,7 +27,7 @@ const DEFAULT_STATE = {
   darkMode: false,
   completedStages: {},
   mistakes: {},
-  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0 },
+  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, dailyCount: 0, srs: {} },
   xp: 0,
   streak: 0,
   lastStreakDate: null,
@@ -38,8 +41,10 @@ export default function Page() {
   const [loaded,      setLoaded]      = useState(false);
   const [user,        setUser]        = useState(null);
   const [showRecovery, setShowRecovery] = useState(false);
-  const saveTimer     = useRef(null);
-  const userLoadedRef = useRef(false);
+  const [toast,       setToast]       = useState(null);
+  const saveTimer       = useRef(null);
+  const userLoadedRef   = useRef(false);
+  const prevUnlockedRef = useRef(null);
 
   // ── Auth + initial load ──────────────────────────────────────────────────
   useEffect(() => {
@@ -80,6 +85,21 @@ export default function Page() {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  // ── Achievement unlock detection ────────────────────────────────────────
+  useEffect(() => {
+    if (!loaded) return;
+    const current = getUnlockedIds(state);
+    if (prevUnlockedRef.current === null) {
+      prevUnlockedRef.current = current;
+      return;
+    }
+    const newOnes = ACHIEVEMENTS.filter(
+      a => current.has(a.id) && !prevUnlockedRef.current.has(a.id)
+    );
+    if (newOnes.length > 0) setToast(newOnes[0]);
+    prevUnlockedRef.current = current;
+  }, [state, loaded]);
 
   const loadProgress = async (userId) => {
     const { data } = await supabase
@@ -133,12 +153,21 @@ export default function Page() {
 
   // ── State helpers ────────────────────────────────────────────────────────
   const update        = p => setState(s => ({ ...s, ...p }));
-  const toggleLearned = id => setState(s => ({
-    ...s,
-    learnedWords: s.learnedWords.includes(id)
-      ? s.learnedWords.filter(x => x !== id)
-      : [...s.learnedWords, id],
-  }));
+  const toggleLearned = id => setState(s => {
+    if (s.learnedWords.includes(id)) {
+      // Un-learn: remove from list and clear SRS entry
+      const newSrs = { ...(s.stats.srs || {}) };
+      delete newSrs[id];
+      return { ...s, learnedWords: s.learnedWords.filter(x => x !== id), stats: { ...s.stats, srs: newSrs } };
+    } else {
+      // Learn: add to list and init SRS entry (due tomorrow)
+      return {
+        ...s,
+        learnedWords: [...s.learnedWords, id],
+        stats: { ...s.stats, srs: { ...(s.stats.srs || {}), [id]: initSrsEntry() } },
+      };
+    }
+  });
   const completeStage = id => setState(s => ({
     ...s, completedStages: { ...s.completedStages, [id]: true },
   }));
@@ -162,7 +191,11 @@ export default function Page() {
     return { ...s, mistakes: m };
   });
   const addXP         = amount => setState(s => ({ ...s, xp: (s.xp || 0) + amount }));
-  const markDailyDone = () => setState(s => ({ ...s, lastDailyDate: new Date().toDateString() }));
+  const markDailyDone = () => setState(s => ({
+    ...s,
+    lastDailyDate: new Date().toDateString(),
+    stats: { ...s.stats, dailyCount: (s.stats.dailyCount || 0) + 1 },
+  }));
   const checkStreak   = () => setState(s => {
     const today     = new Date().toDateString();
     const yesterday = new Date(Date.now() - 86400000).toDateString();
@@ -170,6 +203,17 @@ export default function Page() {
     const newStreak = s.lastStreakDate === yesterday ? (s.streak || 0) + 1 : 1;
     return { ...s, streak: newStreak, lastStreakDate: today };
   });
+  const updateSRS = (wordId, isCorrect) => setState(s => ({
+    ...s,
+    stats: {
+      ...s.stats,
+      srs: {
+        ...(s.stats.srs || {}),
+        [wordId]: updateSrsEntry((s.stats.srs || {})[wordId], isCorrect),
+      },
+    },
+  }));
+
   const recordStat = (key, ok) => setState(s => ({
     ...s,
     stats: {
@@ -225,11 +269,8 @@ export default function Page() {
         {tab === 'home'     && <HomeScreen     t={t} state={state} setTab={setTab} />}
         {tab === 'review'   && (
           <ReviewScreen  t={t} state={state} setTab={setTab}
-            recordStat={recordStat} recordMistake={recordMistake} clearMistake={clearMistake} />
-        )}
-        {tab === 'mistakes' && (
-          <MistakeScreen t={t} state={state} setTab={setTab}
-            recordMistake={recordMistake} clearMistake={clearMistake} />
+            recordStat={recordStat} recordMistake={recordMistake} clearMistake={clearMistake}
+            updateSRS={updateSRS} />
         )}
         {tab === 'chat'     && <ChatScreen    t={t} state={state} onUpdateHistory={msgs => update({ chatHistory: msgs })} />}
         {tab === 'grammar'  && <GrammarScreen t={t} state={state} />}
@@ -252,8 +293,10 @@ export default function Page() {
             recordMistake={recordMistake} clearMistake={clearMistake}
             onQuit={() => setTab('home')} />
         )}
+        {tab === 'achievements' && <AchievementsScreen t={t} state={state} />}
       </div>
       <BottomNav t={t} tab={tab} setTab={setTab} />
+      <AchievementToast achievement={toast} onDone={() => setToast(null)} />
     </div>
   );
 }
