@@ -2,7 +2,7 @@
 const fs   = require('fs');
 const path = require('path');
 
-const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_d24fd8b099f04bffdc04f295cad2ca91226fc0bdaa650514';
+const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_e5f81e21302fb284ddc75844d0dd86bb3908d2245e1294aa';
 const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'IKne3meq5aSn9XLyUdCD';
 const OUT_DIR  = path.join(__dirname, '..', 'public', 'audio');
 
