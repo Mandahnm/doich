@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { getTheme } from '@/lib/theme';
 import { loadState, saveState } from '@/lib/storage';
 import { supabase } from '@/lib/supabase';
-import AuthScreen        from '@/components/screens/AuthScreen';
-import WelcomeScreen     from '@/components/screens/WelcomeScreen';
+import AuthScreen           from '@/components/screens/AuthScreen';
+import PasswordResetScreen  from '@/components/screens/PasswordResetScreen';
+import WelcomeScreen        from '@/components/screens/WelcomeScreen';
 import HomeScreen        from '@/components/screens/HomeScreen';
 import ReviewScreen      from '@/components/screens/ReviewScreen';
 import MistakeScreen     from '@/components/screens/MistakeScreen';
@@ -32,11 +33,13 @@ const DEFAULT_STATE = {
 };
 
 export default function Page() {
-  const [state,  setState]  = useState(DEFAULT_STATE);
-  const [tab,    setTab]    = useState('home');
-  const [loaded, setLoaded] = useState(false);
-  const [user,   setUser]   = useState(null);
-  const saveTimer = useRef(null);
+  const [state,       setState]       = useState(DEFAULT_STATE);
+  const [tab,         setTab]         = useState('home');
+  const [loaded,      setLoaded]      = useState(false);
+  const [user,        setUser]        = useState(null);
+  const [showRecovery, setShowRecovery] = useState(false);
+  const saveTimer     = useRef(null);
+  const userLoadedRef = useRef(false);
 
   // ── Auth + initial load ──────────────────────────────────────────────────
   useEffect(() => {
@@ -46,6 +49,7 @@ export default function Page() {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
+        userLoadedRef.current = true;
         setUser(session.user);
         loadProgress(session.user.id);
       } else {
@@ -54,8 +58,21 @@ export default function Page() {
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user && !userLoadedRef.current) {
+        userLoadedRef.current = true;
+        setUser(session.user);
+        loadProgress(session.user.id);
+      }
+      if (event === 'PASSWORD_RECOVERY' && session?.user) {
+        userLoadedRef.current = true;
+        setUser(session.user);
+        setShowRecovery(true);
+        setLoaded(true);
+      }
       if (event === 'SIGNED_OUT') {
+        userLoadedRef.current = false;
         setUser(null);
+        setShowRecovery(false);
         setState(s => ({ ...DEFAULT_STATE, darkMode: s.darkMode }));
         setTab('home');
         setLoaded(true);
@@ -170,6 +187,15 @@ export default function Page() {
       <div style={{ minHeight: '100vh', background: '#15121E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ color: '#FF6FA8', fontFamily: 'var(--font-nunito)', fontSize: 18, fontWeight: 800 }}>нэмэх...</div>
       </div>
+    );
+  }
+
+  if (showRecovery) {
+    return (
+      <PasswordResetScreen
+        isDark={state.darkMode}
+        onDone={() => setShowRecovery(false)}
+      />
     );
   }
 

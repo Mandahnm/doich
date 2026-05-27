@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Key } from 'lucide-react';
 import SessionHeader from './SessionHeader';
+import PlayButton from './PlayButton';
 
 export default function GenderCard({ t, stage, word, progress, onContinue, onQuit }) {
   const [sel, setSel]             = useState(null);
@@ -35,6 +36,7 @@ export default function GenderCard({ t, stage, word, progress, onContinue, onQui
           <div className="fd" style={{ fontSize: word.de.length > 12 ? 28 : 48, fontWeight: 800, color: t.text, lineHeight: 1 }}>
             {word.de}
           </div>
+          <PlayButton wordId={word.id} size={22} color={t.textMid} />
         </div>
         <div style={{ color: t.textMid, fontSize: 14, fontWeight: 600 }}>{word.mn}</div>
         {(clueShown || revealed) && (

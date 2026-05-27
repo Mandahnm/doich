@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Check, X, Key } from 'lucide-react';
 import { VOCAB } from '@/lib/vocab';
 import SessionHeader from './SessionHeader';
+import PlayButton from './PlayButton';
 
 const TYPE_LABEL = { noun: 'нэр үг', verb: 'үйл үг', adj: 'тэмдэг нэр', adv: 'дайвар үг' };
 
@@ -36,6 +37,7 @@ export default function FlashCard({ t, stage, word, progress, onContinue, onQuit
             {word.gender && <span style={{ color: t.pink }}>{word.gender} </span>}
             {word.de}
           </div>
+          <PlayButton wordId={word.id} size={22} color={t.textMid} />
         </div>
         {(clueShown || revealed) && (
           <div className="af" style={{ marginTop: 14 }}>
