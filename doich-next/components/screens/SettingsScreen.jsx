@@ -45,7 +45,7 @@ export default function SettingsScreen({ t, state, update, user, onLogout }) {
   };
 
   const handleDeleteAccount = async () => {
-    if (!confirm('Данс болон бүх өгөгдлийг устгах уу?\n\nЭнэ үйлдлийг буцааж болохгүй.')) return;
+    if (!confirm('Бүртгэл болон бүх өгөгдлийг устгах уу?\n\nЭнэ үйлдлийг буцааж болохгүй.')) return;
     if (user) await supabase.from('user_progress').delete().eq('id', user.id);
     await supabase.auth.signOut();
   };
@@ -177,7 +177,7 @@ export default function SettingsScreen({ t, state, update, user, onLogout }) {
         {user && (
           <button onClick={handleDeleteAccount}
             style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.darkMode ? '#1A0A0A' : '#FFF5F5', border: `2px solid ${t.darkMode ? '#5A1A1A' : '#FEB2B2'}`, color: '#C53030', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
-            <Trash2 size={16} /> Данс устгах
+            <Trash2 size={16} /> Бүртгэл устгах
           </button>
         )}
       </div>
