@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Heart, Search, X } from 'lucide-react';
 import { VOCAB, LEVELS, CEFR_META } from '@/lib/vocab';
 import MultiChips from '@/components/shared/MultiChips';
+import PlayButton from '@/components/shared/PlayButton';
 
 const TYPE_LABEL = { noun: 'Нэр үг', verb: 'Үйл үг', adj: 'Тэмдэг нэр', adv: 'Дайвар үг' };
 const TYPES      = ['noun', 'verb', 'adj', 'adv'];
@@ -49,7 +50,7 @@ export default function VocabScreen({ t, state, toggleLearned }) {
     <div className="af">
       <div style={{ marginBottom: 14 }}>
         <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>ҮГСИЙН САН 📖</div>
-        <div className="fd" style={{ fontSize: 30, fontWeight: 800, color: t.text }}>{filtered.length} үг</div>
+        <div className="fd" style={{ fontSize: 30, fontWeight: 800, color: t.text }}>Үгсийн сан</div>
       </div>
 
       <div style={{ position: 'relative', marginBottom: 12 }}>
@@ -79,9 +80,10 @@ export default function VocabScreen({ t, state, toggleLearned }) {
             <div key={w.id} className="au" style={{ background: t.bgCard, borderRadius: 18, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, boxShadow: t.shadow, animationDelay: `${Math.min(i * 12, 280)}ms` }}>
               <div style={{ fontSize: 22, flexShrink: 0 }}>{w.emoji}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                   {w.gender && <span style={{ color: t.pink, fontSize: 13, fontWeight: 800 }}>{w.gender}</span>}
                   <span style={{ fontWeight: 800, color: t.text, fontSize: 15 }}>{w.de}</span>
+                  <PlayButton wordId={w.id} size={15} color={t.textSoft} />
                   <span style={{ fontSize: 10, fontWeight: 800, background: m.pill, color: m.pillTxt, padding: '2px 8px', borderRadius: 10 }}>{w.level}</span>
                 </div>
                 <div style={{ color: t.textMid, fontSize: 13, marginTop: 2 }}>{w.mn}</div>
