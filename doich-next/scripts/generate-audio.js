@@ -2,7 +2,7 @@
 const fs   = require('fs');
 const path = require('path');
 
-const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_4fc1988cfcee2c2d8a42b00392063b60c336c940381400ea';
+const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_d24fd8b099f04bffdc04f295cad2ca91226fc0bdaa650514';
 const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'IKne3meq5aSn9XLyUdCD';
 const OUT_DIR  = path.join(__dirname, '..', 'public', 'audio');
 
@@ -14,7 +14,10 @@ const wordRegex = /\{\s*id:\s*(\d+)[\s\S]*?de:\s*'([^']+)'[\s\S]*?\}/g;
 const words = [];
 let m;
 while ((m = wordRegex.exec(vocabSrc)) !== null) {
-  words.push({ id: Number(m[1]), de: m[2] });
+  const genderMatch = m[0].match(/gender:\s*'([^']+)'/);
+  const gender = genderMatch ? genderMatch[1] : null;
+  const text = gender ? `${gender} ${m[2]}` : m[2];
+  words.push({ id: Number(m[1]), de: m[2], text });
 }
 
 console.log(`Found ${words.length} words. Starting generation...\n`);
@@ -36,7 +39,7 @@ async function generateAudio(word) {
       'Accept': 'audio/mpeg',
     },
     body: JSON.stringify({
-      text: word.de,
+      text: word.text,
       model_id: 'eleven_multilingual_v2',
       language_code: 'de',
       voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true },
