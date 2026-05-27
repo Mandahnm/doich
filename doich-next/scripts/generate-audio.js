@@ -2,7 +2,7 @@
 const fs   = require('fs');
 const path = require('path');
 
-const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_ec11a0257f982342e813ecca91e50402ce601aeb7d71a73f';
+const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_4fc1988cfcee2c2d8a42b00392063b60c336c940381400ea';
 const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'IKne3meq5aSn9XLyUdCD';
 const OUT_DIR  = path.join(__dirname, '..', 'public', 'audio');
 
@@ -38,6 +38,7 @@ async function generateAudio(word) {
     body: JSON.stringify({
       text: word.de,
       model_id: 'eleven_multilingual_v2',
+      language_code: 'de',
       voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true },
     }),
   });
