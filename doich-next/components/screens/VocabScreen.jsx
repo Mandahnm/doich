@@ -50,7 +50,6 @@ export default function VocabScreen({ t, state, toggleLearned }) {
     <div className="af">
       <div style={{ marginBottom: 14 }}>
         <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>ҮГСИЙН САН 📖</div>
-        <div className="fd" style={{ fontSize: 30, fontWeight: 800, color: t.text }}>Үгсийн сан</div>
       </div>
 
       <div style={{ position: 'relative', marginBottom: 12 }}>
