@@ -1,14 +1,14 @@
 'use client';
 
-import { Home, MessageCircle, Pencil, Gamepad2, BookOpen, Settings } from 'lucide-react';
+import { Home, MessageCircle, Pencil, Gamepad2, BookOpen, User } from 'lucide-react';
 
 const ITEMS = [
-  { id: 'home',     Icon: Home,          label: 'Нүүр'    },
-  { id: 'chat',     Icon: MessageCircle, label: 'AI'      },
-  { id: 'grammar',  Icon: Pencil,        label: 'Засагч'  },
-  { id: 'games',    Icon: Gamepad2,      label: 'Тоглоом' },
-  { id: 'vocab',    Icon: BookOpen,      label: 'Үгс'     },
-  { id: 'settings', Icon: Settings,      label: ''        },
+  { id: 'home',    Icon: Home,          label: 'Нүүр'    },
+  { id: 'chat',    Icon: MessageCircle, label: 'AI'      },
+  { id: 'grammar', Icon: Pencil,        label: 'Засагч'  },
+  { id: 'games',   Icon: Gamepad2,      label: 'Тоглоом' },
+  { id: 'vocab',   Icon: BookOpen,      label: 'Үгс'     },
+  { id: 'profile', Icon: User,          label: 'Профайл' },
 ];
 
 export default function BottomNav({ t, tab, setTab }) {

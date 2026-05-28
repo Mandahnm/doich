@@ -13,7 +13,7 @@ import ChatScreen        from '@/components/screens/ChatScreen';
 import GrammarScreen     from '@/components/screens/GrammarScreen';
 import GamesScreen       from '@/components/screens/GamesScreen';
 import VocabScreen       from '@/components/screens/VocabScreen';
-import SettingsScreen    from '@/components/screens/SettingsScreen';
+import ProfileScreen     from '@/components/screens/ProfileScreen';
 import DailyPracticeScreen   from '@/components/screens/DailyPracticeScreen';
 import AchievementsScreen    from '@/components/screens/AchievementsScreen';
 import AchievementToast      from '@/components/shared/AchievementToast';
@@ -281,9 +281,9 @@ export default function Page() {
             addXP={addXP} checkStreak={checkStreak} />
         )}
         {tab === 'vocab'    && <VocabScreen    t={t} state={state} toggleLearned={toggleLearned} />}
-        {tab === 'settings' && (
-          <SettingsScreen t={t} state={state} update={update}
-            user={user}
+        {tab === 'profile' && (
+          <ProfileScreen t={t} state={state} update={update}
+            user={user} setTab={setTab}
             onLogout={() => supabase.auth.signOut()} />
         )}
         {tab === 'daily'    && (
