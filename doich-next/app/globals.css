@@ -1,12 +1,19 @@
 * {
-  font-family: var(--font-nunito), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Montserrat for display/headline text (German words, titles, numbers) */
 .fd {
-  font-family: var(--font-lexend), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
   letter-spacing: -0.02em;
+}
+
+/* Tactile button press — scale 0.98x on tap */
+button:active:not(:disabled) {
+  transform: scale(0.98);
+  transition: transform 0.08s ease;
 }
 
 @keyframes fadeUp {
@@ -35,6 +42,10 @@
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
 
 .au { animation: fadeUp  0.35s ease-out both; }
 .af { animation: fadeIn  0.35s ease-out; }
@@ -44,4 +55,3 @@
 
 ::-webkit-scrollbar { width: 0; height: 0; }
 textarea { resize: none; }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

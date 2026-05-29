@@ -69,7 +69,7 @@ export default function WelcomeScreen({ t, onSelect, isDark, onToggle }) {
         </div>
 
         <button onClick={() => sel && onSelect(sel)} disabled={!sel}
-          style={{ marginTop: 16, width: '100%', padding: '16px', borderRadius: 18, fontWeight: 800, fontSize: 15, border: 'none', cursor: sel ? 'pointer' : 'not-allowed', background: sel ? t.pinkBtn : t.border, color: sel ? '#fff' : t.textSoft, boxShadow: sel ? t.shadowLg : 'none' }}>
+          style={{ marginTop: 16, width: '100%', padding: '16px', borderRadius: 18, fontWeight: 800, fontSize: 15, border: 'none', cursor: sel ? 'pointer' : 'not-allowed', background: sel ? t.pinkBtn : t.border, color: sel ? t.pinkBtnText : t.textSoft, boxShadow: sel ? t.shadowLg : 'none' }}>
           Эхлэх →
         </button>
       </div>

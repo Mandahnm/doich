@@ -140,7 +140,7 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
                   {pwErr && <div style={{ color: '#FF6B6B', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{pwErr}</div>}
                   {pwMsg && <div style={{ color: '#34D399', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{pwMsg}</div>}
                   <button onClick={handleChangePassword} disabled={pwLoading}
-                    style={{ width: '100%', padding: '12px', borderRadius: 14, border: 'none', cursor: pwLoading ? 'not-allowed' : 'pointer', fontWeight: 800, fontSize: 14, background: t.pinkBtn, color: '#fff', opacity: pwLoading ? 0.7 : 1 }}>
+                    style={{ width: '100%', padding: '12px', borderRadius: 14, border: 'none', cursor: pwLoading ? 'not-allowed' : 'pointer', fontWeight: 800, fontSize: 14, background: t.pinkBtn, color: t.pinkBtnText, opacity: pwLoading ? 0.7 : 1 }}>
                     {pwLoading ? '...' : 'Хадгалах'}
                   </button>
                 </div>
@@ -183,10 +183,10 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
   ];
 
   const ACCURACY_ROWS = [
-    { e: '🎯', l: 'Үг таах',    v: `${state.stats.flashcardsCorrect}/${state.stats.flashcardsTotal}` },
-    { e: '🏷️', l: 'Артикль',    v: `${state.stats.genderCorrect}/${state.stats.genderTotal}` },
-    { e: '🎧', l: 'Сонсох',     v: `${state.stats?.listeningCorrect || 0}/${state.stats?.listeningTotal || 0}` },
-    { e: '✍️', l: 'Өгүүлбэр',  v: `${state.stats?.sentenceCorrect || 0}/${state.stats?.sentenceTotal || 0}` },
+    { e: '🎯', l: 'Үг таах',   v: `${state.stats.flashcardsCorrect}/${state.stats.flashcardsTotal}` },
+    { e: '🏷️', l: 'Артикль',   v: `${state.stats.genderCorrect}/${state.stats.genderTotal}` },
+    { e: '🎧', l: 'Сонсох',    v: `${state.stats?.listeningCorrect || 0}/${state.stats?.listeningTotal || 0}` },
+    { e: '✍️', l: 'Өгүүлбэр', v: `${state.stats?.sentenceCorrect || 0}/${state.stats?.sentenceTotal || 0}` },
   ];
 
   return (

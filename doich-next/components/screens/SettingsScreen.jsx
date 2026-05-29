@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { LogOut, User, Lock, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { LogOut, User, Lock, Eye, EyeOff, Trash2, ChevronLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { LEVELS } from '@/lib/vocab';
 
-export default function SettingsScreen({ t, state, update, user, onLogout }) {
+export default function SettingsScreen({ t, state, update, user, onLogout, onBack }) {
   const [changePwOpen, setChangePwOpen] = useState(false);
   const [newPw,        setNewPw]        = useState('');
   const [confirmPw,    setConfirmPw]    = useState('');
@@ -55,9 +55,17 @@ export default function SettingsScreen({ t, state, update, user, onLogout }) {
 
   return (
     <div className="af">
-      <div style={{ marginBottom: 18 }}>
-        <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>ТОХИРГОО ⚙️</div>
-        <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text }}>Settings</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
+        {onBack && (
+          <button onClick={onBack}
+            style={{ width: 36, height: 36, borderRadius: 18, background: t.bgCard, border: `1px solid ${t.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
+            <ChevronLeft size={18} color={t.textMid} />
+          </button>
+        )}
+        <div>
+          <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 2 }}>ТОХИРГОО ⚙️</div>
+          <div className="fd" style={{ fontSize: 24, fontWeight: 800, color: t.text, lineHeight: 1 }}>Settings</div>
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>

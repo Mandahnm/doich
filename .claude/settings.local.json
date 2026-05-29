@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(rm public/audio/test_Charlie.mp3 public/audio/test_Adam.mp3 public/audio/test_Bella.mp3)",
+      "Bash(node scripts/generate-audio.js)"
     ]
   }
 }

@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronRight, ArrowLeft, Check, Lock } from 'lucide-react';
+import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft } from 'lucide-react';
 import { LEVELS, CEFR_META, getStages } from '@/lib/vocab';
 import { calcStageXP } from '@/lib/xp';
-import FlashCard       from '@/components/shared/FlashCard';
-import GenderCard      from '@/components/shared/GenderCard';
-import MatchCard       from '@/components/shared/MatchCard';
-import FillBlankCard   from '@/components/shared/FillBlankCard';
-import ConjugationCard from '@/components/shared/ConjugationCard';
-import ListeningCard        from '@/components/shared/ListeningCard';
-import SentenceBuilderCard  from '@/components/shared/SentenceBuilderCard';
+import FlashCard           from '@/components/shared/FlashCard';
+import GenderCard          from '@/components/shared/GenderCard';
+import MatchCard           from '@/components/shared/MatchCard';
+import FillBlankCard       from '@/components/shared/FillBlankCard';
+import ConjugationCard     from '@/components/shared/ConjugationCard';
+import ListeningCard       from '@/components/shared/ListeningCard';
+import SentenceBuilderCard from '@/components/shared/SentenceBuilderCard';
 import { getConjugationStages } from '@/lib/conjugation';
 import { getAdjectiveStages }   from '@/lib/adjective';
 import ResultScreen from '@/components/shared/ResultScreen';
@@ -39,12 +39,12 @@ const STAT_KEY = {
   sentence:    'sentence',
 };
 
-// ─── Main coordinator ──────────────────────────────────────
+// ─── Main coordinator ──────────────────────────────────────────────────────────
 export default function GamesScreen({ t, state, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
-  const [view,         setView]        = useState('hub');
-  const [gameType,     setGameType]    = useState(null);
-  const [activeCefr,   setActiveCefr]  = useState(null);
-  const [activeStage,  setActiveStage] = useState(null);
+  const [view,         setView]         = useState('hub');
+  const [gameType,     setGameType]     = useState(null);
+  const [activeCefr,   setActiveCefr]   = useState(null);
+  const [activeStage,  setActiveStage]  = useState(null);
   const [sessionScore, setSessionScore] = useState(0);
 
   const startStage = stage => {
@@ -82,19 +82,13 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
     }
   };
 
-  // ── View routing ──
   if (view === 'hub') return (
-    <GamesHub t={t} state={state} onSelect={type => {
-      setGameType(type);
-      if (CONJ_TYPES.has(type)) { setActiveCefr(null); setView('stages'); }
-      else setView('cefr');
-    }} />
-  );
-
-  if (view === 'cefr') return (
-    <CEFRSelect t={t} gameType={gameType} state={state}
-      onBack={() => setView('hub')}
-      onSelect={cefr => { setActiveCefr(cefr); setView('stages'); }} />
+    <GamesHub t={t} state={state} userLevel={state.userLevel}
+      onSelect={(type, level) => {
+        setGameType(type);
+        setActiveCefr(CONJ_TYPES.has(type) ? null : level);
+        setView('stages');
+      }} />
   );
 
   if (view === 'stages') {
@@ -104,7 +98,7 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
     return (
       <StageSelect t={t} gameType={gameType} cefr={activeCefr} stages={preStages}
         state={state}
-        onBack={() => setView(activeCefr ? 'cefr' : 'hub')}
+        onBack={() => setView('hub')}
         onSelect={startStage} />
     );
   }
@@ -117,7 +111,6 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
     const ex       = activeStage.words[activeStage.idx];
     const progress = activeStage.idx / activeStage.words.length;
     if (!ex) return null;
-
     if (gameType === 'conjugation') {
       return <ConjugationCard t={t} exercise={ex} idx={activeStage.idx} total={activeStage.words.length}
         onContinue={handleContinue} onQuit={() => setView('stages')} />;
@@ -162,145 +155,217 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
   return null;
 }
 
-// ─── Step 1: game type hub ─────────────────────────────────
-function GamesHub({ t, state, onSelect }) {
-  const done = prefix => Object.keys(state.completedStages || {}).filter(k => k.startsWith(prefix)).length;
+// ─── Hub — level picker + all games grid ──────────────────────────────────────
+const ALL_GAMES = [
+  { type: 'flashcard',   title: 'Үг таах',             sub: 'Daily Review',    Icon: Layers,     iconColor: '#0062a1', bg: '#dceeff' },
+  { type: 'gender',      title: 'Der · Die · Das',      sub: 'Артикль тоглоом', Icon: Tag,        iconColor: '#bc0000', bg: '#ffdad4' },
+  { type: 'fillblank',   title: 'Цоорхой бөглөх',      sub: 'Grammar',         Icon: PenLine,    iconColor: '#745b00', bg: '#fff8d4' },
+  { type: 'match',       title: 'Хос тааруулах',        sub: 'Vocabulary',      Icon: Shuffle,    iconColor: '#0062a1', bg: '#dceeff' },
+  { type: 'conjugation', title: 'Үйл үг хувилах',      sub: 'Conjugation',     Icon: RefreshCw,  iconColor: '#0891b2', bg: '#cffafe' },
+  { type: 'adjective',   title: 'Тэмдэг нэр',          sub: 'Declension',      Icon: Pencil,     iconColor: '#7c3aed', bg: '#ede9fe' },
+  { type: 'listening',   title: 'Сонсох дасгал',        sub: 'Audio Practice',  Icon: Headphones, iconColor: '#db2777', bg: '#fce7f3' },
+  { type: 'sentence',    title: 'Өгүүлбэр зохиох',     sub: 'Word Order',      Icon: AlignLeft,  iconColor: '#059669', bg: '#d1fae5' },
+];
 
-  const GAMES = [
-    { type: 'flashcard',   icon: '🎯', title: 'Үг таах',            sub: 'Герман үгийн орчуулгыг 4-өөс сонгох',      color: '#F9709A', doneKey: 'flashcard'   },
-    { type: 'gender',      icon: '🏷️', title: 'Der · Die · Das',    sub: 'Нэр үгийн түйсийг тани',                   color: '#A78BFA', doneKey: 'gender'      },
-    { type: 'match',       icon: '🔗', title: 'Хос тааруулах',      sub: 'Герман–Монгол үгс хосоор тааруулах',       color: '#34D399', doneKey: 'match'       },
-    { type: 'fillblank',   icon: '✍️', title: 'Цоорхой бөглөх',     sub: 'Өгүүлбэрийн цоорхойг зөв үгээр гүйцээ',  color: '#F59E0B', doneKey: 'fillblank'   },
-    { type: 'conjugation', icon: '🔤', title: 'Үйл үг хувилах',     sub: 'Үйл үгийн зөв хэлбэрийг бичих',           color: '#06B6D4', doneKey: 'conjugation' },
-    { type: 'adjective',   icon: '🔡', title: 'Тэмдэг нэр хувилах', sub: 'Тэмдэг нэрийн зөв төгсгөлийг бичих',      color: '#8B5CF6', doneKey: 'adjective'   },
-    { type: 'listening',   icon: '🎧', title: 'Сонсох дасгал',       sub: 'Аудио сонсоод герман үгийг бич',           color: '#EC4899', doneKey: 'listening'   },
-    { type: 'sentence',    icon: '🔀', title: 'Өгүүлбэр зохиох',    sub: 'Холилдсон үгсийг зөв дарааллаар байрлуул', color: '#10B981', doneKey: 'sentence'    },
-  ];
-
-  return (
-    <div className="af">
-      <div style={{ marginBottom: 22 }}>
-        <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>ТОГЛООМУУД 🎮</div>
-        <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text }}>Ямар тоглоом тоглох вэ?</div>
-      </div>
-      {GAMES.map((g, i) => (
-        <button key={g.type} onClick={() => onSelect(g.type)} className="au"
-          style={{ display: 'flex', alignItems: 'center', gap: 16, background: t.bgCard, border: `1px solid ${t.border}`, borderRadius: 22, padding: '20px', cursor: 'pointer', width: '100%', textAlign: 'left', marginBottom: 14, boxShadow: t.shadow, animationDelay: `${i * 80}ms` }}>
-          <div style={{ width: 64, height: 64, borderRadius: 20, background: g.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, flexShrink: 0 }}>{g.icon}</div>
-          <div style={{ flex: 1 }}>
-            <div className="fd" style={{ fontWeight: 700, color: t.text, fontSize: 17 }}>{g.title}</div>
-            <div style={{ color: t.textMid, fontSize: 13, marginTop: 3 }}>{g.sub}</div>
-            <div style={{ color: g.color, fontSize: 12, fontWeight: 800, marginTop: 6 }}>{done(g.doneKey)} шат дууссан</div>
-          </div>
-          <ChevronRight size={20} color={t.textSoft} />
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// ─── Step 2: CEFR level picker (flashcard / gender / match / fillblank only) ──
-function CEFRSelect({ t, gameType, state, onBack, onSelect }) {
-  return (
-    <div className="af">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: t.shadow }}>
-          <ArrowLeft size={18} color={t.textMid} />
-        </button>
-        <div>
-          <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em' }}>{(GAME_SUBTITLE[gameType] ?? gameType).toUpperCase()}</div>
-          <div className="fd" style={{ fontSize: 22, fontWeight: 800, color: t.text }}>CEFR түвшин сонгох</div>
-        </div>
-      </div>
-      {LEVELS.map((cefr, i) => {
-        const m      = CEFR_META[cefr];
-        const stages = getStages(gameType, cefr);
-        if (stages.length === 0) return null;
-        const doneCt = stages.filter(s => state.completedStages?.[s.id]).length;
-        const pct    = doneCt / stages.length;
-        return (
-          <button key={cefr} onClick={() => onSelect(cefr)} className="au"
-            style={{ display: 'flex', alignItems: 'center', gap: 14, background: t.bgCard, border: `1px solid ${t.border}`, borderRadius: 20, padding: '16px', cursor: 'pointer', width: '100%', textAlign: 'left', boxShadow: t.shadow, marginBottom: 12, animationDelay: `${i * 65}ms` }}>
-            <div className="fd" style={{ width: 56, height: 56, borderRadius: 16, background: t.darkMode ? t.bgTag : m.pill, color: t.darkMode ? t.pink : m.pillTxt, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 800, flexShrink: 0 }}>{cefr}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 800, color: t.text, fontSize: 15 }}>{m.title}</div>
-              <div style={{ color: t.textMid, fontSize: 12, marginTop: 2 }}>{stages.length} шат · {stages.reduce((a, s) => a + s.words.length, 0)} үг</div>
-              <div style={{ marginTop: 8, height: 6, background: t.bgTag, borderRadius: 3, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${pct * 100}%`, background: t.pinkBtn, borderRadius: 3, transition: 'width 0.4s' }} />
-              </div>
-              <div style={{ color: t.textMid, fontSize: 11, marginTop: 4 }}>{doneCt}/{stages.length} шат дууссан</div>
-            </div>
-            <ChevronRight size={18} color={t.textSoft} />
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-// ─── Step 3: Duolingo-style stage path ─────────────────────
-function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onSelect }) {
-  const m       = cefr ? CEFR_META[cefr] : { title: '', pill: '#F9709A33', pillTxt: '#F9709A' };
-  const stages  = stagesProp ?? getStages(gameType, cefr);
-  const offsets = ['-40px', '0px', '40px', '0px'];
-  const isConj  = CONJ_TYPES.has(gameType);
+function GamesHub({ t, state, userLevel, onSelect }) {
+  const [selectedLevel, setSelectedLevel] = useState(userLevel || 'A1');
 
   return (
     <div className="af">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
-        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: t.shadow }}>
-          <ArrowLeft size={18} color={t.textMid} />
-        </button>
-        <div>
-          <div className="fd" style={{ fontSize: 22, fontWeight: 800, color: t.text }}>
-            {cefr ? `${cefr} · ${m.title}` : GAME_SUBTITLE[gameType]}
-          </div>
-          <div style={{ color: t.textMid, fontSize: 13 }}>{GAME_SUBTITLE[gameType]}</div>
-        </div>
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em' }}>ТОГЛООМУУД 🎮</div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 8, paddingBottom: 24 }}>
-        {stages.map((stage, i) => {
-          const done     = !!state.completedStages?.[stage.id];
-          const isNext   = !done && (i === 0 || !!state.completedStages?.[stages[i - 1]?.id]);
-          const isLocked = !done && !isNext;
-          const offset   = offsets[i % offsets.length];
+      {/* Level pills — horizontal scroll with visible overflow */}
+      <div style={{
+        display: 'flex', gap: 8,
+        overflowX: 'scroll',
+        paddingBottom: 8, paddingRight: 16, marginBottom: 22,
+        WebkitOverflowScrolling: 'touch',
+      }}>
+        {LEVELS.map(lv => {
+          const active = selectedLevel === lv;
           return (
-            <div key={stage.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {i > 0 && <div style={{ width: 3, height: 36, background: done ? t.pink : t.border, borderRadius: 2 }} />}
-              <div className="au" style={{ marginLeft: offset, animationDelay: `${i * 100}ms` }}>
-                <button
-                  disabled={isLocked}
-                  onClick={() => !isLocked && onSelect(stage)}
-                  className={done ? 'ap' : ''}
-                  style={{
-                    width: 90, height: 90, borderRadius: 45,
-                    background: done ? (t.darkMode ? m.pill + '33' : m.pill) : isNext ? t.pinkBtn : t.bgCard,
-                    border: `4px solid ${done ? m.pillTxt + '80' : isNext ? 'transparent' : t.border}`,
-                    boxShadow: isNext ? `0 0 0 6px ${t.pink}30, ${t.shadowLg}` : t.shadow,
-                    cursor: isLocked ? 'not-allowed' : 'pointer',
-                    opacity: isLocked ? 0.45 : 1,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
-                  }}>
-                  {done
-                    ? <Check size={32} color={m.pillTxt} strokeWidth={3} />
-                    : isLocked
-                      ? <Lock size={24} color={t.textSoft} />
-                      : <div className="fd" style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>{stage.stageNum}</div>
-                  }
-                </button>
-                <div style={{ textAlign: 'center', marginTop: 8, marginBottom: 8 }}>
-                  <div style={{ fontWeight: 800, color: done ? m.pillTxt : isNext ? t.pink : t.textSoft, fontSize: 13 }}>
-                    {stage.stageNum}-р шат {done ? '✓' : isNext ? '▶' : '🔒'}
-                  </div>
-                  <div style={{ color: t.textSoft, fontSize: 11 }}>
-                    {stage.words.length} {isConj ? 'дасгал' : gameType === 'flashcard' ? 'үг' : 'нэр үг'}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button key={lv} onClick={() => setSelectedLevel(lv)}
+              style={{
+                padding: '8px 16px', borderRadius: 22, fontWeight: 700, fontSize: 13,
+                border: `2px solid ${active ? t.pinkBtn : t.border}`,
+                background: active ? t.pinkBtn : t.bgCard,
+                color: active ? t.pinkBtnText : t.textMid,
+                cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
+                boxShadow: active ? `0 2px 10px ${t.darkMode ? 'rgba(201,160,0,0.35)' : 'rgba(255,204,0,0.45)'}` : 'none',
+                transition: 'all 0.15s',
+              }}>
+              {lv} {CEFR_META[lv].title}
+            </button>
           );
         })}
+      </div>
+
+      {/* All 8 games in uniform 2×4 grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        {ALL_GAMES.map((g, i) => (
+          <button key={g.type} onClick={() => onSelect(g.type, selectedLevel)} className="au"
+            style={{
+              position: 'relative', overflow: 'hidden',
+              background: t.bgCard, borderRadius: 20,
+              padding: '18px 14px 16px',
+              border: `1px solid ${t.border}`,
+              cursor: 'pointer', textAlign: 'left',
+              boxShadow: t.shadow, minHeight: 148,
+              display: 'flex', flexDirection: 'column',
+              animationDelay: `${i * 45}ms`,
+            }}>
+            {/* Decorative circle top-right */}
+            <div style={{
+              position: 'absolute', top: -20, right: -20,
+              width: 86, height: 86, borderRadius: '50%',
+              background: t.darkMode ? (g.bg + '28') : (g.bg + 'bb'),
+              pointerEvents: 'none',
+            }} />
+            {/* Icon box */}
+            <div style={{
+              width: 46, height: 46, borderRadius: 13,
+              background: t.darkMode ? (g.bg + '35') : g.bg,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              marginBottom: 'auto',
+            }}>
+              <g.Icon size={22} color={g.iconColor} strokeWidth={2} />
+            </div>
+            {/* Text */}
+            <div style={{ marginTop: 28 }}>
+              <div style={{ fontWeight: 800, color: t.text, fontSize: 14, lineHeight: 1.2 }}>{g.title}</div>
+              <div style={{ color: t.textSoft, fontSize: 12, marginTop: 3 }}>{g.sub}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Journey / Stage path ──────────────────────────────────────────────────────
+function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onSelect }) {
+  const stages = stagesProp ?? getStages(gameType, cefr);
+  const m      = cefr ? CEFR_META[cefr] : null;
+  const isConj = CONJ_TYPES.has(gameType);
+
+  return (
+    <div className="af">
+      {/* Back + header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+        <button onClick={onBack}
+          style={{ width: 38, height: 38, borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: t.shadow, flexShrink: 0 }}>
+          <ArrowLeft size={18} color={t.textMid} />
+        </button>
+        <div>
+          <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.14em' }}>
+            {GAME_SUBTITLE[gameType]?.toUpperCase()}
+          </div>
+          <div className="fd" style={{ fontSize: 20, fontWeight: 800, color: t.text }}>
+            {cefr ? `${cefr} · ${m.title}` : GAME_SUBTITLE[gameType]}
+          </div>
+        </div>
+      </div>
+
+      {/* Journey header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+        <div style={{ fontWeight: 800, fontSize: 16, color: t.text }}>Journey</div>
+        {cefr && (
+          <div style={{ background: t.bgCard, border: `1px solid ${t.border}`, borderRadius: 20, padding: '4px 14px', fontSize: 12, fontWeight: 700, color: t.textMid }}>
+            {cefr} · {m.title}
+          </div>
+        )}
+      </div>
+
+      {/* Stage path container */}
+      <div style={{ background: t.bgCard, borderRadius: 24, padding: '28px 20px 24px', border: `1px solid ${t.border}` }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {stages.map((stage, i) => {
+            const done     = !!state.completedStages?.[stage.id];
+            const isNext   = !done && (i === 0 || !!state.completedStages?.[stages[i - 1]?.id]);
+            const isLocked = !done && !isNext;
+
+            const circleBg = done   ? (t.darkMode ? '#2e2300' : '#3d2c00')
+                           : isNext ? (t.darkMode ? '#002050' : '#003470')
+                           : t.bgTag;
+            const circleBorder = done   ? `3px solid ${t.darkMode ? '#6b5200' : '#5a3e00'}`
+                               : isNext ? `3px solid ${t.darkMode ? '#0050b3' : '#00449a'}`
+                               : `2px solid ${t.border}`;
+            const circleSize = isNext ? 92 : 72;
+            const lineColor  = done ? (t.darkMode ? '#5c4800' : '#6b4e00') : t.border;
+
+            return (
+              <div key={stage.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                {/* Connecting line */}
+                {i > 0 && (
+                  <div style={{ width: 4, height: 48, background: lineColor, borderRadius: 2, margin: '2px 0' }} />
+                )}
+
+                <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+                  {/* Circle button */}
+                  <button
+                    disabled={isLocked}
+                    onClick={() => !isLocked && onSelect(stage)}
+                    style={{
+                      width: circleSize, height: circleSize,
+                      borderRadius: circleSize / 2,
+                      background: circleBg,
+                      border: circleBorder,
+                      boxShadow: isNext
+                        ? `0 0 0 10px ${t.darkMode ? 'rgba(0,52,112,0.28)' : 'rgba(0,52,112,0.1)'}, ${t.shadow}`
+                        : t.shadow,
+                      cursor: isLocked ? 'not-allowed' : 'pointer',
+                      opacity: isLocked ? 0.48 : 1,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                    {done ? (
+                      <Star size={30} color={t.darkMode ? '#f1c100' : '#ffcc00'} fill={t.darkMode ? '#f1c100' : '#ffcc00'} strokeWidth={0} />
+                    ) : isNext ? (
+                      <Play size={28} color="#ffffff" fill="#ffffff" strokeWidth={0} />
+                    ) : (
+                      <Lock size={22} color={t.textSoft} />
+                    )}
+                  </button>
+
+                  {/* Red pin badge on current stage */}
+                  {isNext && (
+                    <div style={{
+                      position: 'absolute', top: -6, right: -4,
+                      width: 22, height: 22, borderRadius: 11,
+                      background: '#bc0000',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: '0 2px 6px rgba(188,0,0,0.45)',
+                    }}>
+                      <MapPin size={12} color="#fff" fill="#fff" strokeWidth={0} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Stars */}
+                <div style={{ display: 'flex', gap: 3, marginTop: 10, marginBottom: 5 }}>
+                  {[0, 1, 2].map(si => (
+                    <Star key={si} size={13}
+                      color={done ? '#ffcc00' : t.border}
+                      fill={done ? '#ffcc00' : 'none'}
+                      strokeWidth={done ? 0 : 1.5} />
+                  ))}
+                </div>
+
+                {/* Label */}
+                <div style={{ fontWeight: 800, fontSize: 14, color: done ? t.pink : isNext ? t.sky : t.textSoft }}>
+                  {stage.stageNum}-р шат
+                </div>
+                {isNext && (
+                  <div style={{ color: t.sky, fontSize: 12, fontWeight: 600, marginTop: 1 }}>Эхлэх</div>
+                )}
+                <div style={{ color: t.textSoft, fontSize: 11, marginTop: 2, marginBottom: 6 }}>
+                  {stage.words.length} {isConj ? 'дасгал' : 'үг'}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

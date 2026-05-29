@@ -1,17 +1,17 @@
-import { Nunito, Lexend } from 'next/font/google';
+import { Inter, Montserrat } from 'next/font/google';
 import './globals.css';
 
-const nunito = Nunito({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-nunito',
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
-const lexend = Lexend({
+const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['600', '700', '800'],
-  variable: '--font-lexend',
+  variable: '--font-montserrat',
   display: 'swap',
 });
 
@@ -23,7 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="mn">
-      <body className={`${nunito.variable} ${lexend.variable}`}>
+      <body className={`${inter.variable} ${montserrat.variable}`}>
         {children}
       </body>
     </html>
