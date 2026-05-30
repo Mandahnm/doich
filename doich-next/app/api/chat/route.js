@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
+import { checkAuthAndLimit } from '@/lib/rateLimit';
+
+const MAX_MESSAGE_LENGTH = 500;   // chars per user message
+const MAX_HISTORY_TURNS  = 10;    // last N messages kept from history
 
 export async function POST(request) {
   try {
+    // Auth + rate limit
+    const { user, error: limitError } = await checkAuthAndLimit(request);
+    if (limitError) return limitError;
+
     const { level, message, history = [] } = await request.json();
+
+    // Input caps
+    const safeMessage = String(message || '').slice(0, MAX_MESSAGE_LENGTH);
+    const safeHistory = history
+      .slice(-MAX_HISTORY_TURNS)
+      .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: String(m.content).slice(0, 1000) }));
 
     const sys = `Та монгол хүмүүст герман хэл заадаг туслах багш. Хэрэглэгч ${level} түвшинд байна. Үргэлж монгол хэлээр (кирилл) хариулна уу. Герман жишээг герман хэлээр, тайлбарыг монголоор бич.
 
@@ -17,8 +31,8 @@ export async function POST(request) {
 
     const messages = [
       { role: 'system', content: sys },
-      ...history.map(m => ({ role: m.role, content: m.content })),
-      { role: 'user', content: message },
+      ...safeHistory,
+      { role: 'user', content: safeMessage },
     ];
 
     const r = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -27,17 +41,18 @@ export async function POST(request) {
         'Content-Type':  'application/json',
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
       },
-      body: JSON.stringify({ model: 'gpt-4o-mini', max_tokens: 1000, messages }),
+      body: JSON.stringify({ model: 'gpt-4o-mini', max_tokens: 600, messages }),
     });
 
     if (!r.ok) {
-      return NextResponse.json({ error: await r.text() }, { status: r.status });
+      console.error('OpenAI error:', await r.text());
+      return NextResponse.json({ error: 'AI үйлчилгээ түр дараа ажиллахгүй байна.' }, { status: 502 });
     }
 
     const d    = await r.json();
     const text = d.choices?.[0]?.message?.content || '';
     return NextResponse.json({ text: text || 'Хариулт хоосон байна.' });
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: 'Дотоод алдаа гарлаа.' }, { status: 500 });
   }
 }

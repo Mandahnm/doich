@@ -152,9 +152,13 @@ export default function ChatScreen({ t, state, onUpdateHistory }) {
     setInput('');
     setLoading(true);
     try {
+      const { data: { session } } = await import('@/lib/supabase').then(m => m.supabase.auth.getSession());
       const r = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${session?.access_token}`,
+        },
         body: JSON.stringify({ level: state.userLevel, message: input, history: msgs }),
       });
       const d = await r.json();

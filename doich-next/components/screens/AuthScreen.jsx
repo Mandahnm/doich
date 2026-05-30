@@ -18,7 +18,7 @@ export default function AuthScreen({ isDark, onToggle }) {
   const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsDesktop(window.innerWidth >= 768);
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -443,10 +443,42 @@ export default function AuthScreen({ isDark, onToggle }) {
   }
 
   // ── MOBILE layout ─────────────────────────────────────────────────────────
+  const mobileGridBg = isDark ? '#1a1812' : '#f5f0e8';
+  const mobileGridLines = isDark
+    ? 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)'
+    : 'linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)';
+
   return (
-    <div style={{ minHeight: '100vh', background: bgGrad, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-      {toggleBtn}
-      <div style={{ flex: '0 0 42vh', minHeight: 160 }} />
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+      {/* Grid background top area */}
+      <div style={{
+        flex: '0 0 42vh', minHeight: 180,
+        background: mobileGridBg,
+        backgroundImage: mobileGridLines,
+        backgroundSize: '44px 44px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'relative',
+      }}>
+        {toggleBtn}
+        {/* Logo centered */}
+        <div style={{
+          background: card,
+          borderRadius: 24,
+          padding: '16px',
+          boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.4)' : '0 8px 32px rgba(0,0,0,0.10)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <img src="/logo.png" alt="Дойч" width={120} height={120}
+            style={{ objectFit: 'contain', display: 'block' }}
+            onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+          />
+          <div style={{ display: 'none', width: 120, height: 120, alignItems: 'center', justifyContent: 'center', fontSize: 80, fontWeight: 900, color: goldBtn, lineHeight: 1 }}>
+            Д
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom sheet card */}
       <div style={{
         flex: 1, background: card, borderRadius: '32px 32px 0 0',
         padding: '28px 24px 48px',

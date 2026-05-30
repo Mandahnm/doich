@@ -9,18 +9,27 @@ const EXAMPLES = [
   'Ich bin 20 Jahre alt und ich studiere Informatik.',
 ];
 
+const MAX_CHARS = 500;
+
 export default function GrammarScreen({ t, state }) {
-  const [text, setText]     = useState('');
+  const [text, setText]       = useState('');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult]   = useState(null);
+
+  const overLimit = text.length > MAX_CHARS;
+  const nearLimit = text.length >= MAX_CHARS * 0.85;
 
   const fix = async () => {
-    if (!text.trim() || loading) return;
+    if (!text.trim() || loading || overLimit) return;
     setLoading(true); setResult(null);
     try {
+      const { data: { session } } = await import('@/lib/supabase').then(m => m.supabase.auth.getSession());
       const r = await fetch('/api/grammar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${session?.access_token}`,
+        },
         body: JSON.stringify({ text }),
       });
       const d = await r.json();
@@ -43,11 +52,14 @@ export default function GrammarScreen({ t, state }) {
       <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow, marginBottom: 12 }}>
         <textarea value={text} onChange={e => setText(e.target.value)}
           placeholder="Герман өгүүлбэрийг энд бич..." rows={4}
-          style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', fontSize: 15, color: t.text, lineHeight: 1.6 }} />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 10, borderTop: `1px solid ${t.border}` }}>
-          <div style={{ color: t.textSoft, fontSize: 12 }}>{text.length} тэмдэгт</div>
-          <button onClick={fix} disabled={!text.trim() || loading}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 20px', borderRadius: 12, fontWeight: 800, fontSize: 14, border: 'none', cursor: text.trim() && !loading ? 'pointer' : 'not-allowed', background: text.trim() && !loading ? t.pinkBtn : 'transparent', color: text.trim() && !loading ? '#fff' : t.textSoft, opacity: text.trim() && !loading ? 1 : 0.5 }}>
+          style={{ width: '100%', background: 'transparent', border: 'none', outline: 'none', fontSize: 15, color: t.text, lineHeight: 1.6, resize: 'none' }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 10, borderTop: `1px solid ${overLimit ? '#bc0000' : t.border}` }}>
+          <div style={{ fontSize: 12, fontWeight: overLimit ? 700 : 400, color: overLimit ? '#bc0000' : nearLimit ? '#f59e0b' : t.textSoft }}>
+            {text.length} / {MAX_CHARS}
+            {overLimit && <span style={{ marginLeft: 6 }}>— хэт урт</span>}
+          </div>
+          <button onClick={fix} disabled={!text.trim() || loading || overLimit}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 20px', borderRadius: 12, fontWeight: 800, fontSize: 14, border: 'none', cursor: text.trim() && !loading && !overLimit ? 'pointer' : 'not-allowed', background: text.trim() && !loading && !overLimit ? t.pinkBtn : 'transparent', color: text.trim() && !loading && !overLimit ? '#fff' : t.textSoft, opacity: text.trim() && !loading && !overLimit ? 1 : 0.5 }}>
             <Wand2 size={15} />{loading ? 'Хүлээж байна...' : 'Засах'}
           </button>
         </div>
