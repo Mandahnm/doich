@@ -5,6 +5,7 @@ import { getTheme } from '@/lib/theme';
 import { loadState, saveState } from '@/lib/storage';
 import { supabase } from '@/lib/supabase';
 import AuthScreen           from '@/components/screens/AuthScreen';
+import NameScreen            from '@/components/screens/NameScreen';
 import PasswordResetScreen  from '@/components/screens/PasswordResetScreen';
 import WelcomeScreen        from '@/components/screens/WelcomeScreen';
 import HomeScreen        from '@/components/screens/HomeScreen';
@@ -18,11 +19,13 @@ import DailyPracticeScreen   from '@/components/screens/DailyPracticeScreen';
 import AchievementsScreen    from '@/components/screens/AchievementsScreen';
 import AchievementToast      from '@/components/shared/AchievementToast';
 import BottomNav             from '@/components/shared/BottomNav';
+import DesktopSidebar        from '@/components/shared/DesktopSidebar';
 import { ACHIEVEMENTS, getUnlockedIds } from '@/lib/achievements';
 import { initSrsEntry, updateSrsEntry } from '@/lib/srs';
 
 const DEFAULT_STATE = {
   userLevel: null,
+  userName: '',
   learnedWords: [],
   darkMode: false,
   completedStages: {},
@@ -42,6 +45,7 @@ export default function Page() {
   const [user,        setUser]        = useState(null);
   const [showRecovery, setShowRecovery] = useState(false);
   const [toast,       setToast]       = useState(null);
+  const [isDesktop,   setIsDesktop]   = useState(false);
   const saveTimer       = useRef(null);
   const userLoadedRef   = useRef(false);
   const prevUnlockedRef = useRef(null);
@@ -52,15 +56,17 @@ export default function Page() {
     const localDark = loadState()?.darkMode ?? sysDark;
     setState(s => ({ ...s, darkMode: localDark }));
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        userLoadedRef.current = true;
-        setUser(session.user);
-        loadProgress(session.user.id);
-      } else {
-        setLoaded(true);
-      }
-    });
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => {
+        if (session?.user) {
+          userLoadedRef.current = true;
+          setUser(session.user);
+          loadProgress(session.user.id);
+        } else {
+          setLoaded(true);
+        }
+      })
+      .catch(() => setLoaded(true));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user && !userLoadedRef.current) {
@@ -86,6 +92,13 @@ export default function Page() {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   // ── Achievement unlock detection ────────────────────────────────────────
   useEffect(() => {
     if (!loaded) return;
@@ -102,29 +115,33 @@ export default function Page() {
   }, [state, loaded]);
 
   const loadProgress = async (userId) => {
-    const { data } = await supabase
-      .from('user_progress')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    try {
+      const { data } = await supabase
+        .from('user_progress')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
-    if (data) {
-      setState(s => ({
-        ...DEFAULT_STATE,
-        darkMode: s.darkMode,
-        userLevel:       data.user_level,
-        learnedWords:    data.learned_words    || [],
-        completedStages: data.completed_stages || {},
-        mistakes:        data.mistakes         || {},
-        stats:           { ...DEFAULT_STATE.stats, ...(data.stats || {}) },
-        xp:              data.xp               || 0,
-        streak:          data.streak           || 0,
-        lastStreakDate:  data.last_streak_date  || null,
-        lastDailyDate:   data.last_daily_date   || null,
-        chatHistory:     data.chat_history      || [],
-      }));
+      if (data) {
+        setState(s => ({
+          ...DEFAULT_STATE,
+          darkMode: s.darkMode,
+          userLevel:       data.user_level,
+          userName:        data.user_name        || '',
+          learnedWords:    data.learned_words    || [],
+          completedStages: data.completed_stages || {},
+          mistakes:        data.mistakes         || {},
+          stats:           { ...DEFAULT_STATE.stats, ...(data.stats || {}) },
+          xp:              data.xp               || 0,
+          streak:          data.streak           || 0,
+          lastStreakDate:  data.last_streak_date  || null,
+          lastDailyDate:   data.last_daily_date   || null,
+          chatHistory:     data.chat_history      || [],
+        }));
+      }
+    } finally {
+      setLoaded(true);
     }
-    setLoaded(true);
   };
 
   // ── Persist to Supabase (debounced 1.5s) ────────────────────────────────
@@ -136,6 +153,7 @@ export default function Page() {
       await supabase.from('user_progress').upsert({
         id:               user.id,
         user_level:       state.userLevel,
+        user_name:        state.userName,
         learned_words:    state.learnedWords,
         completed_stages: state.completedStages,
         mistakes:         state.mistakes,
@@ -229,7 +247,7 @@ export default function Page() {
   if (!loaded) {
     return (
       <div style={{ minHeight: '100vh', background: '#15121E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#FF6FA8', fontFamily: 'var(--font-nunito)', fontSize: 18, fontWeight: 800 }}>нэмэх...</div>
+        <div style={{ color: '#FF6FA8', fontFamily: 'var(--font-nunito)', fontSize: 18, fontWeight: 800 }}>Уншиж байна...</div>
       </div>
     );
   }
@@ -252,6 +270,16 @@ export default function Page() {
     );
   }
 
+  if (!state.userName) {
+    return (
+      <NameScreen
+        isDark={state.darkMode}
+        onToggle={() => update({ darkMode: !state.darkMode })}
+        onSave={name => update({ userName: name })}
+      />
+    );
+  }
+
   if (!state.userLevel) {
     return (
       <WelcomeScreen
@@ -263,37 +291,55 @@ export default function Page() {
     );
   }
 
+  const screenContent = (
+    <>
+      {tab === 'home'     && <HomeScreen     t={t} state={state} setTab={setTab} isDesktop={isDesktop} />}
+      {tab === 'review'   && (
+        <ReviewScreen  t={t} state={state} setTab={setTab}
+          recordStat={recordStat} recordMistake={recordMistake} clearMistake={clearMistake}
+          updateSRS={updateSRS} />
+      )}
+      {tab === 'chat'     && <ChatScreen    t={t} state={state} onUpdateHistory={msgs => update({ chatHistory: msgs })} />}
+      {tab === 'grammar'  && <GrammarScreen t={t} state={state} />}
+      {tab === 'games'    && (
+        <GamesScreen   t={t} state={state}
+          recordStat={recordStat} completeStage={completeStage}
+          recordMistake={recordMistake} clearMistake={clearMistake}
+          addXP={addXP} checkStreak={checkStreak} />
+      )}
+      {tab === 'vocab'    && <VocabScreen    t={t} state={state} toggleLearned={toggleLearned} />}
+      {tab === 'profile' && (
+        <ProfileScreen t={t} state={state} update={update}
+          user={user} setTab={setTab}
+          onLogout={() => supabase.auth.signOut()} />
+      )}
+      {tab === 'daily'    && (
+        <DailyPracticeScreen t={t} state={state}
+          recordStat={recordStat} addXP={addXP} checkStreak={checkStreak}
+          markDailyDone={markDailyDone}
+          recordMistake={recordMistake} clearMistake={clearMistake}
+          onQuit={() => setTab('home')} />
+      )}
+      {tab === 'achievements' && <AchievementsScreen t={t} state={state} />}
+    </>
+  );
+
+  if (isDesktop) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', background: t.bgMain, color: t.text }}>
+        <DesktopSidebar tab={tab} setTab={setTab} t={t} state={state} />
+        <main style={{ flex: 1, minHeight: '100vh', overflowY: 'auto', padding: '24px 32px' }}>
+          {screenContent}
+        </main>
+        <AchievementToast achievement={toast} onDone={() => setToast(null)} />
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: t.bgMain, color: t.text, paddingBottom: 86 }}>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '24px 18px 0' }}>
-        {tab === 'home'     && <HomeScreen     t={t} state={state} setTab={setTab} />}
-        {tab === 'review'   && (
-          <ReviewScreen  t={t} state={state} setTab={setTab}
-            recordStat={recordStat} recordMistake={recordMistake} clearMistake={clearMistake}
-            updateSRS={updateSRS} />
-        )}
-        {tab === 'chat'     && <ChatScreen    t={t} state={state} onUpdateHistory={msgs => update({ chatHistory: msgs })} />}
-        {tab === 'grammar'  && <GrammarScreen t={t} state={state} />}
-        {tab === 'games'    && (
-          <GamesScreen   t={t} state={state}
-            recordStat={recordStat} completeStage={completeStage}
-            recordMistake={recordMistake} clearMistake={clearMistake}
-            addXP={addXP} checkStreak={checkStreak} />
-        )}
-        {tab === 'vocab'    && <VocabScreen    t={t} state={state} toggleLearned={toggleLearned} />}
-        {tab === 'profile' && (
-          <ProfileScreen t={t} state={state} update={update}
-            user={user} setTab={setTab}
-            onLogout={() => supabase.auth.signOut()} />
-        )}
-        {tab === 'daily'    && (
-          <DailyPracticeScreen t={t} state={state}
-            recordStat={recordStat} addXP={addXP} checkStreak={checkStreak}
-            markDailyDone={markDailyDone}
-            recordMistake={recordMistake} clearMistake={clearMistake}
-            onQuit={() => setTab('home')} />
-        )}
-        {tab === 'achievements' && <AchievementsScreen t={t} state={state} />}
+        {screenContent}
       </div>
       <BottomNav t={t} tab={tab} setTab={setTab} />
       <AchievementToast achievement={toast} onDone={() => setToast(null)} />

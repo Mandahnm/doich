@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Settings, ArrowLeft, LogOut, Lock, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Settings, ArrowLeft, LogOut, Lock, Eye, EyeOff, Trash2, Flame, BookOpen, Trophy, Calendar } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { LEVELS } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
@@ -15,8 +15,8 @@ function formatJoinDate(isoStr) {
   return `${d.getFullYear()} оны ${MN_MONTHS[d.getMonth()]} сард нэгдсэн`;
 }
 
-function getInitial(email) {
-  return email ? email[0].toUpperCase() : '?';
+function pct(correct, total) {
+  return total > 0 ? Math.round(correct / total * 100) : 0;
 }
 
 export default function ProfileScreen({ t, state, update, user, onLogout, setTab }) {
@@ -28,17 +28,29 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
   const [pwErr,        setPwErr]        = useState('');
   const [pwMsg,        setPwMsg]        = useState('');
   const [pwLoading,    setPwLoading]    = useState(false);
+  const [isDesktop,    setIsDesktop]    = useState(false);
 
-  const totalDone            = Object.keys(state.completedStages || {}).length;
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const totalDone = Object.keys(state.completedStages || {}).length;
   const { level, xpInLevel, xpToNext, progress } = getLevelInfo(state.xp || 0);
-  const unlockedAchievements = ACHIEVEMENTS.filter(a => a.check(state));
+  const unlockedIds = new Set(ACHIEVEMENTS.filter(a => a.check(state)).map(a => a.id));
   const mid    = t.textMid;
   const border = t.border;
 
+  const initial = state.userName ? state.userName[0].toUpperCase()
+                : user?.email   ? user.email[0].toUpperCase()
+                : '?';
+
   const handleChangePassword = async () => {
     setPwErr(''); setPwMsg('');
-    if (newPw.length < 6)      { setPwErr('Хамгийн багадаа 6 тэмдэгт'); return; }
-    if (newPw !== confirmPw)   { setPwErr('Нууц үгнүүд таарахгүй байна'); return; }
+    if (newPw.length < 6)    { setPwErr('Хамгийн багадаа 6 тэмдэгт'); return; }
+    if (newPw !== confirmPw) { setPwErr('Нууц үгнүүд таарахгүй байна'); return; }
     setPwLoading(true);
     const { error } = await supabase.auth.updateUser({ password: newPw });
     setPwLoading(false);
@@ -67,8 +79,7 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
     return (
       <div className="af">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-          <button
-            onClick={() => { setShowSettings(false); setChangePwOpen(false); setPwErr(''); setPwMsg(''); }}
+          <button onClick={() => { setShowSettings(false); setChangePwOpen(false); setPwErr(''); setPwMsg(''); }}
             style={{ background: t.bgTag, border: 'none', borderRadius: 12, padding: '8px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <ArrowLeft size={18} color={t.text} />
           </button>
@@ -76,7 +87,6 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {/* Dark mode */}
           <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
             <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Өдрийн / харанхуй горим</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -89,7 +99,6 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
             </div>
           </div>
 
-          {/* CEFR level */}
           <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
             <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Миний түвшин</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
@@ -105,7 +114,6 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
             </div>
           </div>
 
-          {/* Change password */}
           {user && (
             <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
               <button onClick={() => { setChangePwOpen(o => !o); setPwErr(''); setPwMsg(''); }}
@@ -114,7 +122,6 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
                 <div style={{ flex: 1, textAlign: 'left', fontWeight: 800, color: t.text, fontSize: 14 }}>Нууц үг солих</div>
                 <span style={{ color: mid, fontSize: 18 }}>{changePwOpen ? '▲' : '▼'}</span>
               </button>
-
               {changePwOpen && (
                 <div style={{ marginTop: 16 }}>
                   <div style={{ marginBottom: 10 }}>
@@ -148,13 +155,11 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
             </div>
           )}
 
-          {/* Reset data */}
           <button onClick={handleReset}
             style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${t.darkMode ? '#4A1F25' : '#FFD0D5'}`, color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
             <LogOut size={16} /> Бүх өгөгдлийг устгах
           </button>
 
-          {/* Sign out */}
           {onLogout && (
             <button onClick={() => { if (confirm('Гарах уу?')) onLogout(); }}
               style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${border}`, color: mid, fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
@@ -162,7 +167,6 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
             </button>
           )}
 
-          {/* Delete account */}
           {user && (
             <button onClick={handleDeleteAccount}
               style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.darkMode ? '#1A0A0A' : '#FFF5F5', border: `2px solid ${t.darkMode ? '#5A1A1A' : '#FEB2B2'}`, color: '#C53030', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
@@ -174,121 +178,297 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
     );
   }
 
-  // ── Profile main view ────────────────────────────────────────────────────
+  // ── Shared data ───────────────────────────────────────────────────────────
   const STAT_CARDS = [
-    { e: '🔥', l: 'Streak',        v: state.streak || 0 },
-    { e: '💖', l: 'Сурсан үг',     v: state.learnedWords.length },
-    { e: '🏆', l: 'Дууссан шат',   v: totalDone },
-    { e: '📅', l: 'Өдрийн дасгал', v: state.stats?.dailyCount || 0 },
+    { Icon: Flame,    bg: '#ffdad4', ic: '#bc0000', l: 'Streak',        v: state.streak || 0 },
+    { Icon: BookOpen, bg: '#dceeff', ic: '#0062a1', l: 'Сурсан үг',     v: state.learnedWords.length },
+    { Icon: Trophy,   bg: '#fff8d4', ic: '#745b00', l: 'Дууссан шат',   v: totalDone },
+    { Icon: Calendar, bg: '#f0eded', ic: '#80765f', l: 'Өдрийн дасгал', v: state.stats?.dailyCount || 0 },
   ];
 
   const ACCURACY_ROWS = [
-    { e: '🎯', l: 'Үг таах',   v: `${state.stats.flashcardsCorrect}/${state.stats.flashcardsTotal}` },
-    { e: '🏷️', l: 'Артикль',   v: `${state.stats.genderCorrect}/${state.stats.genderTotal}` },
-    { e: '🎧', l: 'Сонсох',    v: `${state.stats?.listeningCorrect || 0}/${state.stats?.listeningTotal || 0}` },
-    { e: '✍️', l: 'Өгүүлбэр', v: `${state.stats?.sentenceCorrect || 0}/${state.stats?.sentenceTotal || 0}` },
+    { l: 'Үг таах',   pct: pct(state.stats.flashcardsCorrect, state.stats.flashcardsTotal),   color: t.pinkBtn },
+    { l: 'Артикль',   pct: pct(state.stats.genderCorrect,     state.stats.genderTotal),        color: '#0062a1' },
+    { l: 'Сонсох',    pct: pct(state.stats?.listeningCorrect || 0, state.stats?.listeningTotal || 0), color: '#bc0000' },
+    { l: 'Өгүүлбэр', pct: pct(state.stats?.sentenceCorrect  || 0, state.stats?.sentenceTotal  || 0), color: t.pinkBtn },
   ];
 
-  return (
-    <div className="af">
-      {/* Header row */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
-        <div>
-          <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>ПРОФАЙЛ</div>
-          <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text }}>Миний хуудас</div>
-        </div>
-        <button onClick={() => setShowSettings(true)}
-          style={{ background: t.bgCard, border: `1px solid ${border}`, borderRadius: 14, padding: '10px', cursor: 'pointer', boxShadow: t.shadow, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 4 }}>
-          <Settings size={20} color={mid} />
-        </button>
-      </div>
+  const shown = ACHIEVEMENTS.slice(0, 6);
 
-      {/* Avatar + user info */}
-      <div style={{ background: t.bgCard, borderRadius: 24, padding: '20px 18px', marginBottom: 16, boxShadow: t.shadow, display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div style={{ width: 64, height: 64, borderRadius: 32, background: 'linear-gradient(135deg,#FF6FA8,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <span style={{ color: '#fff', fontWeight: 800, fontSize: 26 }}>{getInitial(user?.email)}</span>
+  // ── DESKTOP layout ────────────────────────────────────────────────────────
+  if (isDesktop) {
+    return (
+      <div>
+        {/* Page title */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: t.text, margin: 0 }}>Профайл</h1>
+          <button onClick={() => setShowSettings(true)}
+            style={{ background: t.bgCard, border: `1px solid ${border}`, borderRadius: 12, padding: '8px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Settings size={16} color={mid} />
+            <span style={{ fontSize: 13, fontWeight: 600, color: mid }}>Тохиргоо</span>
+          </button>
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ color: t.text, fontWeight: 800, fontSize: 15, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</div>
-          {state.userLevel && (
-            <div style={{ color: mid, fontSize: 12, marginTop: 3 }}>Герман · {state.userLevel} түвшин</div>
-          )}
-          {user?.created_at && (
-            <div style={{ color: t.textSoft, fontSize: 11, marginTop: 3 }}>{formatJoinDate(user.created_at)}</div>
-          )}
-        </div>
-      </div>
 
-      {/* Level + XP bar */}
-      <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 16, boxShadow: t.shadow }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 12 }}>
-          <div>
-            <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.15em', marginBottom: 2 }}>ТҮВШИН</div>
-            <div className="fd" style={{ fontSize: 40, fontWeight: 800, color: t.pink, lineHeight: 1 }}>{level}</div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.15em', marginBottom: 2 }}>НИЙТ XP</div>
-            <div className="fd" style={{ fontSize: 24, fontWeight: 800, color: t.text }}>{(state.xp || 0).toLocaleString()}</div>
-          </div>
-        </div>
-        <div style={{ height: 10, background: t.bgTag, borderRadius: 5, overflow: 'hidden', marginBottom: 6 }}>
-          <div style={{ height: '100%', width: `${progress * 100}%`, background: 'linear-gradient(90deg,#FF6FA8,#A78BFA)', borderRadius: 5, transition: 'width 0.6s ease' }} />
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: mid, fontSize: 11 }}>
-          <span>{xpInLevel} XP</span>
-          <span>дараагийн түвшинд {xpToNext - xpInLevel} XP дутна</span>
-        </div>
-      </div>
+        {/* Row 1: User info + stats */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 16, marginBottom: 16 }}>
 
-      {/* Stats grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-        {STAT_CARDS.map(s => (
-          <div key={s.l} style={{ background: t.bgCard, borderRadius: 18, padding: '14px 16px', boxShadow: t.shadow }}>
-            <div style={{ fontSize: 22, marginBottom: 6 }}>{s.e}</div>
-            <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text, lineHeight: 1 }}>{s.v}</div>
-            <div style={{ color: mid, fontSize: 11, marginTop: 4 }}>{s.l}</div>
-          </div>
-        ))}
-      </div>
+          {/* Left: user card + level card */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-      {/* Achievements */}
-      {unlockedAchievements.length > 0 && (
-        <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 16, boxShadow: t.shadow }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-            <div style={{ fontWeight: 800, color: t.text, fontSize: 15 }}>Амжилтууд 🏅</div>
-            <button onClick={() => setTab('achievements')}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: t.pink, fontSize: 12, fontWeight: 800 }}>
-              Бүгдийг харах →
-            </button>
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {unlockedAchievements.slice(0, 6).map(a => (
-              <div key={a.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: 56 }}>
-                <div style={{ width: 48, height: 48, borderRadius: 14, background: '#F59E0B22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
-                  {a.icon}
+            {/* User card */}
+            <div style={{ background: t.bgCard, borderRadius: 20, padding: '20px 22px', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{ width: 68, height: 68, borderRadius: 34, background: t.pinkBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,204,0,0.3)' }}>
+                <span style={{ color: t.pinkBtnText, fontWeight: 900, fontSize: 26 }}>{initial}</span>
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 800, fontSize: 18, color: t.text, marginBottom: 2 }}>
+                  {state.userName || user?.email || ''}
                 </div>
-                <div style={{ color: mid, fontSize: 9, fontWeight: 700, textAlign: 'center', lineHeight: 1.2 }}>{a.title}</div>
+                {state.userName && (
+                  <div style={{ color: mid, fontSize: 13, marginBottom: 6 }}>{user?.email}</div>
+                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  {user?.created_at && (
+                    <span style={{ color: t.textSoft, fontSize: 12 }}>{formatJoinDate(user.created_at)}</span>
+                  )}
+                  {state.userLevel && (
+                    <span style={{ background: t.darkMode ? '#1a2a3a' : '#dceeff', color: t.darkMode ? '#9ccaff' : '#0062a1', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>
+                      {state.userLevel} түвшин
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.12em', marginBottom: 4 }}>CEFR</div>
+                {state.userLevel && (
+                  <span style={{ background: t.darkMode ? '#1a2a3a' : '#dceeff', color: t.darkMode ? '#9ccaff' : '#0062a1', fontSize: 13, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>
+                    {state.userLevel}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Current level card */}
+            <div style={{ background: t.bgCard, borderRadius: 20, padding: '18px 22px', border: `1px solid ${border}` }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                <div>
+                  <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.15em', marginBottom: 4 }}>ТҮВШИН</div>
+                  <div className="fd" style={{ fontSize: 20, fontWeight: 800, color: t.pink }}>Түвшин {level}</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Trophy size={18} color={t.pink} />
+                  <span style={{ fontSize: 15, fontWeight: 700, color: t.text }}>{xpInLevel.toLocaleString()} / {xpToNext.toLocaleString()} XP</span>
+                </div>
+              </div>
+              <div style={{ height: 10, background: t.bgTag, borderRadius: 5, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${progress * 100}%`, background: t.pinkBtn, borderRadius: 5, transition: 'width 0.6s ease' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Right: 2×2 stats grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            {STAT_CARDS.map(({ Icon, bg, ic, l, v }) => (
+              <div key={l} style={{ background: t.bgCard, borderRadius: 18, padding: '18px 16px', border: `1px solid ${border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 14, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={22} color={ic} />
+                </div>
+                <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text, lineHeight: 1 }}>{v}</div>
+                <div style={{ color: mid, fontSize: 12, textAlign: 'center' }}>{l}</div>
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 12, color: t.textSoft, fontSize: 11 }}>
-            {unlockedAchievements.length} / {ACHIEVEMENTS.length} нээгдсэн
+        </div>
+
+        {/* Row 2: Achievements + Accuracy */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 16 }}>
+
+          {/* Achievements */}
+          <div style={{ background: t.bgCard, borderRadius: 20, padding: '18px 20px', border: `1px solid ${border}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <div style={{ fontWeight: 800, color: t.text, fontSize: 16 }}>Амжилтууд</div>
+              <button onClick={() => setTab('achievements')}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: t.pink, fontSize: 13, fontWeight: 700 }}>
+                Бүгдийг харах →
+              </button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+              {shown.map(a => {
+                const unlocked = unlockedIds.has(a.id);
+                return (
+                  <div key={a.id} style={{
+                    aspectRatio: '1', borderRadius: 16,
+                    background: unlocked ? (a.color || t.pinkBtn) : t.bgTag,
+                    border: `1px solid ${unlocked ? 'transparent' : border}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {unlocked
+                      ? <span style={{ fontSize: 26 }}>{a.icon}</span>
+                      : <Lock size={20} color={t.textSoft} strokeWidth={1.5} />}
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ marginTop: 12, color: t.textSoft, fontSize: 11, textAlign: 'center' }}>
+              {unlockedIds.size} / {ACHIEVEMENTS.length} нээгдсэн
+            </div>
+          </div>
+
+          {/* Accuracy */}
+          <div style={{ background: t.bgCard, borderRadius: 20, padding: '18px 22px', border: `1px solid ${border}` }}>
+            <div style={{ fontWeight: 800, color: t.text, fontSize: 16, marginBottom: 18 }}>Статистик</div>
+            {/* Top 2 rows full-width */}
+            {ACCURACY_ROWS.slice(0, 2).map(({ l, pct: p, color }) => (
+              <div key={l} style={{ marginBottom: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: mid }}>{l}</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: t.text }}>{p}%</span>
+                </div>
+                <div style={{ height: 7, background: t.bgTag, borderRadius: 4, overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${p}%`, background: color, borderRadius: 4, transition: 'width 0.6s ease' }} />
+                </div>
+              </div>
+            ))}
+            {/* Bottom 2 side by side */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              {ACCURACY_ROWS.slice(2).map(({ l, pct: p, color }) => (
+                <div key={l}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: mid }}>{l}</span>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: t.text }}>{p}%</span>
+                  </div>
+                  <div style={{ height: 7, background: t.bgTag, borderRadius: 4, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${p}%`, background: color, borderRadius: 4, transition: 'width 0.6s ease' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
 
-      {/* Accuracy stats */}
-      <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 16, boxShadow: t.shadow }}>
-        <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Статистик 📊</div>
-        {ACCURACY_ROWS.map(s => (
-          <div key={s.l} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: t.bgTag, borderRadius: 12, padding: '10px 14px', marginBottom: 8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: mid, fontWeight: 600, fontSize: 14 }}>
-              <span>{s.e}</span>{s.l}
+  return (
+    <div className="af" style={{ paddingBottom: 8 }}>
+
+      {/* ── Hero header ──────────────────────────────────────────────────── */}
+      <div style={{ background: t.bgCard, borderRadius: 24, padding: '24px 20px 20px', marginBottom: 14, border: `1px solid ${border}`, position: 'relative' }}>
+        {/* Settings icon */}
+        <button onClick={() => setShowSettings(true)}
+          style={{ position: 'absolute', top: 16, right: 16, background: t.bgTag, border: 'none', borderRadius: 10, padding: 8, cursor: 'pointer', display: 'flex' }}>
+          <Settings size={18} color={mid} />
+        </button>
+
+        {/* Avatar */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 80, height: 80, borderRadius: 40, background: t.pinkBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 4px 16px rgba(255,204,0,0.35)` }}>
+            <span style={{ color: t.pinkBtnText, fontWeight: 900, fontSize: 32 }}>{initial}</span>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontWeight: 800, fontSize: 18, color: t.text, marginBottom: 2 }}>
+              {state.userName || user?.email || ''}
             </div>
-            <div style={{ fontWeight: 800, color: t.text, fontSize: 14 }}>{s.v}</div>
+            {state.userName && (
+              <div style={{ color: mid, fontSize: 13, marginBottom: 8 }}>{user?.email}</div>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
+              {user?.created_at && (
+                <span style={{ color: t.textSoft, fontSize: 12 }}>{formatJoinDate(user.created_at)}</span>
+              )}
+              {state.userLevel && (
+                <span style={{ background: t.darkMode ? '#1a2a3a' : '#dceeff', color: t.darkMode ? '#9ccaff' : '#0062a1', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>
+                  {state.userLevel} түвшин
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Current level card ────────────────────────────────────────────── */}
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 14, border: `1px solid ${border}` }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <div>
+            <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.15em', marginBottom: 4 }}>ТҮВШИН</div>
+            <div className="fd" style={{ fontSize: 22, fontWeight: 800, color: t.pink }}>Түвшин {level}</div>
+          </div>
+          <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Trophy size={18} color={t.pink} />
+            <div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: t.text }}>{xpInLevel.toLocaleString()} / {xpToNext.toLocaleString()} XP</div>
+            </div>
+          </div>
+        </div>
+        <div style={{ height: 10, background: t.bgTag, borderRadius: 5, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${progress * 100}%`, background: t.pinkBtn, borderRadius: 5, transition: 'width 0.6s ease' }} />
+        </div>
+      </div>
+
+      {/* ── Stats grid 2×2 ────────────────────────────────────────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+        {STAT_CARDS.map(({ Icon, bg, ic, l, v }) => (
+          <div key={l} style={{ background: t.bgCard, borderRadius: 18, padding: '16px', border: `1px solid ${border}` }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+              <Icon size={20} color={ic} />
+            </div>
+            <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text, lineHeight: 1 }}>{v}</div>
+            <div style={{ color: mid, fontSize: 12, marginTop: 4 }}>{l}</div>
           </div>
         ))}
       </div>
+
+      {/* ── Achievements ──────────────────────────────────────────────────── */}
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 14, border: `1px solid ${border}` }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+          <div style={{ fontWeight: 800, color: t.text, fontSize: 16 }}>Амжилтууд</div>
+          <button onClick={() => setTab('achievements')}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: t.pink, fontSize: 13, fontWeight: 700 }}>
+            Бүгдийг харах →
+          </button>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+          {shown.map(a => {
+            const unlocked = unlockedIds.has(a.id);
+            return (
+              <div key={a.id} style={{
+                aspectRatio: '1',
+                borderRadius: 16,
+                background: unlocked ? a.color || t.pinkBtn : t.bgTag,
+                border: `1px solid ${unlocked ? 'transparent' : border}`,
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', gap: 6,
+              }}>
+                {unlocked ? (
+                  <span style={{ fontSize: 28 }}>{a.icon}</span>
+                ) : (
+                  <Lock size={22} color={t.textSoft} strokeWidth={1.5} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: 12, color: t.textSoft, fontSize: 11, textAlign: 'center' }}>
+          {unlockedIds.size} / {ACHIEVEMENTS.length} нээгдсэн
+        </div>
+      </div>
+
+      {/* ── Accuracy ─────────────────────────────────────────────────────── */}
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 8, border: `1px solid ${border}` }}>
+        <div style={{ fontWeight: 800, color: t.text, fontSize: 16, marginBottom: 16 }}>Статистик</div>
+        {ACCURACY_ROWS.map(({ l, pct: p, color }) => (
+          <div key={l} style={{ marginBottom: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: mid }}>{l}</span>
+              <span style={{ fontSize: 14, fontWeight: 800, color: t.text }}>{p}%</span>
+            </div>
+            <div style={{ height: 7, background: t.bgTag, borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${p}%`, background: color, borderRadius: 4, transition: 'width 0.6s ease' }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 }
