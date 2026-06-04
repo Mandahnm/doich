@@ -54,4 +54,23 @@ button:active:not(:disabled) {
 .su { animation: slideUp 0.4s  ease-out; }
 
 ::-webkit-scrollbar { width: 0; height: 0; }
+.desktop-only { display: none; }
+@media (min-width: 1024px) { .desktop-only { display: flex; } }
 textarea { resize: none; }
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.sk {
+  background: linear-gradient(90deg, #e8e4de 25%, #f5f2ee 50%, #e8e4de 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}
+.sk-dark {
+  background: linear-gradient(90deg, #2a2620 25%, #36322a 50%, #2a2620 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}

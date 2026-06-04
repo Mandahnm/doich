@@ -245,9 +245,41 @@ export default function Page() {
 
   // ── Render ───────────────────────────────────────────────────────────────
   if (!loaded) {
+    const isDark = state.darkMode;
+    const sk = isDark ? 'sk-dark' : 'sk';
+    const bg = isDark ? '#1a1812' : '#f5f0e8';
+    const card = isDark ? '#1e1e1e' : '#ffffff';
     return (
-      <div style={{ minHeight: '100vh', background: '#15121E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#FF6FA8', fontFamily: 'var(--font-nunito)', fontSize: 18, fontWeight: 800 }}>Уншиж байна...</div>
+      <div style={{ minHeight: '100vh', display: 'flex' }}>
+        {/* Desktop: left panel skeleton */}
+        <div className="desktop-only" style={{ flex: 1, background: bg, padding: '32px 48px', display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div className={sk} style={{ width: 80, height: 24 }} />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
+            <div className={sk} style={{ width: 180, height: 180, borderRadius: 24 }} />
+            <div className={sk} style={{ width: 260, height: 28, borderRadius: 8 }} />
+            <div className={sk} style={{ width: 220, height: 18, borderRadius: 8 }} />
+            <div className={sk} style={{ width: 200, height: 18, borderRadius: 8 }} />
+          </div>
+        </div>
+
+        {/* Right panel / mobile: form skeleton */}
+        <div style={{ width: '100%', maxWidth: 520, background: card, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 48px', gap: 20 }}>
+          {/* Tab switcher */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+            <div className={sk} style={{ flex: 1, height: 44, borderRadius: 10 }} />
+            <div className={sk} style={{ flex: 1, height: 44, borderRadius: 10 }} />
+          </div>
+          {/* Title */}
+          <div className={sk} style={{ width: '60%', height: 28, borderRadius: 8 }} />
+          <div className={sk} style={{ width: '80%', height: 16, borderRadius: 8 }} />
+          {/* Inputs */}
+          <div className={sk} style={{ width: '100%', height: 50, borderRadius: 10, marginTop: 8 }} />
+          <div className={sk} style={{ width: '100%', height: 50, borderRadius: 10 }} />
+          {/* Button */}
+          <div className={sk} style={{ width: '100%', height: 52, borderRadius: 12, marginTop: 8 }} />
+          {/* Footer link */}
+          <div className={sk} style={{ width: '50%', height: 14, borderRadius: 8, margin: '0 auto' }} />
+        </div>
       </div>
     );
   }

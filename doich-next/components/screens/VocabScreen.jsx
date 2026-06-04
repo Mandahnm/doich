@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Check, Search, X } from 'lucide-react';
 import { VOCAB, LEVELS, CEFR_META } from '@/lib/vocab';
 import MultiChips from '@/components/shared/MultiChips';
@@ -25,11 +25,13 @@ function toggle(arr, item) {
 }
 
 export default function VocabScreen({ t, state, toggleLearned }) {
-  const [lF,        setLF]        = useState([]);
-  const [tF,        setTF]        = useState([]);
-  const [stF,       setStF]       = useState('all');
-  const [query,     setQuery]     = useState('');
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [lF,          setLF]          = useState([]);
+  const [tF,          setTF]          = useState([]);
+  const [stF,         setStF]         = useState('all');
+  const [query,       setQuery]       = useState('');
+  const [isDesktop,   setIsDesktop]   = useState(false);
+  const [visibleCount, setVisibleCount] = useState(50);
+  const sentinelRef = useRef(null);
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
@@ -38,7 +40,7 @@ export default function VocabScreen({ t, state, toggleLearned }) {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const filtered = VOCAB.filter(w => {
+  const filtered = useMemo(() => VOCAB.filter(w => {
     if (lF.length > 0 && !lF.includes(w.level)) return false;
     if (tF.length > 0 && !tF.includes(w.type))  return false;
     const learned = state.learnedWords.includes(w.id);
@@ -49,7 +51,23 @@ export default function VocabScreen({ t, state, toggleLearned }) {
       if (!w.de.toLowerCase().includes(q) && !w.mn.toLowerCase().includes(q)) return false;
     }
     return true;
-  });
+  }), [lF, tF, stF, query, state.learnedWords]);
+
+  // Reset visible count whenever filters change
+  useEffect(() => { setVisibleCount(50); }, [filtered]);
+
+  // Load more when sentinel scrolls into view
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setVisibleCount(n => Math.min(n + 50, filtered.length));
+    }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [filtered]);
+
+  const visible = filtered.slice(0, visibleCount);
 
   // ── Shared word card ──────────────────────────────────────────────────────
   const WordCard = ({ w, i }) => {
@@ -157,7 +175,7 @@ export default function VocabScreen({ t, state, toggleLearned }) {
 
         {/* 2-column word grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          {filtered.map((w, i) => <WordCard key={w.id} w={w} i={i} />)}
+          {visible.map((w, i) => <WordCard key={w.id} w={w} i={i} />)}
           {filtered.length === 0 && (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: t.textMid, padding: '48px 0' }}>
               <div style={{ fontSize: 36, marginBottom: 8 }}>🌸</div>
@@ -165,6 +183,7 @@ export default function VocabScreen({ t, state, toggleLearned }) {
             </div>
           )}
         </div>
+        {visibleCount < filtered.length && <div ref={sentinelRef} style={{ height: 40 }} />}
       </div>
     );
   }
@@ -203,7 +222,7 @@ export default function VocabScreen({ t, state, toggleLearned }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
-        {filtered.map((w, i) => <WordCard key={w.id} w={w} i={i} />)}
+        {visible.map((w, i) => <WordCard key={w.id} w={w} i={i} />)}
         {filtered.length === 0 && (
           <div style={{ textAlign: 'center', color: t.textMid, padding: '48px 0' }}>
             <div style={{ fontSize: 36, marginBottom: 8 }}>🌸</div>
@@ -211,6 +230,7 @@ export default function VocabScreen({ t, state, toggleLearned }) {
           </div>
         )}
       </div>
+      {visibleCount < filtered.length && <div ref={sentinelRef} style={{ height: 40 }} />}
     </div>
   );
 }

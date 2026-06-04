@@ -8,14 +8,37 @@ import PlayButton from './PlayButton';
 const TYPE_LABEL = { noun: 'нэр үг', verb: 'үйл үг', adj: 'тэмдэг нэр', adv: 'дайвар үг' };
 
 function normalize(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, ' ');
+  return s.trim().toLowerCase()
+    .replace(/[.,!?;:]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, (_, i) => Array(n + 1).fill(0).map((_, j) => j === 0 ? i : 0));
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[m][n];
 }
 
 function matchesWord(transcript, word) {
   const said = normalize(transcript);
   const bare = normalize(word.de).replace(/^(der|die|das) /, '');
   const withArt = word.gender ? `${word.gender} ${bare}` : null;
-  return said === bare || (withArt && said === withArt);
+
+  // exact match
+  if (said === bare || (withArt && said === withArt)) return true;
+
+  // transcript contains the target word (handles "der Hund" when target is "Hund")
+  if (said.split(' ').includes(bare)) return true;
+
+  // fuzzy: allow 1 edit for words 5+ chars, 2 edits for 10+ chars
+  const maxDist = bare.length >= 10 ? 2 : bare.length >= 5 ? 1 : 0;
+  if (maxDist > 0 && levenshtein(said, bare) <= maxDist) return true;
+
+  return false;
 }
 
 export default function SpeakingCard({ t, stage, word, progress, onContinue, onQuit }) {
@@ -40,7 +63,7 @@ export default function SpeakingCard({ t, stage, word, progress, onContinue, onQ
     r.lang            = 'de-DE';
     r.continuous      = false;
     r.interimResults  = false;
-    r.maxAlternatives = 3;
+    r.maxAlternatives = 6;
 
     r.onresult = e => {
       const alts = Array.from(e.results[0]).map(a => a.transcript);

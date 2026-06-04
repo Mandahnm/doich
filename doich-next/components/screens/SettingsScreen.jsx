@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { LogOut, User, Lock, Eye, EyeOff, Trash2, ChevronLeft } from 'lucide-react';
+import { LogOut, User, Lock, Eye, EyeOff, Trash2, ChevronLeft, FileText, Shield } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { LEVELS } from '@/lib/vocab';
 
@@ -166,6 +166,21 @@ export default function SettingsScreen({ t, state, update, user, onLogout, onBac
             )}
           </div>
         )}
+
+        {/* Legal */}
+        <div style={{ background: t.bgCard, borderRadius: 20, padding: '6px 8px', boxShadow: t.shadow }}>
+          {[
+            { href: '/terms',   Icon: FileText, label: 'Үйлчилгээний нөхцөл' },
+            { href: '/privacy', Icon: Shield,   label: 'Нууцлалын бодлого' },
+          ].map(({ href, Icon, label }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer"
+              style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', textDecoration: 'none', borderRadius: 14 }}>
+              <Icon size={16} color={t.textMid} />
+              <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: t.text }}>{label}</span>
+              <span style={{ color: t.textSoft, fontSize: 16 }}>›</span>
+            </a>
+          ))}
+        </div>
 
         {/* Reset data */}
         <button onClick={handleReset}

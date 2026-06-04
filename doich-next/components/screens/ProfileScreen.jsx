@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Settings, ArrowLeft, LogOut, Lock, Eye, EyeOff, Trash2, Flame, BookOpen, Trophy, Calendar } from 'lucide-react';
+import { Settings, ArrowLeft, LogOut, Lock, Eye, EyeOff, Trash2, Flame, BookOpen, Trophy, Calendar, FileText, Shield } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { LEVELS } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
@@ -29,6 +29,10 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
   const [pwMsg,        setPwMsg]        = useState('');
   const [pwLoading,    setPwLoading]    = useState(false);
   const [isDesktop,    setIsDesktop]    = useState(false);
+  const [deleteOpen,   setDeleteOpen]   = useState(false);
+  const [deletePw,     setDeletePw]     = useState('');
+  const [deleteErr,    setDeleteErr]    = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
@@ -69,9 +73,22 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
   };
 
   const handleDeleteAccount = async () => {
-    if (!confirm('Бүртгэл болон бүх өгөгдлийг устгах уу?\n\nЭнэ үйлдлийг буцааж болохгүй.')) return;
+    setDeleteErr('');
+    if (!deletePw) { setDeleteErr('Нууц үгээ оруулна уу'); return; }
+    setDeleteLoading(true);
+    // Re-authenticate to verify password
+    const { error: authErr } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: deletePw,
+    });
+    if (authErr) {
+      setDeleteLoading(false);
+      setDeleteErr('Нууц үг буруу байна');
+      return;
+    }
     if (user) await supabase.from('user_progress').delete().eq('id', user.id);
     await supabase.auth.signOut();
+    setDeleteLoading(false);
   };
 
   // ── Settings sub-view ────────────────────────────────────────────────────
@@ -155,6 +172,21 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
             </div>
           )}
 
+          {/* Legal */}
+          <div style={{ background: t.bgCard, borderRadius: 20, padding: '6px 8px', boxShadow: t.shadow }}>
+            {[
+              { href: '/terms',   Icon: FileText, label: 'Үйлчилгээний нөхцөл' },
+              { href: '/privacy', Icon: Shield,   label: 'Нууцлалын бодлого' },
+            ].map(({ href, Icon, label }) => (
+              <a key={href} href={href} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', textDecoration: 'none', borderRadius: 14 }}>
+                <Icon size={16} color={t.textMid} />
+                <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: t.text }}>{label}</span>
+                <span style={{ color: t.textSoft, fontSize: 16 }}>›</span>
+              </a>
+            ))}
+          </div>
+
           <button onClick={handleReset}
             style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${t.darkMode ? '#4A1F25' : '#FFD0D5'}`, color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
             <LogOut size={16} /> Бүх өгөгдлийг устгах
@@ -168,10 +200,64 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
           )}
 
           {user && (
-            <button onClick={handleDeleteAccount}
-              style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.darkMode ? '#1A0A0A' : '#FFF5F5', border: `2px solid ${t.darkMode ? '#5A1A1A' : '#FEB2B2'}`, color: '#C53030', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
-              <Trash2 size={16} /> Бүртгэл устгах
-            </button>
+            <div style={{ background: t.darkMode ? '#1A0A0A' : '#FFF5F5', border: `2px solid ${t.darkMode ? '#5A1A1A' : '#FEB2B2'}`, borderRadius: 18, overflow: 'hidden', boxShadow: t.shadow }}>
+              <button onClick={() => { setDeleteOpen(o => !o); setDeleteErr(''); setDeletePw(''); }}
+                style={{ width: '100%', padding: '14px', background: 'none', border: 'none', color: '#C53030', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <Trash2 size={16} /> Бүртгэл устгах
+              </button>
+
+              {deleteOpen && (
+                <div style={{ padding: '0 16px 16px' }}>
+                  {/* Warning block */}
+                  <div style={{ background: t.darkMode ? '#2A0A0A' : '#FFF0F0', border: `1.5px solid #FEB2B2`, borderRadius: 14, padding: '14px', marginBottom: 16 }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: '#C53030', marginBottom: 8, textAlign: 'center' }}>
+                      ⚠️ Та итгэлтэй байна уу?
+                    </div>
+                    <div style={{ color: t.darkMode ? '#ffaaaa' : '#9B2C2C', fontSize: 13, marginBottom: 10 }}>
+                      Бүртгэл устгасан тохиолдолд дараах бүх зүйл үүрд устах болно:
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                      {[
+                        `📚 Сурсан үгс (${state.learnedWords.length} үг)`,
+                        `⭐ XP оноо (${state.xp || 0} XP)`,
+                        `🔥 Streak (${state.streak || 0} өдөр)`,
+                        '🏆 Бүх амжилт, дууссан шатууд',
+                      ].map(item => (
+                        <div key={item} style={{ fontSize: 13, color: t.darkMode ? '#ffaaaa' : '#9B2C2C', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 10, fontSize: 12, color: t.darkMode ? '#cc8888' : '#C53030', fontWeight: 700, textAlign: 'center' }}>
+                      Энэ үйлдлийг буцааж болохгүй.
+                    </div>
+                  </div>
+                  <div style={{ position: 'relative', marginBottom: 10 }}>
+                    <input
+                      type="password"
+                      value={deletePw}
+                      onChange={e => setDeletePw(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleDeleteAccount()}
+                      placeholder="Нууц үгээ оруулна уу"
+                      style={{ width: '100%', boxSizing: 'border-box', background: t.bgCard, border: `1.5px solid ${deleteErr ? '#C53030' : border}`, borderRadius: 12, padding: '10px 14px', fontSize: 14, color: t.text, outline: 'none' }}
+                    />
+                  </div>
+                  {deleteErr && (
+                    <div style={{ color: '#C53030', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{deleteErr}</div>
+                  )}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    <button onClick={() => { setDeleteOpen(false); setDeletePw(''); setDeleteErr(''); }}
+                      style={{ padding: '11px', borderRadius: 12, border: `1.5px solid ${border}`, background: t.bgCard, color: t.textMid, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                      Цуцлах
+                    </button>
+                    <button onClick={handleDeleteAccount} disabled={deleteLoading}
+                      style={{ padding: '11px', borderRadius: 12, border: 'none', background: '#C53030', color: '#fff', fontWeight: 800, fontSize: 13, cursor: deleteLoading ? 'not-allowed' : 'pointer', opacity: deleteLoading ? 0.7 : 1 }}>
+                      {deleteLoading ? '...' : 'Устгах'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
