@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft } from 'lucide-react';
+import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft, Mic } from 'lucide-react';
 import { LEVELS, CEFR_META, getStages } from '@/lib/vocab';
 import { calcStageXP } from '@/lib/xp';
 import FlashCard           from '@/components/shared/FlashCard';
@@ -11,6 +11,7 @@ import FillBlankCard       from '@/components/shared/FillBlankCard';
 import ConjugationCard     from '@/components/shared/ConjugationCard';
 import ListeningCard       from '@/components/shared/ListeningCard';
 import SentenceBuilderCard from '@/components/shared/SentenceBuilderCard';
+import SpeakingCard        from '@/components/shared/SpeakingCard';
 import { getConjugationStages } from '@/lib/conjugation';
 import { getAdjectiveStages }   from '@/lib/adjective';
 import ResultScreen from '@/components/shared/ResultScreen';
@@ -26,6 +27,7 @@ const GAME_SUBTITLE = {
   adjective:   'Тэмдэг нэр хувилах',
   listening:   'Сонсох дасгал',
   sentence:    'Өгүүлбэр зохиох',
+  speaking:    'Дуудлага хийх',
 };
 
 const STAT_KEY = {
@@ -37,6 +39,7 @@ const STAT_KEY = {
   adjective:   'adjective',
   listening:   'listening',
   sentence:    'sentence',
+  speaking:    'speaking',
 };
 
 // ─── Main coordinator ──────────────────────────────────────────────────────────
@@ -125,6 +128,7 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
     if (gameType === 'fillblank')  return <FillBlankCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
     if (gameType === 'listening')  return <ListeningCard       t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
     if (gameType === 'sentence')   return <SentenceBuilderCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    if (gameType === 'speaking')   return <SpeakingCard        t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
   }
 
   if (view === 'result') {
@@ -157,14 +161,15 @@ export default function GamesScreen({ t, state, recordStat, completeStage, recor
 
 // ─── Hub — level picker + all games grid ──────────────────────────────────────
 const ALL_GAMES = [
-  { type: 'flashcard',   title: 'Үг таах',             sub: 'Daily Review',    Icon: Layers,     iconColor: '#0062a1', bg: '#dceeff' },
-  { type: 'gender',      title: 'Der · Die · Das',      sub: 'Артикль тоглоом', Icon: Tag,        iconColor: '#bc0000', bg: '#ffdad4' },
-  { type: 'fillblank',   title: 'Цоорхой бөглөх',      sub: 'Grammar',         Icon: PenLine,    iconColor: '#745b00', bg: '#fff8d4' },
-  { type: 'match',       title: 'Хос тааруулах',        sub: 'Vocabulary',      Icon: Shuffle,    iconColor: '#0062a1', bg: '#dceeff' },
-  { type: 'conjugation', title: 'Үйл үг хувилах',      sub: 'Conjugation',     Icon: RefreshCw,  iconColor: '#0891b2', bg: '#cffafe' },
-  { type: 'adjective',   title: 'Тэмдэг нэр',          sub: 'Declension',      Icon: Pencil,     iconColor: '#7c3aed', bg: '#ede9fe' },
-  { type: 'listening',   title: 'Сонсох дасгал',        sub: 'Audio Practice',  Icon: Headphones, iconColor: '#db2777', bg: '#fce7f3' },
-  { type: 'sentence',    title: 'Өгүүлбэр зохиох',     sub: 'Word Order',      Icon: AlignLeft,  iconColor: '#059669', bg: '#d1fae5' },
+  { type: 'flashcard',   title: 'Үг таах',             sub: 'Үг цээжлэх',            Icon: Layers,     iconColor: '#0062a1', bg: '#dceeff' },
+  { type: 'gender',      title: 'Der · Die · Das',      sub: 'Зөв артиклийг сонго',   Icon: Tag,        iconColor: '#bc0000', bg: '#ffdad4' },
+  { type: 'fillblank',   title: 'Цоорхой бөглөх',      sub: 'Дутуу үгийг бөглө',     Icon: PenLine,    iconColor: '#745b00', bg: '#fff8d4' },
+  { type: 'match',       title: 'Хос тааруулах',        sub: 'Орчуулгыг тааруул',     Icon: Shuffle,    iconColor: '#0062a1', bg: '#dceeff' },
+  { type: 'conjugation', title: 'Үйл үг хувилах',      sub: 'Цаг, биеэр хувилах',    Icon: RefreshCw,  iconColor: '#0891b2', bg: '#cffafe' },
+  { type: 'adjective',   title: 'Тэмдэг нэр',          sub: 'Тохирох төгсгөлийг бич', Icon: Pencil,     iconColor: '#7c3aed', bg: '#ede9fe' },
+  { type: 'listening',   title: 'Сонсох дасгал',        sub: 'Сонсоод бичнэ үү',      Icon: Headphones, iconColor: '#db2777', bg: '#fce7f3' },
+  { type: 'sentence',    title: 'Өгүүлбэр зохиох',     sub: 'Үгсийн дараалал',       Icon: AlignLeft,  iconColor: '#059669', bg: '#d1fae5' },
+  { type: 'speaking',   title: 'Дуудлага хийх',        sub: 'Микрофонд дуудлага хий', Icon: Mic,        iconColor: '#7c3aed', bg: '#f3e8ff' },
 ];
 
 function GamesHub({ t, state, userLevel, onSelect }) {
