@@ -25,6 +25,17 @@ export default function AuthScreen({ isDark, onToggle }) {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  // Detect expired / invalid confirmation link from Supabase URL hash
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.includes('error_code=otp_expired') || (hash.includes('error=access_denied') && hash.includes('error_description'))) {
+      setMsg('');
+      setError('Имэйл баталгаажуулах холбоос хугацаа дууссан эсвэл хүчингүй байна. Шинэ холбоос авахын тулд дахин бүртгүүлнэ үү.');
+      setMode('signup');
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, []);
+
   const card        = isDark ? '#1e1e1e'                : '#ffffff';
   const text        = isDark ? '#e4e2e1'                : '#1b1c1c';
   const soft        = isDark ? '#7a6e54'                : '#80765f';
@@ -49,6 +60,13 @@ export default function AuthScreen({ isDark, onToggle }) {
     '--grad-text':        isDark ? 'linear-gradient(120deg,#ffd84d,#e8bb2a)' : 'linear-gradient(120deg,#e0a000,#ffc400)',
   };
 
+  const translateError = msg => {
+    const m = msg || '';
+    const seconds = m.match(/after (\d+) second/)?.[1];
+    if (seconds) return `Аюулгүй байдлын үүднээс та ${seconds} секундын дараа дахин оролдоно уу.`;
+    return m;
+  };
+
   const switchMode = m => {
     setMode(m); setError(''); setMsg(''); setPassword(''); setConfirmPw(''); setAgeOk(false);
   };
@@ -60,7 +78,7 @@ export default function AuthScreen({ isDark, onToggle }) {
       setLoading(true);
       const { error: e } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: window.location.origin });
       setLoading(false);
-      if (e) setError(e.message);
+      if (e) setError(translateError(e.message));
       else   setMsg('Нууц үг сэргээх холбоос имэйл рүү илгээгдлээ!');
       return;
     }
@@ -71,9 +89,9 @@ export default function AuthScreen({ isDark, onToggle }) {
     if (mode === 'signup') {
       const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password });
       setLoading(false);
-      if (e) { setError(e.message); return; }
+      if (e) { setError(translateError(e.message)); return; }
       if (data.session) setMsg('Амжилттай бүртгүүллээ! Нэвтэрч байна...');
-      else              setMsg('Имэйл хаягруу баталгаажуулах холбоос илгээгдлээ!');
+      else              setMsg('Имэйл хаягт баталгаажуулах холбоос илгээгдлээ. Имэйлээ шалгаад холбоос дээр дарна уу.');
     } else {
       const { error: e } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       setLoading(false);
