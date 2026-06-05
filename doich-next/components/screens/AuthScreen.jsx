@@ -340,7 +340,6 @@ export default function AuthScreen({ isDark, onToggle }) {
           </div>
         </div>
         <div style={{ width: 520, minHeight: '100vh', background: card, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 56px', position: 'relative', boxShadow: isDark ? '-12px 0 48px rgba(0,0,0,0.4)' : '-8px 0 40px rgba(0,0,0,0.06)' }}>
-          <ThemeToggle pos={{ top: 20, right: 20 }} />
           {desktopForm}
         </div>
       </div>
@@ -360,7 +359,6 @@ export default function AuthScreen({ isDark, onToggle }) {
         <div className="doich-blob b2" style={{ width: 220, height: 220, bottom: -50, right: -30, background: isDark ? 'rgba(180,80,40,0.16)' : 'rgba(255,176,140,0.42)' }} />
         <FloatChip text="Hallo" sub="Сайн уу"   style={{ top: '16%', left: '7%' }}  d="0s"   isDark={isDark} card={card} border={border} text2={text} soft={soft} small />
         <FloatChip text="Danke" sub="Баярлалаа" style={{ top: '20%', right: '7%' }} d="1.1s" isDark={isDark} card={card} border={border} text2={text} soft={soft} small />
-        <ThemeToggle pos={{ top: 20, left: 20 }} />
         <div style={{ position: 'relative', zIndex: 2 }}>{logoCard(108)}</div>
       </div>
       <div style={{ flex: 1, background: card, borderRadius: '32px 32px 0 0', padding: '14px 24px 48px', marginTop: -22, position: 'relative', zIndex: 5, boxShadow: isDark ? '0 -12px 48px rgba(0,0,0,0.55)' : '0 -8px 40px rgba(0,0,0,0.07)' }}>

@@ -104,17 +104,6 @@ export default function ProfileScreen({ t, state, update, user, onLogout, setTab
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
-            <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Өдрийн / харанхуй горим</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              {[{ d: false, label: '☀️ Цагаан' }, { d: true, label: '🌙 Харанхуй' }].map(o => (
-                <button key={String(o.d)} onClick={() => update({ darkMode: o.d })}
-                  style={{ padding: '12px', borderRadius: 14, border: `2px solid ${state.darkMode === o.d ? t.pink : border}`, background: state.darkMode === o.d ? t.pinkBg : t.bgTag, color: state.darkMode === o.d ? t.pink : mid, fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          </div>
 
           <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
             <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Миний түвшин</div>

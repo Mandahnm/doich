@@ -52,9 +52,7 @@ export default function Page() {
 
   // ── Auth + initial load ──────────────────────────────────────────────────
   useEffect(() => {
-    const sysDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
-    const localDark = loadState()?.darkMode ?? sysDark;
-    setState(s => ({ ...s, darkMode: localDark }));
+    setState(s => ({ ...s, darkMode: false }));
 
     supabase.auth.getSession()
       .then(({ data: { session } }) => {

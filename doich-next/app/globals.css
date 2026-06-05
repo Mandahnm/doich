@@ -1,7 +1,12 @@
-* {
+*, *::before, *::after {
   font-family: var(--font-inter), sans-serif;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
 }
 
 /* Montserrat for display/headline text (German words, titles, numbers) */
