@@ -1733,7 +1733,7 @@ export const VOCAB = [
   { id:1734, de:'Transport',       mn:'тээвэр / зөөвөр',         level:'B1', type:'noun', gender:'der', example:'Was kostet der Transport?',                                emoji:'🚚' },
   { id:1735, de:'Treffpunkt',      mn:'уулзах цэг',              level:'B1', type:'noun', gender:'der', example:'Unser Treffpunkt ist um 17 Uhr am Hauptbahnhof.',          emoji:'📍' },
   { id:1736, de:'Trennung',        mn:'салалт / тусгаарлалт',    level:'B1', type:'noun', gender:'die', example:'Die Trennung von der Familie war schwierig.',               emoji:'💔' },
-  { id:1737, de:'Trinkgeld',       mn:'өшиглөл / зөвлөгийн мөнгө', level:'B1', type:'noun', gender:'das', example:'Ich habe dem Kellner zwei Euro Trinkgeld gegeben.',        emoji:'💶' },
+  { id:1737, de:'Trinkgeld',       mn:'гарын мөнгө', level:'B1', type:'noun', gender:'das', example:'Ich habe dem Kellner zwei Euro Trinkgeld gegeben.',        emoji:'💶' },
   { id:1738, de:'Typ',             mn:'төрөл / залуу хүн',       level:'B1', type:'noun', gender:'der', example:'Mein Nachbar ist ein netter Typ.',                         emoji:'🧑' },
   { id:1739, de:'Übernachtung',    mn:'шөнийн хонолт',           level:'B1', type:'noun', gender:'die', example:'In diesem Hotel kostet die Übernachtung mit Frühstück 90 Euro.', emoji:'🛏️' },
   { id:1740, de:'Überraschung',    mn:'гайхшрал / бэлэг',        level:'B1', type:'noun', gender:'die', example:'Ich habe eine Überraschung für dich.',                     emoji:'🎁' },
