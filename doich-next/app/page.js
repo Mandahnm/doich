@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { Bot } from 'lucide-react';
 import { getTheme } from '@/lib/theme';
 import { loadState, saveState } from '@/lib/storage';
 import { supabase } from '@/lib/supabase';
@@ -405,6 +406,22 @@ export default function Page() {
         {screenContent}
       </div>
       <BottomNav t={t} tab={tab} setTab={setTab} />
+      {tab !== 'chat' && (
+        <button
+          onClick={() => setTab('chat')}
+          aria-label="AI багш нээх"
+          style={{
+            position: 'fixed', bottom: 96, right: 20, zIndex: 100,
+            width: 52, height: 52, borderRadius: 18,
+            background: state.darkMode ? '#f1c100' : '#ffcc00',
+            border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 20px rgba(255,180,0,0.45)',
+          }}
+        >
+          <Bot size={24} color={state.darkMode ? '#1a1812' : '#241a00'} strokeWidth={2.2} />
+        </button>
+      )}
       <AchievementToast achievement={toast} onDone={() => setToast(null)} />
     </div>
   );
