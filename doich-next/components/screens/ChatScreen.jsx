@@ -77,6 +77,80 @@ function RichMessage({ content, isDark }) {
   return <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>{elems}</div>;
 }
 
+// ── Stable sub-components (defined outside to prevent remount on every keystroke) ──
+
+function AiAvatar({ isDark, t }) {
+  return (
+    <div style={{ width: 32, height: 32, borderRadius: 10, background: isDark ? '#2e2600' : '#fff8d4', border: `1.5px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'flex-end' }}>
+      <Bot size={16} color={isDark ? '#f1c100' : '#745b00'} />
+    </div>
+  );
+}
+
+function LoadingBubble({ isDark, t }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+      <AiAvatar isDark={isDark} t={t} />
+      <div style={{ display: 'flex', gap: 5, padding: '14px 18px', background: t.bgCard, borderRadius: '20px 20px 20px 6px', boxShadow: t.shadow, border: `1px solid ${t.border}` }}>
+        {[0,1,2].map(i => (
+          <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: isDark ? '#f1c100' : '#ffcc00', animation: `pulse 0.9s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({ showQuestions, isDark, t, onSend }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: showQuestions ? 16 : 24, padding: showQuestions ? '16px 0' : '48px 0', flex: 1, justifyContent: showQuestions ? 'flex-start' : 'center' }}>
+      <div style={{ width: showQuestions ? 56 : 72, height: showQuestions ? 56 : 72, borderRadius: showQuestions ? 18 : 22, background: isDark ? '#2e2600' : '#fff8d4', border: `2px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isDark ? 'none' : '0 8px 24px rgba(255,180,0,0.18)' }}>
+        <Sparkles size={showQuestions ? 26 : 32} color={isDark ? '#f1c100' : '#745b00'} />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div className="fd" style={{ fontSize: showQuestions ? 18 : 22, fontWeight: 800, color: t.text, marginBottom: 6 }}>AI багш бэлэн байна</div>
+        <div style={{ color: t.textSoft, fontSize: 13, lineHeight: 1.6 }}>Герман хэлний асуултаа асуугаарай</div>
+      </div>
+      {showQuestions && (
+        <div style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {EXAMPLES.map((q, i) => (
+            <button key={i} onClick={() => onSend(q.t)}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', textAlign: 'left', boxShadow: t.shadow, transition: 'border-color 0.2s', gridColumn: i === 4 ? '1 / -1' : 'auto' }}>
+              <span style={{ fontSize: 16, flexShrink: 0 }}>{q.e}</span>
+              <span style={{ color: t.text, fontSize: 12, fontWeight: 600, lineHeight: 1.4 }}>{q.t}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Messages({ msgs, loading, isDark, t, endRef }) {
+  return (
+    <>
+      {msgs.map((m, i) => (
+        <div key={i} className="au" style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}>
+          {m.role === 'assistant' && <AiAvatar isDark={isDark} t={t} />}
+          <div style={{
+            maxWidth: m.role === 'user' ? '72%' : '88%',
+            padding: m.role === 'user' ? '10px 16px' : '14px 18px',
+            borderRadius: m.role === 'user' ? '20px 20px 6px 20px' : '20px 20px 20px 6px',
+            background: m.role === 'user' ? t.pinkBtn : t.bgCard,
+            color: m.role === 'user' ? t.pinkBtnText : t.text,
+            fontSize: 14, lineHeight: 1.6,
+            boxShadow: t.shadow,
+            border: m.role === 'assistant' ? `1px solid ${t.border}` : 'none',
+          }}>
+            {m.role === 'assistant' ? <RichMessage content={m.content} isDark={isDark} /> : m.content}
+          </div>
+        </div>
+      ))}
+      {loading && <LoadingBubble isDark={isDark} t={t} />}
+      <div ref={endRef} />
+    </>
+  );
+}
+
 export default function ChatScreen({ t, state, onUpdateHistory }) {
   return <WithSkeleton ms={250} skeleton={<ChatSkeleton t={t} />}><ChatScreenInner t={t} state={state} onUpdateHistory={onUpdateHistory} /></WithSkeleton>;
 }
@@ -123,71 +197,6 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 100);
   };
-
-  // ── Shared sub-components ────────────────────────────────────────────────
-  const AiAvatar = () => (
-    <div style={{ width: 32, height: 32, borderRadius: 10, background: isDark ? '#2e2600' : '#fff8d4', border: `1.5px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'flex-end' }}>
-      <Bot size={16} color={isDark ? '#f1c100' : '#745b00'} />
-    </div>
-  );
-
-  const LoadingBubble = () => (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-      <AiAvatar />
-      <div style={{ display: 'flex', gap: 5, padding: '14px 18px', background: t.bgCard, borderRadius: '20px 20px 20px 6px', boxShadow: t.shadow, border: `1px solid ${t.border}` }}>
-        {[0,1,2].map(i => (
-          <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: isDark ? '#f1c100' : '#ffcc00', animation: `pulse 0.9s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }} />
-        ))}
-      </div>
-    </div>
-  );
-
-  const EmptyState = ({ showQuestions }) => (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: showQuestions ? 16 : 24, padding: showQuestions ? '16px 0' : '48px 0', flex: 1, justifyContent: showQuestions ? 'flex-start' : 'center' }}>
-      <div style={{ width: showQuestions ? 56 : 72, height: showQuestions ? 56 : 72, borderRadius: showQuestions ? 18 : 22, background: isDark ? '#2e2600' : '#fff8d4', border: `2px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isDark ? 'none' : '0 8px 24px rgba(255,180,0,0.18)' }}>
-        <Sparkles size={showQuestions ? 26 : 32} color={isDark ? '#f1c100' : '#745b00'} />
-      </div>
-      <div style={{ textAlign: 'center' }}>
-        <div className="fd" style={{ fontSize: showQuestions ? 18 : 22, fontWeight: 800, color: t.text, marginBottom: 6 }}>AI багш бэлэн байна</div>
-        <div style={{ color: t.textSoft, fontSize: 13, lineHeight: 1.6 }}>Герман хэлний асуултаа асуугаарай</div>
-      </div>
-      {showQuestions && (
-        <div style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          {EXAMPLES.map((q, i) => (
-            <button key={i} onClick={() => send(q.t)}
-              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', textAlign: 'left', boxShadow: t.shadow, transition: 'border-color 0.2s', gridColumn: i === 4 ? '1 / -1' : 'auto' }}>
-              <span style={{ fontSize: 16, flexShrink: 0 }}>{q.e}</span>
-              <span style={{ color: t.text, fontSize: 12, fontWeight: 600, lineHeight: 1.4 }}>{q.t}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-
-  const Messages = () => (
-    <>
-      {msgs.map((m, i) => (
-        <div key={i} className="au" style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}>
-          {m.role === 'assistant' && <AiAvatar />}
-          <div style={{
-            maxWidth: m.role === 'user' ? '72%' : '88%',
-            padding: m.role === 'user' ? '10px 16px' : '14px 18px',
-            borderRadius: m.role === 'user' ? '20px 20px 6px 20px' : '20px 20px 20px 6px',
-            background: m.role === 'user' ? t.pinkBtn : t.bgCard,
-            color: m.role === 'user' ? t.pinkBtnText : t.text,
-            fontSize: 14, lineHeight: 1.6,
-            boxShadow: t.shadow,
-            border: m.role === 'assistant' ? `1px solid ${t.border}` : 'none',
-          }}>
-            {m.role === 'assistant' ? <RichMessage content={m.content} isDark={isDark} /> : m.content}
-          </div>
-        </div>
-      ))}
-      {loading && <LoadingBubble />}
-      <div ref={ref} />
-    </>
-  );
 
   // InputBar JSX is inlined in both returns below (not a sub-component)
   // so the <input> element is never unmounted on re-render → keyboard stays open on mobile
@@ -262,7 +271,7 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
 
           {/* Messages */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {msgs.length === 0 ? <EmptyState compact={false} /> : <Messages />}
+            {msgs.length === 0 ? <EmptyState showQuestions={false} isDark={isDark} t={t} onSend={send} /> : <Messages msgs={msgs} loading={loading} isDark={isDark} t={t} endRef={ref} />}
           </div>
 
           {/* Input */}
@@ -312,7 +321,7 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
 
       {/* Messages */}
       <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 4 }}>
-        {msgs.length === 0 ? <EmptyState compact={true} /> : <Messages />}
+        {msgs.length === 0 ? <EmptyState showQuestions={true} isDark={isDark} t={t} onSend={send} /> : <Messages msgs={msgs} loading={loading} isDark={isDark} t={t} endRef={ref} />}
       </div>
 
       {/* Input */}
