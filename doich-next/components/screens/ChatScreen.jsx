@@ -189,20 +189,8 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
     </>
   );
 
-  const InputBar = () => (
-    <div style={{ display: 'flex', gap: 8, padding: isDesktop ? '16px 0 0' : '12px 0 0', borderTop: `1px solid ${t.border}` }}>
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
-        <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-          placeholder="Герман хэлний асуулт..."
-          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
-        <button onClick={() => send()} disabled={!input.trim() || loading}
-          style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-          <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
-        </button>
-      </div>
-    </div>
-  );
+  // InputBar JSX is inlined in both returns below (not a sub-component)
+  // so the <input> element is never unmounted on re-render → keyboard stays open on mobile
 
   // ── DESKTOP ───────────────────────────────────────────────────────────────
   if (isDesktop) {
@@ -279,7 +267,18 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
 
           {/* Input */}
           <div style={{ padding: '0 22px 20px' }}>
-            <InputBar />
+            <div style={{ display: 'flex', gap: 8, paddingTop: 16, borderTop: `1px solid ${t.border}` }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
+                <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+                  placeholder="Герман хэлний асуулт..."
+                  style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
+                <button onClick={() => send()} disabled={!input.trim() || loading}
+                  style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+                  <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -317,7 +316,18 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
       </div>
 
       {/* Input */}
-      <InputBar />
+      <div style={{ display: 'flex', gap: 8, paddingTop: 12, borderTop: `1px solid ${t.border}` }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
+          <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+            placeholder="Герман хэлний асуулт..."
+            style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
+          <button onClick={() => send()} disabled={!input.trim() || loading}
+            style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+            <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
