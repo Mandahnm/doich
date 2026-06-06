@@ -1,38 +1,26 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Send } from 'lucide-react';
+import { Send, Sparkles, Trash2, Bot } from 'lucide-react';
+import { WithSkeleton, ChatSkeleton } from '@/components/shared/ScreenSkeleton';
 
 const EXAMPLES = [
-  { t: 'Akkusativ ба Dativ ялгаа юу вэ?', e: '🤔' },
-  { t: 'Modalverben хэрхэн ашиглах вэ?',  e: '📚' },
-  { t: 'der/die/das яаж тогтоох вэ?',      e: '🎯' },
+  { t: 'Akkusativ ба Dativ ялгаа юу вэ?',  e: '🔤' },
+  { t: 'Modalverben хэрхэн ашиглах вэ?',   e: '📖' },
+  { t: 'der/die/das яаж тогтоох вэ?',       e: '🎯' },
+  { t: 'Perfekt ба Präteritum ялгаа?',      e: '⏳' },
+  { t: 'Герман үг цээжлэх арга?',           e: '💡' },
+  { t: 'Харьцуулах өгүүлбэр яаж үүсгэх?',  e: '📝' },
 ];
 
-// ── Inline parser: **bold** and `code` ────────────────────────────────────
+// ── Inline parser: **bold** and `code` ───────────────────────────────────
 function parseInline(text, isDark) {
   const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
   return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return (
-        <strong key={i} style={{ color: isDark ? '#f1c100' : '#745b00', fontWeight: 800 }}>
-          {part.slice(2, -2)}
-        </strong>
-      );
-    }
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return (
-        <span key={i} style={{
-          background: isDark ? '#002a44' : '#dceeff',
-          color: isDark ? '#9ccaff' : '#0062a1',
-          padding: '1px 7px', borderRadius: 6,
-          fontWeight: 700, fontSize: '0.9em',
-          letterSpacing: '0.01em',
-        }}>
-          {part.slice(1, -1)}
-        </span>
-      );
-    }
+    if (part.startsWith('**') && part.endsWith('**'))
+      return <strong key={i} style={{ color: isDark ? '#f1c100' : '#745b00', fontWeight: 800 }}>{part.slice(2, -2)}</strong>;
+    if (part.startsWith('`') && part.endsWith('`'))
+      return <span key={i} style={{ background: isDark ? '#002a44' : '#dceeff', color: isDark ? '#9ccaff' : '#0062a1', padding: '1px 7px', borderRadius: 6, fontWeight: 700, fontSize: '0.9em' }}>{part.slice(1, -1)}</span>;
     return <span key={i}>{part}</span>;
   });
 }
@@ -47,17 +35,15 @@ const CALLOUT_STYLES = {
   '📝': { bg: ['#001a1a', '#e0f7fa'], border: '#006d3a' },
 };
 
-// ── Full message renderer ─────────────────────────────────────────────────
-function RichMessage({ content, isDark, t }) {
-  const lines   = content.split('\n');
-  const elems   = [];
-  let bullets   = [];
-  let key       = 0;
-
+function RichMessage({ content, isDark }) {
+  const lines = content.split('\n');
+  const elems = [];
+  let bullets = [];
+  let key = 0;
   const flushBullets = () => {
     if (!bullets.length) return;
     elems.push(
-      <ul key={key++} style={{ margin: '6px 0 6px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <ul key={key++} style={{ margin: '6px 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
         {bullets.map((b, i) => (
           <li key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
             <span style={{ color: isDark ? '#f1c100' : '#745b00', fontWeight: 800, fontSize: 16, lineHeight: 1.5, flexShrink: 0 }}>•</span>
@@ -68,86 +54,56 @@ function RichMessage({ content, isDark, t }) {
     );
     bullets = [];
   };
-
   for (const raw of lines) {
     const line = raw.trim();
-
-    // Empty line → spacing
-    if (!line) {
-      flushBullets();
-      elems.push(<div key={key++} style={{ height: 6 }} />);
-      continue;
-    }
-
-    // ## or ### Heading
+    if (!line) { flushBullets(); elems.push(<div key={key++} style={{ height: 6 }} />); continue; }
     if (/^#{2,3} /.test(line)) {
       flushBullets();
-      const text = line.replace(/^#{2,3} /, '');
-      elems.push(
-        <div key={key++} style={{
-          fontWeight: 800, fontSize: 14, color: isDark ? '#e4e2e1' : '#1b1c1c',
-          marginTop: 10, marginBottom: 4,
-          paddingBottom: 4,
-          borderBottom: `2px solid ${isDark ? '#f1c10030' : '#ffcc0050'}`,
-        }}>
-          {parseInline(text, isDark)}
-        </div>
-      );
+      elems.push(<div key={key++} style={{ fontWeight: 800, fontSize: 14, marginTop: 10, marginBottom: 4, paddingBottom: 4, borderBottom: `2px solid ${isDark ? '#f1c10030' : '#ffcc0050'}` }}>{parseInline(line.replace(/^#{2,3} /, ''), isDark)}</div>);
       continue;
     }
-
-    // Bullet
-    if (/^[-•] /.test(line)) {
-      bullets.push(line.slice(2));
-      continue;
-    }
-
-    // Callout (💡 ⚠️ 📌 etc.)
+    if (/^[-•] /.test(line)) { bullets.push(line.slice(2)); continue; }
     const calloutKey = Object.keys(CALLOUT_STYLES).find(e => line.startsWith(e));
     if (calloutKey) {
       flushBullets();
       const cs = CALLOUT_STYLES[calloutKey];
-      elems.push(
-        <div key={key++} style={{
-          background: isDark ? cs.bg[0] : cs.bg[1],
-          border: `1px solid ${cs.border}40`,
-          borderLeft: `3px solid ${cs.border}`,
-          borderRadius: 10, padding: '8px 12px', margin: '4px 0',
-          fontSize: 13, lineHeight: 1.6,
-        }}>
-          {parseInline(line, isDark)}
-        </div>
-      );
+      elems.push(<div key={key++} style={{ background: isDark ? cs.bg[0] : cs.bg[1], border: `1px solid ${cs.border}40`, borderLeft: `3px solid ${cs.border}`, borderRadius: 10, padding: '8px 12px', margin: '4px 0', fontSize: 13, lineHeight: 1.6 }}>{parseInline(line, isDark)}</div>);
       continue;
     }
-
-    // Normal paragraph
     flushBullets();
-    elems.push(
-      <p key={key++} style={{ margin: '2px 0', lineHeight: 1.7, fontSize: 14 }}>
-        {parseInline(line, isDark)}
-      </p>
-    );
+    elems.push(<p key={key++} style={{ margin: '2px 0', lineHeight: 1.7, fontSize: 14 }}>{parseInline(line, isDark)}</p>);
   }
-
   flushBullets();
   return <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>{elems}</div>;
 }
 
-// ── Screen ────────────────────────────────────────────────────────────────
 export default function ChatScreen({ t, state, onUpdateHistory }) {
-  const [msgs,    setMsgs]    = useState(() => state.chatHistory || []);
-  const [input,   setInput]   = useState('');
-  const [loading, setLoading] = useState(false);
-  const ref = useRef(null);
-  const isDark = t.darkMode;
+  return <WithSkeleton ms={250} skeleton={<ChatSkeleton t={t} />}><ChatScreenInner t={t} state={state} onUpdateHistory={onUpdateHistory} /></WithSkeleton>;
+}
+
+function ChatScreenInner({ t, state, onUpdateHistory }) {
+  const [msgs,     setMsgs]     = useState(() => state.chatHistory || []);
+  const [input,    setInput]    = useState('');
+  const [loading,  setLoading]  = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const ref      = useRef(null);
+  const inputRef = useRef(null);
+  const isDark   = t.darkMode;
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => { ref.current?.scrollIntoView({ behavior: 'smooth' }); }, [msgs]);
   useEffect(() => { onUpdateHistory(msgs); }, [msgs]);
 
-  const send = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg = { role: 'user', content: input };
+  const send = async (text) => {
+    const msg = (text ?? input).trim();
+    if (!msg || loading) return;
+    const userMsg = { role: 'user', content: msg };
     setMsgs(m => [...m, userMsg]);
     setInput('');
     setLoading(true);
@@ -155,11 +111,8 @@ export default function ChatScreen({ t, state, onUpdateHistory }) {
       const { data: { session } } = await import('@/lib/supabase').then(m => m.supabase.auth.getSession());
       const r = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-        },
-        body: JSON.stringify({ level: state.userLevel, message: input, history: msgs }),
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ level: state.userLevel, message: msg, history: msgs }),
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'API error');
@@ -168,89 +121,203 @@ export default function ChatScreen({ t, state, onUpdateHistory }) {
       setMsgs(m => [...m, { role: 'assistant', content: `Алдаа: ${e.message}` }]);
     }
     setLoading(false);
+    setTimeout(() => inputRef.current?.focus(), 100);
   };
 
+  // ── Shared sub-components ────────────────────────────────────────────────
+  const AiAvatar = () => (
+    <div style={{ width: 32, height: 32, borderRadius: 10, background: isDark ? '#2e2600' : '#fff8d4', border: `1.5px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'flex-end' }}>
+      <Bot size={16} color={isDark ? '#f1c100' : '#745b00'} />
+    </div>
+  );
+
+  const LoadingBubble = () => (
+    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+      <AiAvatar />
+      <div style={{ display: 'flex', gap: 5, padding: '14px 18px', background: t.bgCard, borderRadius: '20px 20px 20px 6px', boxShadow: t.shadow, border: `1px solid ${t.border}` }}>
+        {[0,1,2].map(i => (
+          <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: isDark ? '#f1c100' : '#ffcc00', animation: `pulse 0.9s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }} />
+        ))}
+      </div>
+    </div>
+  );
+
+  const EmptyState = ({ showQuestions }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: showQuestions ? 16 : 24, padding: showQuestions ? '16px 0' : '48px 0', flex: 1, justifyContent: showQuestions ? 'flex-start' : 'center' }}>
+      <div style={{ width: showQuestions ? 56 : 72, height: showQuestions ? 56 : 72, borderRadius: showQuestions ? 18 : 22, background: isDark ? '#2e2600' : '#fff8d4', border: `2px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isDark ? 'none' : '0 8px 24px rgba(255,180,0,0.18)' }}>
+        <Sparkles size={showQuestions ? 26 : 32} color={isDark ? '#f1c100' : '#745b00'} />
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div className="fd" style={{ fontSize: showQuestions ? 18 : 22, fontWeight: 800, color: t.text, marginBottom: 6 }}>AI багш бэлэн байна</div>
+        <div style={{ color: t.textSoft, fontSize: 13, lineHeight: 1.6 }}>Герман хэлний асуултаа асуугаарай</div>
+      </div>
+      {showQuestions && (
+        <div style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {EXAMPLES.map((q, i) => (
+            <button key={i} onClick={() => send(q.t)}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', textAlign: 'left', boxShadow: t.shadow, transition: 'border-color 0.2s', gridColumn: i === 4 ? '1 / -1' : 'auto' }}>
+              <span style={{ fontSize: 16, flexShrink: 0 }}>{q.e}</span>
+              <span style={{ color: t.text, fontSize: 12, fontWeight: 600, lineHeight: 1.4 }}>{q.t}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  const Messages = () => (
+    <>
+      {msgs.map((m, i) => (
+        <div key={i} className="au" style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}>
+          {m.role === 'assistant' && <AiAvatar />}
+          <div style={{
+            maxWidth: m.role === 'user' ? '72%' : '88%',
+            padding: m.role === 'user' ? '10px 16px' : '14px 18px',
+            borderRadius: m.role === 'user' ? '20px 20px 6px 20px' : '20px 20px 20px 6px',
+            background: m.role === 'user' ? t.pinkBtn : t.bgCard,
+            color: m.role === 'user' ? t.pinkBtnText : t.text,
+            fontSize: 14, lineHeight: 1.6,
+            boxShadow: t.shadow,
+            border: m.role === 'assistant' ? `1px solid ${t.border}` : 'none',
+          }}>
+            {m.role === 'assistant' ? <RichMessage content={m.content} isDark={isDark} /> : m.content}
+          </div>
+        </div>
+      ))}
+      {loading && <LoadingBubble />}
+      <div ref={ref} />
+    </>
+  );
+
+  const InputBar = () => (
+    <div style={{ display: 'flex', gap: 8, padding: isDesktop ? '16px 0 0' : '12px 0 0', borderTop: `1px solid ${t.border}` }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
+        <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+          placeholder="Герман хэлний асуулт..."
+          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
+        <button onClick={() => send()} disabled={!input.trim() || loading}
+          style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+          <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
+        </button>
+      </div>
+    </div>
+  );
+
+  // ── DESKTOP ───────────────────────────────────────────────────────────────
+  if (isDesktop) {
+    return (
+      <div className="af" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 20, height: 'calc(100vh - 48px)' }}>
+
+        {/* Left sidebar */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
+          {/* AI info card */}
+          <div style={{ background: isDark ? '#2e2600' : '#fff8d4', borderRadius: 20, padding: '20px 18px', border: `1.5px solid ${isDark ? '#c9a00040' : '#ffcc0060'}` }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+              <div style={{ width: 44, height: 44, borderRadius: 14, background: isDark ? '#3d3000' : '#ffcc00', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Bot size={22} color={isDark ? '#f1c100' : '#241a00'} />
+              </div>
+              <div>
+                <div className="fd" style={{ fontWeight: 800, fontSize: 15, color: t.text }}>AI Багш</div>
+                <div style={{ fontSize: 12, color: t.textSoft }}>Герман хэлний туслагч</div>
+              </div>
+            </div>
+            <div style={{ background: isDark ? '#00000030' : '#ffffff80', borderRadius: 10, padding: '8px 12px', fontSize: 12, color: t.textMid, lineHeight: 1.6 }}>
+              Дүрэм, үгсийн сан, өгүүлбэр зохиох болон бусад асуултаа асуугаарай.
+            </div>
+          </div>
+
+          {/* Level badge */}
+          <div style={{ background: t.bgCard, borderRadius: 16, padding: '12px 16px', border: `1px solid ${t.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: 13, color: t.textMid, fontWeight: 600 }}>Таны түвшин</span>
+            <span style={{ background: isDark ? '#2e2600' : '#fff8d4', color: isDark ? '#f1c100' : '#745b00', fontWeight: 800, fontSize: 13, padding: '3px 10px', borderRadius: 10 }}>{state.userLevel}</span>
+          </div>
+
+          {/* Suggested questions */}
+          <div>
+            <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.16em', marginBottom: 10 }}>САНАЛ БОЛГОХ АСУУЛТ</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {EXAMPLES.map((q, i) => (
+                <button key={i} onClick={() => send(q.t)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.2s, background 0.2s' }}>
+                  <span style={{ fontSize: 16, flexShrink: 0 }}>{q.e}</span>
+                  <span style={{ color: t.text, fontSize: 12, fontWeight: 600, lineHeight: 1.4 }}>{q.t}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Clear button */}
+          {msgs.length > 0 && (
+            <button onClick={() => setMsgs([])}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', color: t.textMid, fontSize: 13, fontWeight: 700, marginTop: 'auto' }}>
+              <Trash2 size={14} /> Чат цэвэрлэх
+            </button>
+          )}
+        </div>
+
+        {/* Right chat panel */}
+        <div style={{ display: 'flex', flexDirection: 'column', background: t.bgCard, borderRadius: 24, border: `1px solid ${t.border}`, overflow: 'hidden' }}>
+          {/* Chat header */}
+          <div style={{ padding: '18px 22px', borderBottom: `1px solid ${t.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 9, height: 9, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e80' }} />
+              <span style={{ fontWeight: 700, fontSize: 14, color: t.text }}>AI Багш онлайн байна</span>
+            </div>
+            {msgs.length > 0 && (
+              <button onClick={() => setMsgs([])}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 10, background: 'transparent', border: `1px solid ${t.border}`, cursor: 'pointer', color: t.textMid, fontSize: 12, fontWeight: 600 }}>
+                <Trash2 size={13} /> Цэвэрлэх
+              </button>
+            )}
+          </div>
+
+          {/* Messages */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {msgs.length === 0 ? <EmptyState compact={false} /> : <Messages />}
+          </div>
+
+          {/* Input */}
+          <div style={{ padding: '0 22px 20px' }}>
+            <InputBar />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── MOBILE ────────────────────────────────────────────────────────────────
   return (
     <div className="af" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 98px)' }}>
       {/* Header */}
-      <div style={{ marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>AI БАГШ 💬</div>
-          <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Юу асуух вэ?</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 38, height: 38, borderRadius: 12, background: isDark ? '#2e2600' : '#fff8d4', border: `1.5px solid ${isDark ? '#c9a00040' : '#ffcc0060'}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Bot size={18} color={isDark ? '#f1c100' : '#745b00'} />
+          </div>
+          <div>
+            <div className="fd" style={{ fontWeight: 800, fontSize: 16, color: t.text, lineHeight: 1 }}>AI Багш</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 3 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e' }} />
+              <span style={{ fontSize: 11, color: t.textSoft, fontWeight: 600 }}>Онлайн · {state.userLevel} түвшин</span>
+            </div>
+          </div>
         </div>
         {msgs.length > 0 && (
           <button onClick={() => setMsgs([])}
-            style={{ background: t.bgCard, border: `1px solid ${t.border}`, borderRadius: 12, padding: '6px 12px', fontSize: 12, fontWeight: 700, color: t.textMid, cursor: 'pointer' }}>
-            Цэвэрлэх
+            style={{ width: 34, height: 34, borderRadius: 10, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Trash2 size={14} color={t.textMid} />
           </button>
         )}
       </div>
 
       {/* Messages */}
-      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 12 }}>
-        {msgs.length === 0 && (
-          <div style={{ marginTop: 10 }}>
-            <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 10 }}>ЖИШЭЭ АСУУЛТУУД</div>
-            {EXAMPLES.map((q, i) => (
-              <button key={i} onClick={() => setInput(q.t)}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', textAlign: 'left', padding: '12px 14px', borderRadius: 16, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', marginBottom: 8, boxShadow: t.shadow }}>
-                <span style={{ fontSize: 20 }}>{q.e}</span>
-                <span style={{ color: t.text, fontSize: 14, fontWeight: 600 }}>{q.t}</span>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {msgs.map((m, i) => (
-          <div key={i} className="au" style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
-            {m.role === 'user' ? (
-              /* User bubble */
-              <div style={{
-                maxWidth: '78%', padding: '11px 16px',
-                borderRadius: '20px 20px 6px 20px',
-                background: t.pinkBtn, color: t.pinkBtnText,
-                fontSize: 14, lineHeight: 1.6,
-                boxShadow: t.shadow,
-              }}>
-                {m.content}
-              </div>
-            ) : (
-              /* AI rich message */
-              <div style={{
-                maxWidth: '90%', padding: '14px 18px',
-                borderRadius: '20px 20px 20px 6px',
-                background: t.bgCard,
-                color: t.text,
-                boxShadow: t.shadow,
-                border: `1px solid ${t.border}`,
-              }}>
-                <RichMessage content={m.content} isDark={isDark} t={t} />
-              </div>
-            )}
-          </div>
-        ))}
-
-        {loading && (
-          <div style={{ display: 'flex', gap: 6, padding: '14px 18px', background: t.bgCard, borderRadius: '20px 20px 20px 6px', width: 'fit-content', boxShadow: t.shadow, border: `1px solid ${t.border}` }}>
-            {[0, 1, 2].map(i => (
-              <div key={i} style={{ width: 8, height: 8, borderRadius: 4, background: t.pink, animation: `pulse 0.9s infinite ${i * 0.15}s` }} />
-            ))}
-          </div>
-        )}
-        <div ref={ref} />
+      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 4 }}>
+        {msgs.length === 0 ? <EmptyState compact={true} /> : <Messages />}
       </div>
 
       {/* Input */}
-      <div style={{ display: 'flex', gap: 8 }}>
-        <input value={input} onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && send()}
-          placeholder="Герман хэлний асуулт..."
-          style={{ flex: 1, background: t.bgCard, border: `2px solid ${t.border}`, borderRadius: 16, padding: '12px 16px', fontSize: 14, color: t.text, outline: 'none', boxShadow: t.shadow }} />
-        <button onClick={send} disabled={!input.trim() || loading}
-          style={{ width: 48, height: 48, borderRadius: 16, background: t.pinkBtn, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', opacity: input.trim() && !loading ? 1 : 0.4, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: t.shadow }}>
-          <Send size={18} color={t.pinkBtnText} />
-        </button>
-      </div>
+      <InputBar />
     </div>
   );
 }

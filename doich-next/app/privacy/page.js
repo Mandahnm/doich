@@ -19,6 +19,7 @@ const MN = {
     { h: '2. Гуравдагч талын үйлчилгээ', items: [
       '<strong>Supabase</strong> — таны бүртгэл болон ахицын мэдээллийг хадгална. <a href="https://supabase.com/privacy" style="color:#0062a1">Supabase-ийн нууцлалын бодлого</a>',
       '<strong>OpenAI</strong> — AI чатын мессеж болон дуудлагын дуу хоолойг Whisper-ээр дамжуулан боловсруулна. <a href="https://openai.com/privacy" style="color:#0062a1">OpenAI-ийн нууцлалын бодлого</a>',
+      '<strong>Resend</strong> — имэйл баталгаажуулалт болон нууц үг сэргээх имэйлийг хүргэхэд ашиглагдана. Үүний тулд таны имэйл хаягийг боловсруулна. <a href="https://resend.com/legal/privacy-policy" style="color:#0062a1">Resend-ийн нууцлалын бодлого</a>',
       '<strong>Vercel</strong> — аппыг хостинг хийх ба стандарт хүсэлтийн мета мэдээллийг (IP хаяг, хөтчийн төрөл) бүртгэж болно. <a href="https://vercel.com/legal/privacy-policy" style="color:#0062a1">Vercel-ийн нууцлалын бодлого</a>',
     ]},
     { h: '3. Бид таны мэдээллийг хэрхэн ашигладаг вэ', items: [
@@ -57,6 +58,7 @@ const EN = {
     { h: '2. Third-Party Services', items: [
       '<strong>Supabase</strong> — stores your account and progress data. <a href="https://supabase.com/privacy" style="color:#0062a1">Supabase Privacy Policy</a>',
       '<strong>OpenAI</strong> — processes AI chat messages and pronunciation audio via Whisper. <a href="https://openai.com/privacy" style="color:#0062a1">OpenAI Privacy Policy</a>',
+      '<strong>Resend</strong> — delivers confirmation and password reset emails. Your email address is shared with Resend for this purpose. <a href="https://resend.com/legal/privacy-policy" style="color:#0062a1">Resend Privacy Policy</a>',
       '<strong>Vercel</strong> — hosts the app and may log standard request metadata (IP address, browser type). <a href="https://vercel.com/legal/privacy-policy" style="color:#0062a1">Vercel Privacy Policy</a>',
     ]},
     { h: '3. How We Use Your Data', items: [

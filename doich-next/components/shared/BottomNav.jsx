@@ -1,12 +1,12 @@
 'use client';
 
-import { Home, MessageCircle, BookOpen, Gamepad2, User } from 'lucide-react';
+import { Home, MessageCircle, BookOpen, Gamepad2, User, Library } from 'lucide-react';
 
 const ITEMS = [
   { id: 'home',    Icon: Home,          label: 'Нүүр'    },
-  { id: 'games',   Icon: Gamepad2,      label: 'Тоглоом' },
+  { id: 'reading', Icon: Library,       label: 'Унших'   },
   { id: 'vocab',   Icon: BookOpen,      label: 'Үгс',    center: true },
-  { id: 'chat',    Icon: MessageCircle, label: 'AI багш' },
+  { id: 'games',   Icon: Gamepad2,      label: 'Тоглоом' },
   { id: 'profile', Icon: User,          label: 'Профайл' },
 ];
 

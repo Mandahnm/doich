@@ -15,6 +15,7 @@ import SpeakingCard        from '@/components/shared/SpeakingCard';
 import { getConjugationStages } from '@/lib/conjugation';
 import { getAdjectiveStages }   from '@/lib/adjective';
 import ResultScreen from '@/components/shared/ResultScreen';
+import { WithSkeleton, GamesSkeleton } from '@/components/shared/ScreenSkeleton';
 
 const CONJ_TYPES = new Set(['conjugation', 'adjective']);
 
@@ -44,6 +45,10 @@ const STAT_KEY = {
 
 // ─── Main coordinator ──────────────────────────────────────────────────────────
 export default function GamesScreen({ t, state, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
+  return <WithSkeleton ms={250} skeleton={<GamesSkeleton t={t} />}><GamesScreenInner t={t} state={state} recordStat={recordStat} completeStage={completeStage} recordMistake={recordMistake} clearMistake={clearMistake} addXP={addXP} checkStreak={checkStreak} /></WithSkeleton>;
+}
+
+function GamesScreenInner({ t, state, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
   const [view,         setView]         = useState('hub');
   const [gameType,     setGameType]     = useState(null);
   const [activeCefr,   setActiveCefr]   = useState(null);

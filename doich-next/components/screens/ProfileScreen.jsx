@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { LEVELS } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
 import { ACHIEVEMENTS } from '@/lib/achievements';
+import { WithSkeleton, ProfileSkeleton } from '@/components/shared/ScreenSkeleton';
 
 const MN_MONTHS = ['1-р', '2-р', '3-р', '4-р', '5-р', '6-р', '7-р', '8-р', '9-р', '10-р', '11-р', '12-р'];
 
@@ -20,6 +21,10 @@ function pct(correct, total) {
 }
 
 export default function ProfileScreen({ t, state, update, user, onLogout, setTab }) {
+  return <WithSkeleton ms={250} skeleton={<ProfileSkeleton t={t} />}><ProfileScreenInner t={t} state={state} update={update} user={user} onLogout={onLogout} setTab={setTab} /></WithSkeleton>;
+}
+
+function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
   const [showSettings, setShowSettings] = useState(false);
   const [changePwOpen, setChangePwOpen] = useState(false);
   const [newPw,        setNewPw]        = useState('');

@@ -1,0 +1,239 @@
+[id 862] Rahmenbedingung
+  Current: хүрээний нөхцөл
+  Issue:   The translation 'хүрээний нөхцөл' is too vague. 'Rahmenbedingung' refers to specific conditions or parameters within which something operates, which might be better translated as 'хүрээний нөхцөл байдал' or 'хүрээний нөхцөлүүд'.
+
+[id 864] Tragweite
+  Current: ач холбогдол / хамрах хүрээ
+  Issue:   The translation 'ач холбогдол / хамрах хүрээ' is correct but could be misleading. 'Tragweite' often refers to the significance or impact of something, so it might be clearer to use 'нөлөөллийн хүрээ' or 'үр дагаврын ач холбогдол'.
+
+[id 865] Umkehrung
+  Current: эргүүлэлт / урвуу тал
+  Issue:   The translation 'эргүүлэлт / урвуу тал' is somewhat vague. 'Umkehrung' often refers to a reversal or inversion, so a more precise translation might be 'урвуу байдал' or 'эргүүлэх үйл явц'.
+
+[id 877] Gesichtspunkt
+  Current: үзэл баримтлал
+  Issue:   The translation 'үзэл баримтлал' is misleading. 'Gesichtspunkt' refers to a point of view or perspective, so a more accurate translation would be 'харах өнцөг' or 'үзэл бодол'.
+
+[id 884] Weitblick
+  Current: урт хугацааны харц
+  Issue:   The translation 'урт хугацааны харц' is misleading. 'Weitblick' refers to foresight or vision, so a more appropriate translation might be 'холын хараа' or 'ирээдүйг харах чадвар'.
+
+[id 900] eruieren
+  Current: тогтоох / нэрлэх
+  Issue:   The translation 'нэрлэх' is misleading. 'Eruieren' means to ascertain or determine, not to name.
+
+[id 901] hinterfragen
+  Current: асуулт тавих / шүүмжлэх
+  Issue:   The translation 'шүүмжлэх' is misleading. 'Hinterfragen' means to scrutinize or question critically, not necessarily to criticize.
+
+[id 902] kondensieren
+  Current: товчлох / хураангуйлах
+  Issue:   The translation is too vague. 'Kondensieren' refers to the process of condensation, which is more specific than summarizing.
+
+[id 903] kontrastieren
+  Current: харьцуулах / зөрчилдөх
+  Issue:   The translation 'зөрчилдөх' is misleading. 'Kontrastieren' means to contrast, not to conflict.
+
+[id 910] voraussetzen
+  Current: урьдчилан шаардах
+  Issue:   The translation 'урьдчилан шаардах' is misleading. 'Voraussetzen' means to assume or presuppose, not to demand in advance.
+
+[id 911] abgewogen
+  Current: тэнцвэртэй
+  Issue:   The translation is too vague. 'Abgewogen' means well-considered or balanced, which is more specific than just balanced.
+
+[id 914] differenziert
+  Current: ялгаатай авч үзсэн
+  Issue:   The translation is too vague. 'Differenziert' means nuanced or detailed, which is more specific than just considering differences.
+
+[id 924] lapidar
+  Current: товч / хялбарчилсан
+  Issue:   The translation 'хялбарчилсан' is misleading. 'Lapidar' means terse or succinct, not simplified.
+
+[id 925] missverständlich
+  Current: ойлгоход хэцүү / буруу ойлгох магадлалтай
+  Issue:   The translation 'ойлгоход хэцүү' is misleading. 'Missverständlich' means ambiguous or misleading, not necessarily difficult to understand.
+
+[id 1480] Anrufbeantworter
+  Current: хариулт апарат
+  Issue:   The translation is too vague. It should specify that it refers to a 'telephone answering machine'.
+
+[id 1481] Botschaft
+  Current: элчин сайдын яам / мэдэгдэл
+  Issue:   The translation is correct but could be misleading without context. 'Botschaft' can mean both 'embassy' and 'message', which are distinct meanings.
+
+[id 1483] Asyl
+  Current: дүрвэгсдийн орогнол
+  Issue:   The translation is too specific. 'Asyl' can refer to 'asylum' in a broader sense, not just for refugees.
+
+[id 1508] blind
+  Current: харагдахгүй / сохор
+  Issue:   The translation 'харагдахгүй' (not visible) is misleading. 'Blind' should be translated as 'сохор' (blind) only.
+
+[id 1512] Einrichtung
+  Current: тавилга / дотоод зохион байгуулалт
+  Issue:   The translation is too vague. 'Einrichtung' can also mean 'institution' or 'facility', which are important meanings.
+
+[id 1691] Sorge
+  Current: санаа зоворлол
+  Issue:   The translation 'санаа зоворлол' is incorrect. It should be 'санаа зовнил' or 'санаа зовох'.
+
+[id 1693] Sprechstunde
+  Current: хүлээлгийн цаг
+  Issue:   The translation 'хүлээлгийн цаг' is misleading. It should be 'ярилцах цаг' or 'зөвлөгөө өгөх цаг'.
+
+[id 1695] Spur
+  Current: зам дохио / ул мөр
+  Issue:   The translation 'зам дохио' is incorrect. It should be 'мөр' or 'ул мөр'.
+
+[id 1708] Streichholz
+  Current: шатаасан
+  Issue:   The translation 'шатаасан' is incorrect. It should be 'шүдэнз'.
+
+[id 1712] Strumpf
+  Current: оймс / нойтон оймс
+  Issue:   The translation 'нойтон оймс' is incorrect. It should be 'оймс'.
+
+[id 1819] stolz
+  Current: бахархалтай
+  Issue:   The translation 'бахархалтай' is correct but lacks the nuance of 'proud' as a feeling or state, which might be important for learners.
+
+[id 1826] überhaupt
+  Current: огт / ерөнхийдөө
+  Issue:   The translation 'огт / ерөнхийдөө' is too vague. 'Überhaupt' can mean 'at all' or 'generally', depending on context, which might be confusing for learners.
+
+[id 1832] Unterhaltung
+  Current: зугаа / ярилцлага
+  Issue:   The translation 'зугаа / ярилцлага' is misleading as 'Unterhaltung' primarily means 'entertainment' or 'conversation', which are distinct concepts.
+
+[id 1839] Verabredung
+  Current: уулзалт / болзол
+  Issue:   The translation 'уулзалт / болзол' is correct but could be misleading as 'Verabredung' often implies a social or romantic appointment, not just any meeting.
+
+[id 1890] Wunde
+  Current: шарх / гэмтэл
+  Issue:   The translation 'гэмтэл' can be misleading as it generally refers to 'injury' rather than specifically 'wound'.
+
+[id 1892] Zahl
+  Current: тоо / дугаар
+  Issue:   The translation 'дугаар' can be misleading as it refers to 'number' in the sense of a sequence or order, not a numerical value.
+
+[id 1894] Zange
+  Current: хавч / хайч
+  Issue:   The translation 'хайч' is incorrect as it means 'scissors', while 'Zange' refers to 'pliers'.
+
+[id 1895] Zeichen
+  Current: тэмдэг / дохио
+  Issue:   The translation 'дохио' can be misleading as it refers to 'signal', which is a specific type of sign.
+
+[id 1898] Zeitpunkt
+  Current: цаг мөч / тохиромжтой үе
+  Issue:   The translation 'тохиромжтой үе' is misleading as it implies suitability, which is not inherent in 'Zeitpunkt'.
+
+[id 1908] Zuschlag
+  Current: нэмэлт хөлс / нэмэлт дүн
+  Issue:   The translation 'нэмэлт дүн' is vague and could be misleading as it doesn't specify the context of a surcharge or additional fee.
+
+[id 1913] Urkunde
+  Current: гэрчилгээ / баримт бичиг
+  Issue:   The translation 'баримт бичиг' is too vague as 'Urkunde' specifically refers to a certificate or official document.
+
+[id 1915] unterlassen
+  Current: хийхгүй орхих / зогсоох
+  Issue:   The translation 'зогсоох' is misleading as 'unterlassen' means to refrain from doing something, not to stop something already in progress.
+
+[id 1933] vermissen
+  Current: санах / дутаах
+  Issue:   The translation 'дутаах' is misleading. 'Vermissen' means to miss someone or something emotionally, not to lack.
+
+[id 1934] vermuten
+  Current: сэжиглэх / таамаглах
+  Issue:   The translation 'сэжиглэх' is misleading. 'Vermuten' means to assume or suppose, not to suspect.
+
+[id 1936] verraten
+  Current: урвах / задруулах
+  Issue:   The translation 'урвах' is misleading. 'Verraten' primarily means to betray or reveal a secret, not necessarily to defect or betray in a political sense.
+
+[id 1940] versichern
+  Current: даатгах / батлах
+  Issue:   The translation 'батлах' is vague. 'Versichern' means to insure or assure, not just to confirm.
+
+[id 1945] verurteilen
+  Current: шийтгэх / буруутгах
+  Issue:   The translation 'буруутгах' is misleading. 'Verurteilen' means to condemn or sentence, not just to blame.
+
+[id 1958] weigern
+  Current: татгалзах / зөвшөөрөхгүй байх
+  Issue:   The translation 'зөвшөөрөхгүй байх' is vague. 'Weigern' means to refuse, not just to not agree.
+
+[id 1966] zählen
+  Current: тоолох / найдах
+  Issue:   The translation 'найдах' is misleading. 'Zählen' means to count or to be important, not to rely on.
+
+[id 1977] zwingen
+  Current: албадах / зэрэглэх
+  Issue:   The translation 'зэрэглэх' is incorrect. 'Zwingen' means 'to force' or 'to compel', and 'зэрэглэх' does not convey this meaning.
+
+[id 2001] wild
+  Current: зэрлэг / зальтай
+  Issue:   The translation 'зальтай' is misleading. 'Wild' typically means 'зэрлэг' or 'дүрсгүй', not 'зальтай' which means 'cunning'.
+
+[id 2002] zentral
+  Current: төвийн / хотын голд
+  Issue:   The translation 'хотын голд' is too specific. 'Zentral' means 'central' or 'main', which can apply to more than just a city context.
+
+[id 2056] respektieren
+  Current: хүндэтгэх / хүлцэх
+  Issue:   The translation 'хүлцэх' (to tolerate) is misleading as it does not convey the respect aspect of 'respektieren'.
+
+[id 2058] prägen
+  Current: тодорхойлох / хэлбэрлэх
+  Issue:   The translation 'тодорхойлох' (to define) is too vague and does not capture the nuance of 'prägen' which often means to shape or influence.
+
+[id 2064] spenden
+  Current: хандивлах / өгөх
+  Issue:   The translation 'өгөх' (to give) is too vague and does not specifically convey the charitable aspect of 'spenden'.
+
+[id 2069] abenteuerlich
+  Current: эрсдэлтэй / адал явдалт
+  Issue:   The translation 'эрсдэлтэй' (risky) is misleading as 'abenteuerlich' refers more to adventurous or exciting rather than risky.
+
+[id 2074] kooperativ
+  Current: хамтран ажиллах
+  Issue:   The translation is a verb form, while 'kooperativ' is an adjective meaning cooperative.
+
+[id 2088] überlebenswichtig
+  Current: амь насанд тустай / зайлшгүй
+  Issue:   The translation 'амь насанд тустай' (beneficial to life) is misleading as 'überlebenswichtig' means essential for survival.
+
+[id 2091] erholen
+  Current: эдгэрэх / амрах
+  Issue:   The translation 'эдгэрэх' (to heal) is misleading as 'erholen' refers more to recovering or resting.
+
+[id 2748] die Schachtel
+  Current: хайрцаг / цаасан хайрцаг
+  Issue:   The translation is too specific. 'Schachtel' can refer to any kind of box, not just a paper box.
+
+[id 2750] der Schalter
+  Current: унтраалга / тоолуур
+  Issue:   The translation is misleading. 'Schalter' can mean 'counter' (as in a service counter) or 'switch' (as in a light switch), but 'тоолуур' means 'meter'.
+
+[id 2754] die Scheibe
+  Current: зүсэлт / шил
+  Issue:   The translation is vague. 'Scheibe' can mean 'slice' or 'pane (of glass)', but 'зүсэлт' means 'cut' which is not accurate.
+
+[id 2759] der Schinken
+  Current: жамбон / хиамны хэсэг
+  Issue:   The translation is misleading. 'Schinken' specifically means 'ham', not 'хиамны хэсэг' which means 'part of a sausage'.
+
+[id 2766] der Schnupfen
+  Current: хамрын ханиад / ханиад
+  Issue:   The translation is misleading. 'Schnupfen' specifically refers to a 'cold with a runny nose', not just any 'cold'.
+
+[id 2778] der See
+  Current: нуур / далай
+  Issue:   The translation is misleading. 'See' in German can mean 'lake' or 'sea', but 'далай' specifically means 'ocean' in Mongolian.
+
+[id 2782] der Sender
+  Current: телевизийн суваг / хэлхээ
+  Issue:   The translation is misleading. 'Sender' can mean 'broadcaster' or 'transmitter', but 'хэлхээ' means 'circuit', which is not accurate.

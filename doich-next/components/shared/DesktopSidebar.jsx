@@ -1,9 +1,10 @@
 'use client';
 
-import { Home, Gamepad2, BookOpen, MessageCircle, User } from 'lucide-react';
+import { Home, Gamepad2, BookOpen, MessageCircle, User, Library } from 'lucide-react';
 
 const NAV = [
   { id: 'home',    Icon: Home,          label: 'Нүүр'       },
+  { id: 'reading', Icon: Library,       label: 'Унших'      },
   { id: 'games',   Icon: Gamepad2,      label: 'Тоглоомууд' },
   { id: 'vocab',   Icon: BookOpen,      label: 'Үгсийн сан' },
   { id: 'chat',    Icon: MessageCircle, label: 'AI багш'    },

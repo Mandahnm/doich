@@ -1,0 +1,3395 @@
+[A1] id 8  Wasser
+  Current : ус
+  Google  : Ус
+
+[A2] id 19  Geschäft
+  Current : дэлгүүр
+  Google  : Бизнес
+
+[A2] id 25  leicht
+  Current : амархан
+  Google  : гэрэл
+
+[B1] id 32  Gesellschaft
+  Current : нийгэм
+  Google  : Компани
+
+[B1] id 37  trotzdem
+  Current : гэсэн хэдий ч
+  Google  : үүнээс үл хамааран
+
+[B2] id 39  Voraussetzung
+  Current : урьдчилсан нөхцөл
+  Google  : Шаардлага
+
+[B2] id 40  Zusammenhang
+  Current : холбоо
+  Google  : Холболт
+
+[B2] id 44  allerdings
+  Current : гэхдээ
+  Google  : Гэсэн хэдий ч
+
+[C1] id 46  Beeinträchtigung
+  Current : сөрөг нөлөө / саад учруулалт
+  Google  : үнэ цэнийн бууралт
+
+[C1] id 47  veranschaulichen
+  Current : тайлбарлан үзүүлэх
+  Google  : дүрслэх
+
+[A1] id 52  Bruder
+  Current : ах / дүү (эрэгтэй)
+  Google  : Ах
+
+[A1] id 76  Bett
+  Current : ор
+  Google  : Ор
+
+[A1] id 85  Frage
+  Current : асуулт
+  Google  : Асуух
+
+[A1] id 102  heißen
+  Current : нэрлэгдэх
+  Google  : дуудагдах
+
+[A1] id 103  kennen
+  Current : таних
+  Google  : мэдэх
+
+[A1] id 104  fahren
+  Current : явах (тээврийн хэрэгслээр)
+  Google  : жолоодох
+
+[A1] id 107  kochen
+  Current : хоол хийх
+  Google  : тогооч
+
+[A1] id 108  öffnen
+  Current : нээх
+  Google  : нээлттэй
+
+[A1] id 110  helfen
+  Current : туслах
+  Google  : тусламж
+
+[A1] id 112  stehen
+  Current : зогсох
+  Google  : зогсож байна
+
+[A1] id 136  oft
+  Current : олон удаа / ойр ойрхон
+  Google  : ихэвчлэн
+
+[A1] id 138  noch
+  Current : дахиад / бас
+  Google  : одоо ч
+
+[A1] id 141  nah
+  Current : ойр
+  Google  : хаах
+
+[A1] id 147  allein
+  Current : дангаараа
+  Google  : ганцаараа
+
+[A2] id 151  Supermarkt
+  Current : их дэлгүүр
+  Google  : супермаркет
+
+[A2] id 161  Paket
+  Current : илгээмж
+  Google  : багц
+
+[A2] id 163  Rechnung
+  Current : тооцоо / баримт
+  Google  : Нэхэмжлэх
+
+[A2] id 164  Kasse
+  Current : касс
+  Google  : Төлбөр тооцоо
+
+[A2] id 171  Koffer
+  Current : аяллын цүнх
+  Google  : Чемодан
+
+[A2] id 175  Sonne
+  Current : нар
+  Google  : Ням
+
+[A2] id 183  Party
+  Current : парти
+  Google  : үдэшлэг
+
+[A2] id 189  reisen
+  Current : аялах
+  Google  : аялал
+
+[A2] id 190  besuchen
+  Current : зочлох
+  Google  : айлчлал
+
+[A2] id 191  reservieren
+  Current : захиалах
+  Google  : нөөц
+
+[A2] id 196  zeigen
+  Current : үзүүлэх
+  Google  : шоу
+
+[A2] id 199  ankommen
+  Current : ирж хүрэх
+  Google  : ирэх
+
+[A2] id 202  unterschreiben
+  Current : гарын үсэг зурах
+  Google  : тэмдэг
+
+[A2] id 203  wechseln
+  Current : солих
+  Google  : өөрчлөлт
+
+[A2] id 204  anrufen
+  Current : утасдах
+  Google  : дуудлага
+
+[A2] id 206  planen
+  Current : төлөвлөх
+  Google  : төлөвлөгөө
+
+[A2] id 215  spät
+  Current : орой / хожуу
+  Google  : хоцорсон
+
+[A2] id 217  frei
+  Current : чөлөөтэй
+  Google  : үнэгүй
+
+[A2] id 223  natürlich
+  Current : мэдээж
+  Google  : байгалийн жамаар
+
+[A2] id 224  wahrscheinlich
+  Current : магадтай
+  Google  : магадгүй
+
+[A2] id 225  normalerweise
+  Current : ерөнхийдөө
+  Google  : ердийн үед
+
+[A2] id 226  zuerst
+  Current : эхлээд
+  Google  : анхны
+
+[A2] id 227  danach
+  Current : үүний дараа
+  Google  : түүнээс хойш
+
+[A2] id 241  einfach
+  Current : энгийн
+  Google  : зүгээр л
+
+[A2] id 246  leise
+  Current : намуухан
+  Google  : чимээгүй
+
+[B1] id 265  Stelle
+  Current : ажлын байр
+  Google  : албан тушаал
+
+[B1] id 268  Studium
+  Current : их сургуулийн боловсрол
+  Google  : Судалгаа
+
+[B1] id 269  Prüfung
+  Current : шалгалт
+  Google  : Тест
+
+[B1] id 270  Note
+  Current : дүн
+  Google  : тэмдэглэл
+
+[B1] id 271  Unterricht
+  Current : хичээл
+  Google  : Зааварчилгаа
+
+[B1] id 278  Internet
+  Current : интернэт
+  Google  : Интернет
+
+[B1] id 282  Wirtschaft
+  Current : эдийн засаг
+  Google  : Бизнес
+
+[B1] id 283  Politik
+  Current : улс төр
+  Google  : бодлого
+
+[B1] id 285  Recht
+  Current : эрх
+  Google  : Баруун
+
+[B1] id 300  versuchen
+  Current : оролдох
+  Google  : оролдлого
+
+[B1] id 306  hoffen
+  Current : найдах
+  Google  : найдвар
+
+[B1] id 307  meinen
+  Current : бодох / үзэх
+  Google  : утга учиртай
+
+[B1] id 311  verändern
+  Current : өөрчлөх
+  Google  : өөрчлөлт
+
+[B1] id 313  darstellen
+  Current : дүрслэх / илэрхийлэх
+  Google  : төлөөлөх
+
+[B1] id 314  beachten
+  Current : анхаарах
+  Google  : ажиглах
+
+[B1] id 317  verlieren
+  Current : гээх / алдах
+  Google  : хожигдох
+
+[B1] id 321  sparen
+  Current : хэмнэх
+  Google  : хадгалах
+
+[B1] id 323  benutzen
+  Current : хэрэглэх
+  Google  : ашиглах
+
+[B1] id 324  erzählen
+  Current : ярих / дүрслэх
+  Google  : хэлэх
+
+[B1] id 325  berichten
+  Current : мэдэгдэх / тайлагнах
+  Google  : тайлан
+
+[B1] id 328  überlegen
+  Current : эргэцүүлэх
+  Google  : дээд зэргийн
+
+[B1] id 331  vorbereiten
+  Current : бэлдэх
+  Google  : бэлтгэх
+
+[B1] id 333  verbringen
+  Current : өнгөрүүлэх
+  Google  : зарцуулах
+
+[B1] id 343  selbständig
+  Current : бие даасан
+  Google  : хувиараа хөдөлмөр эрхлэгч
+
+[B1] id 360  verschieden
+  Current : янз бүрийн
+  Google  : өөр
+
+[B1] id 361  gemeinsam
+  Current : хамтарсан / нийтлэг
+  Google  : хамтдаа
+
+[B1] id 363  kaum
+  Current : бараг үгүй
+  Google  : арай ядан
+
+[B1] id 365  deshalb
+  Current : иймээс
+  Google  : энэ шалтгааны улмаас
+
+[B1] id 366  deswegen
+  Current : тэр учраас
+  Google  : үүнээс болж
+
+[B1] id 368  jedoch
+  Current : гэвч / гэхдээ
+  Google  : Гэсэн хэдий ч
+
+[B1] id 370  damit
+  Current : тэр зорилгоор / ингэснээр
+  Google  : үүнтэй хамт
+
+[B1] id 371  wenigstens
+  Current : наад зах нь
+  Google  : ядаж л
+
+[B1] id 372  zumindest
+  Current : хамгийн багаар бол
+  Google  : ядаж л
+
+[B1] id 375  immerhin
+  Current : тэгсэн ч / гэлээ ч
+  Google  : ямар ч байсан
+
+[B1] id 380  zunächst
+  Current : эхэндээ / юуны өмнө
+  Google  : анхны
+
+[B1] id 385  zuletzt
+  Current : хамгийн сүүлд
+  Google  : сүүлчийн
+
+[B1] id 394  Mitte
+  Current : дунд
+  Google  : төв
+
+[B1] id 402  Menge
+  Current : тоо хэмжээ
+  Google  : Олон хүн
+
+[B1] id 403  Anzahl
+  Current : тоо
+  Google  : Дугаар
+
+[B1] id 406  Bereich
+  Current : салбар / хүрээ
+  Google  : Талбай
+
+[B1] id 416  Art
+  Current : төрөл / байдал
+  Google  : Урлаг
+
+[B1] id 419  Umstand
+  Current : нөхцөл / байдал
+  Google  : баримт
+
+[B1] id 436  Freundschaft
+  Current : найрамдал
+  Google  : нөхөрлөл
+
+[B1] id 438  Konflikt
+  Current : зөрчилдөөн
+  Google  : мөргөлдөөн
+
+[B1] id 442  Rat
+  Current : зөвлөгөө
+  Google  : Зөвлөл
+
+[B2] id 453  Perspektive
+  Current : өнцөг / харах хэлбэр
+  Google  : хэтийн төлөв
+
+[B2] id 454  Dimension
+  Current : хэмжүүр / тал
+  Google  : хэмжээс
+
+[B2] id 472  Antrag
+  Current : өргөдөл
+  Google  : Аппликейшн
+
+[B2] id 473  Bewerbung
+  Current : ажилд орох өргөдөл
+  Google  : Аппликейшн
+
+[B2] id 474  Lebenslauf
+  Current : намтар
+  Google  : CV
+
+[B2] id 476  Kompetenz
+  Current : чадвар / эрх мэдэл
+  Google  : чадамж
+
+[B2] id 479  Maßnahme
+  Current : арга хэмжээ
+  Google  : хэмжилт
+
+[B2] id 483  Schwerpunkt
+  Current : голлох асуудал
+  Google  : анхаарлаа төвлөрүүлэх
+
+[B2] id 484  Überblick
+  Current : ерөнхий дүр зураг
+  Google  : тойм
+
+[B2] id 488  These
+  Current : тезис / гол санаа
+  Google  : дипломын ажил
+
+[B2] id 489  Stellungnahme
+  Current : байр суурь
+  Google  : санал бодол
+
+[B2] id 494  Digitalisierung
+  Current : дижиталжуулалт
+  Google  : Дижиталчлал
+
+[B2] id 498  Vereinbarung
+  Current : тохиролцоо
+  Google  : хэлэлцээр
+
+[B2] id 514  Umsetzung
+  Current : хэрэгжүүлэлт
+  Google  : Хэрэгжилт
+
+[B2] id 515  Durchführung
+  Current : гүйцэтгэл
+  Google  : хэрэгжилт
+
+[B2] id 516  Regelung
+  Current : зохицуулалт
+  Google  : хяналт
+
+[B2] id 517  Bestimmung
+  Current : тодорхойлолт / журам
+  Google  : Шийдвэр гаргах
+
+[B2] id 518  Verpflichtung
+  Current : үүрэг / амлалт
+  Google  : оролцоо
+
+[B2] id 520  beurteilen
+  Current : үнэлэх / дүгнэх
+  Google  : шүүгч
+
+[B2] id 521  begründen
+  Current : үндэслэх
+  Google  : зөвтгөх
+
+[B2] id 522  beweisen
+  Current : нотлох
+  Google  : батлах
+
+[B2] id 523  widersprechen
+  Current : эсэргүүцэх
+  Google  : зөрчилдөх
+
+[B2] id 527  fördern
+  Current : дэмжих
+  Google  : санхүүгийн дэмжлэг үзүүлэх
+
+[B2] id 530  verpflichten
+  Current : үүрэг болгох
+  Google  : амлалт өгөх
+
+[B2] id 531  koordinieren
+  Current : зохицуулах
+  Google  : координат
+
+[B2] id 532  evaluieren
+  Current : үнэлгээ хийх
+  Google  : үнэлэх
+
+[B2] id 535  differenzieren
+  Current : ялгаж үзэх
+  Google  : ялгах
+
+[B2] id 536  konkretisieren
+  Current : тодотгох
+  Google  : тодорхойлох
+
+[B2] id 537  verdeutlichen
+  Current : тодорхой болгох
+  Google  : дүрслэх
+
+[B2] id 539  zusammenfassen
+  Current : хураангуйлах
+  Google  : нэгтгэн дүгнэх
+
+[B2] id 540  einbeziehen
+  Current : оролцуулах
+  Google  : оруулах
+
+[B2] id 541  auseinandersetzen
+  Current : судлах / шинжлэх
+  Google  : харьцах
+
+[B2] id 543  beeindrucken
+  Current : гайхшруулах
+  Google  : сэтгэгдэл төрүүлэх
+
+[B2] id 545  anpassen
+  Current : дасан зохицох
+  Google  : тохируулах
+
+[B2] id 547  anerkennen
+  Current : хүлээн зөвшөөрөх
+  Google  : таних
+
+[B2] id 548  aufgreifen
+  Current : авч хэлэлцэх
+  Google  : авах
+
+[B2] id 549  einleiten
+  Current : эхлүүлэх / байгуулах
+  Google  : санаачлах
+
+[B2] id 550  verfolgen
+  Current : мөрдөх / хөөх
+  Google  : зам
+
+[B2] id 553  einhalten
+  Current : мөрдөх
+  Google  : хадгалах
+
+[B2] id 554  widerspiegeln
+  Current : тусгах / илэрхийлэх
+  Google  : тусгал
+
+[B2] id 555  entsprechen
+  Current : тохирох
+  Google  : нь тэнцүү
+
+[B2] id 558  erschöpfen
+  Current : дуусгах / ядраах
+  Google  : яндан
+
+[B2] id 560  bereitstellen
+  Current : бэлтгэх / гаргаж өгөх
+  Google  : хангах
+
+[B2] id 561  nachweisen
+  Current : нотлох
+  Google  : батлах
+
+[B2] id 562  abschließen
+  Current : дуусгах / хаах
+  Google  : бүрэн
+
+[B2] id 565  erheben
+  Current : цуглуулах / авах
+  Google  : өргөх
+
+[B2] id 566  ermitteln
+  Current : тогтоох / нэрлэх
+  Google  : тодорхойлох
+
+[B2] id 567  festlegen
+  Current : тогтоох
+  Google  : байгуулах
+
+[B2] id 569  komplex
+  Current : нарийн төвөгтэй
+  Google  : цогцолбор
+
+[B2] id 573  erheblich
+  Current : мэдэгдэхүйц
+  Google  : чухал
+
+[B2] id 574  beträchtlich
+  Current : томоохон / их хэмжээний
+  Google  : нэлээд
+
+[B2] id 578  transparent
+  Current : ил тод
+  Google  : тунгалаг
+
+[B2] id 579  objektiv
+  Current : объектив
+  Google  : линз
+
+[B2] id 583  konkret
+  Current : тодорхой
+  Google  : тусгайлан
+
+[B2] id 585  systematisch
+  Current : системтэй
+  Google  : системчилсэн
+
+[B2] id 586  strukturiert
+  Current : бүтэцтэй
+  Google  : бүтэцлэгдсэн
+
+[B2] id 588  konsistent
+  Current : уялдаатай
+  Google  : Тогтмол
+
+[B2] id 595  verbindlich
+  Current : хүчин төгөлдөр / заавал биелэх
+  Google  : холбох
+
+[B2] id 597  endgültig
+  Current : эцсийн
+  Google  : эцэст нь
+
+[B2] id 598  voraussichtlich
+  Current : магадтай / тооцоолсоноор
+  Google  : хүлээгдэж буй
+
+[B2] id 600  anscheinend
+  Current : харахад / мэт
+  Google  : бололтой
+
+[B2] id 601  offensichtlich
+  Current : тодорхой / ил
+  Google  : бололтой
+
+[B2] id 603  durchaus
+  Current : бүрэн / үнэхээр
+  Google  : мэдээж
+
+[B2] id 604  weitgehend
+  Current : ихэнхдээ
+  Google  : их хэмжээгээр
+
+[B2] id 605  überwiegend
+  Current : голдуу / ихэвчлэн
+  Google  : ихэнхдээ
+
+[B2] id 610  im Hinblick auf
+  Current : дараах зүйлтэй холбогдуулан
+  Google  : тухайд нь
+
+[B2] id 611  bezüglich
+  Current : хамаарал бүхий / талаар
+  Google  : -тай холбогдуулан
+
+[B2] id 612  hinsichtlich
+  Current : хамааран
+  Google  : тухай
+
+[B2] id 615  demgegenüber
+  Current : үүний эсрэгт
+  Google  : эсрэгээрээ
+
+[B2] id 616  dementsprechend
+  Current : үүнд нийцүүлэн
+  Google  : үүний дагуу
+
+[B2] id 617  diesbezüglich
+  Current : үүнтэй холбогдуулан
+  Google  : энэ талаар
+
+[B2] id 619  entsprechend
+  Current : тохирох хэрээр
+  Google  : үүний дагуу
+
+[B2] id 624  zudem
+  Current : нэмж хэлбэл
+  Google  : үүнээс гадна
+
+[B2] id 625  folglich
+  Current : иймээс
+  Google  : улмаар
+
+[B2] id 626  somit
+  Current : иймд
+  Google  : тиймээс
+
+[B2] id 627  demnach
+  Current : үүнийг харгалзан
+  Google  : дагуу
+
+[B2] id 628  vorrangig
+  Current : тэргүүлэх
+  Google  : нэн тэргүүний ач холбогдол
+
+[B2] id 629  maßgeblich
+  Current : шийдвэрлэх ач холбогдолтой
+  Google  : мэдэгдэхүйц
+
+[B2] id 642  erfreulicherweise
+  Current : баяр хөөртэй нь
+  Google  : азаар
+
+[B2] id 645  bezeichnenderweise
+  Current : онцлог байдлаар
+  Google  : Чухал ач холбогдолтой
+
+[B2] id 647  im Großen und Ganzen
+  Current : нийтдээ / ерөнхийдөө
+  Google  : бүхэлдээ
+
+[B2] id 648  nach wie vor
+  Current : өмнөхийн адил
+  Google  : одоо ч
+
+[C1] id 649  Abwägung
+  Current : жинлэлт / харьцуулалт
+  Google  : ашиг сонирхлыг жигнэх
+
+[C1] id 651  Überzeugung
+  Current : итгэл үнэмшил
+  Google  : ял шийтгэл
+
+[C1] id 661  Erkenntnis
+  Current : ухаарал / танин мэдэхүй
+  Google  : мэдлэг
+
+[C1] id 663  Reflexion
+  Current : эргэцүүлэл
+  Google  : тусгал
+
+[C1] id 671  Formulierung
+  Current : томьёолол
+  Google  : томъёолол
+
+[C1] id 672  Rhetorik
+  Current : риторик
+  Google  : уран илтгэх үг
+
+[C1] id 678  Inklusion
+  Current : хамруулалт
+  Google  : Хамрах хүрээ
+
+[C1] id 695  Metapher
+  Current : метафор
+  Google  : зүйрлэл
+
+[C1] id 698  Kündigung
+  Current : ажлаас халах / гэрээ цуцлах
+  Google  : Төгсгөл
+
+[C1] id 708  Vorurteil
+  Current : өрөөсгөл үзэл
+  Google  : Гадуурхалт
+
+[C1] id 709  Stereotype
+  Current : хэвшмэл ойлголт
+  Google  : Стереотип
+
+[C1] id 710  Perspektivwechsel
+  Current : өнцгийг солих
+  Google  : Үзэл бодлын өөрчлөлт
+
+[C1] id 717  Souveränität
+  Current : тусгаар тогтнол
+  Google  : бүрэн эрхт байдал
+
+[C1] id 718  Koexistenz
+  Current : зэрэгцэн оршин тогтнол
+  Google  : хамтдаа амьдрах
+
+[C1] id 719  reflektieren
+  Current : эргэцүүлэн бодох
+  Google  : тусгал
+
+[C1] id 721  legitimieren
+  Current : хүчин төгөлдөр болгох
+  Google  : хуульчлах
+
+[C1] id 722  implizieren
+  Current : далдаар агуулах
+  Google  : битүү утгаар
+
+[C1] id 723  präzisieren
+  Current : нарийвчлах
+  Google  : тодорхойлох
+
+[C1] id 726  synthetisieren
+  Current : нийлүүлэх / нэгтгэх
+  Google  : синтез хийх
+
+[C1] id 729  kompensieren
+  Current : нөхөх
+  Google  : нөхөн төлбөр олгох
+
+[C1] id 732  moderieren
+  Current : хөтлөн явуулах / зохицуулах
+  Google  : дунд зэрэг
+
+[C1] id 734  qualifizieren
+  Current : мэргэшүүлэх / нарийвчлах
+  Google  : тэнцэх
+
+[C1] id 735  priorisieren
+  Current : чухалчлах
+  Google  : эрэмбэлэх
+
+[C1] id 737  formulieren
+  Current : томьёолох
+  Google  : томъёолох
+
+[C1] id 738  einwenden
+  Current : эсэргүүцэх
+  Google  : объект
+
+[C1] id 739  konstatieren
+  Current : тогтоох / дүгнэх
+  Google  : муж улс
+
+[C1] id 741  elaborieren
+  Current : нарийвчлан боловсруулах
+  Google  : нарийн
+
+[C1] id 752  manifestieren
+  Current : илэрхийлэх / илрэх
+  Google  : манифест
+
+[C1] id 753  perpetuieren
+  Current : тасралтгүй үргэлжлүүлэх
+  Google  : мөнхжүүлэх
+
+[C1] id 754  eskalieren
+  Current : хурцдах
+  Google  : хурцадмал байдал
+
+[C1] id 756  kumulieren
+  Current : хуримтлах
+  Google  : хуримтлуулах
+
+[C1] id 757  fungieren
+  Current : үүрэг гүйцэтгэх
+  Google  : функц
+
+[C1] id 761  divergieren
+  Current : зөрөх
+  Google  : хазайх
+
+[C1] id 764  subsumieren
+  Current : хамруулах
+  Google  : дэд хэсэг
+
+[C1] id 765  reformieren
+  Current : шинэчлэх
+  Google  : шинэчлэл
+
+[C1] id 766  revidieren
+  Current : шинэчлэн үзэх
+  Google  : засварлах
+
+[C1] id 767  resümieren
+  Current : хураангуйлах
+  Google  : нэгтгэн дүгнэх
+
+[C1] id 769  paradigmatisch
+  Current : жишиг болсон / парадигмын
+  Google  : парадигматик
+
+[C1] id 774  dominant
+  Current : давамгайлах
+  Google  : давамгайлсан
+
+[C1] id 778  fundiert
+  Current : сайн үндэслэгдсэн
+  Google  : үндэслэл сайтай
+
+[C1] id 783  latent
+  Current : нуугдмал
+  Google  : далд
+
+[C1] id 785  kumulativ
+  Current : хуримтлагдах
+  Google  : хуримтлагдсан
+
+[C1] id 786  selektiv
+  Current : сонгомол
+  Google  : сонгон шалгаруулалтаар
+
+[C1] id 787  inklusiv
+  Current : хамруулагдсан
+  Google  : бүгдийг хамарсан
+
+[C1] id 788  empirisch
+  Current : туршлагад суурилсан
+  Google  : эмпирик байдлаар
+
+[C1] id 789  analytisch
+  Current : шинжилгээний
+  Google  : аналитик байдлаар
+
+[C1] id 792  deskriptiv
+  Current : тайлбарлах
+  Google  : дүрслэх
+
+[C1] id 793  kritisch
+  Current : шүүмжлэлтэй
+  Google  : чухал
+
+[C1] id 801  treffend
+  Current : оновчтой
+  Google  : тохиромжтой
+
+[C1] id 803  rhetorisch
+  Current : риторикийн
+  Google  : уран илтгэх
+
+[C1] id 807  holistisch
+  Current : бүхэлчлэн авч үзэх
+  Google  : цогц
+
+[C1] id 808  deterministisch
+  Current : тодорхойлогдсон
+  Google  : детерминистик
+
+[C1] id 822  euphemistisch
+  Current : зөөлрүүлэн хэлсэн
+  Google  : эвфемизм
+
+[C1] id 824  nüchtern
+  Current : бодитой / сэрүүн
+  Google  : эрүүл
+
+[C1] id 825  unvoreingenommen
+  Current : өрөөсгөлгүй
+  Google  : шударга
+
+[C1] id 826  aufschlussreich
+  Current : ихийг өгүүлсэн / мэдээлэл сайтай
+  Google  : гүнзгий ойлголттой
+
+[C1] id 827  weitreichend
+  Current : өргөн хүрээтэй
+  Google  : алс холын
+
+[C1] id 830  richtungsweisend
+  Current : чиглэл заасан
+  Google  : шинэлэг санаа
+
+[C1] id 832  epochal
+  Current : үеийг тодорхойлсон
+  Google  : эрин үе
+
+[C1] id 833  zukunftsweisend
+  Current : ирээдүйг чиглэсэн
+  Google  : алсын хараатай
+
+[C1] id 834  nachdrücklich
+  Current : хатуу / чанга
+  Google  : онцлон тэмдэглэв
+
+[C1] id 835  ausdrücklich
+  Current : тодорхой / илэрхий
+  Google  : илт
+
+[C1] id 840  zweifellos
+  Current : эргэлзэлгүй
+  Google  : эргэлзээгүй
+
+[C1] id 844  nolens volens
+  Current : хүсэх эс хүсэх
+  Google  : санаатай
+
+[C1] id 845  de facto
+  Current : бодит байдал дээр
+  Google  : де факто
+
+[C1] id 846  de jure
+  Current : хуулийн хувьд
+  Google  : де юрэ
+
+[C1] id 848  a posteriori
+  Current : туршлагаас гаргасан
+  Google  : а апостериори
+
+[C1] id 849  Abschreckung
+  Current : айлган сүрдүүлэлт / тогтоон барих нөлөө
+  Google  : хорио цээр
+
+[C1] id 850  Aushandlung
+  Current : хэлэлцэн тохиролцох
+  Google  : хэлэлцээр
+
+[C1] id 854  Feststellung
+  Current : тогтоолт / дүгнэлт
+  Google  : олох
+
+[C1] id 857  Infragestellung
+  Current : асуудал болгох
+  Google  : Асуулт асуух
+
+[C1] id 859  Leitfaden
+  Current : удирдамж
+  Google  : хөтөч
+
+[C1] id 861  Nachbesserung
+  Current : нэмэлт засвар
+  Google  : Сайжруулалт
+
+[C1] id 865  Umkehrung
+  Current : эргүүлэлт / урвуу тал
+  Google  : буцаах
+
+[C1] id 866  Verflechtung
+  Current : уялдаа холбоо
+  Google  : Сүлжих
+
+[C1] id 869  Anschauung
+  Current : үзэл / ойлголт
+  Google  : Харах
+
+[C1] id 870  Betrachtungsweise
+  Current : авч үзэх арга
+  Google  : хэтийн төлөв
+
+[C1] id 875  Vorgehensweise
+  Current : үйл ажиллагааны арга
+  Google  : Журам
+
+[C1] id 876  Herangehensweise
+  Current : хандах арга
+  Google  : Хандлага
+
+[C1] id 877  Gesichtspunkt
+  Current : үзэл баримтлал
+  Google  : харах өнцөг
+
+[C1] id 878  Blickwinkel
+  Current : харах өнцөг
+  Google  : хэтийн төлөв
+
+[C1] id 879  Standpunkt
+  Current : байр суурь
+  Google  : албан тушаал
+
+[C1] id 881  Beurteilungsvermögen
+  Current : дүгнэх чадвар
+  Google  : Шүүмж
+
+[C1] id 882  Urteilskraft
+  Current : дүгнэх хүч
+  Google  : Шүүмж
+
+[C1] id 884  Weitblick
+  Current : урт хугацааны харц
+  Google  : Алсын хараа
+
+[C1] id 892  aufzeigen
+  Current : харуулах
+  Google  : үзүүлэх
+
+[C1] id 894  bekräftigen
+  Current : батлах
+  Google  : баталгаажуулах
+
+[C1] id 896  charakterisieren
+  Current : дүрслэх / онцлогийг харуулах
+  Google  : шинж чанар
+
+[C1] id 898  einräumen
+  Current : зөвшөөрөх / хүлээн зөвшөөрөх
+  Google  : байрлуулах
+
+[C1] id 899  entfalten
+  Current : дэлгэрүүлэх / илэрхийлэх
+  Google  : задлах
+
+[C1] id 900  eruieren
+  Current : тогтоох / нэрлэх
+  Google  : мөрдөн шалгах
+
+[C1] id 902  kondensieren
+  Current : товчлох / хураангуйлах
+  Google  : нягтруулах
+
+[C1] id 903  kontrastieren
+  Current : харьцуулах / зөрчилдөх
+  Google  : ялгаатай байдал
+
+[C1] id 908  verknüpfen
+  Current : холбох
+  Google  : холбоос
+
+[C1] id 909  vernachlässigen
+  Current : үл тоох
+  Google  : үл тоомсорлох
+
+[C1] id 910  voraussetzen
+  Current : урьдчилан шаардах
+  Google  : таамаглах
+
+[C1] id 911  abgewogen
+  Current : тэнцвэртэй
+  Google  : жинлэв
+
+[C1] id 912  bahnbrechend
+  Current : анхдагч / шинийг нээсэн
+  Google  : шинэлэг санаа
+
+[C1] id 913  bezeichnend
+  Current : онцлог / шинж тэмдэгтэй
+  Google  : чухал
+
+[C1] id 914  differenziert
+  Current : ялгаатай авч үзсэн
+  Google  : ялгавартай
+
+[C1] id 916  fehlerhaft
+  Current : алдаатай
+  Google  : гэмтэлтэй
+
+[C1] id 918  geistreich
+  Current : оюунлаг / сэцэн
+  Google  : ухаантай
+
+[C1] id 921  haltlos
+  Current : үндэсгүй
+  Google  : үндэслэлгүй
+
+[C1] id 925  missverständlich
+  Current : ойлгоход хэцүү / буруу ойлгох магадлалтай
+  Google  : төөрөгдүүлсэн
+
+[C1] id 927  sachlich
+  Current : бодитой / зүйлд тохирсон
+  Google  : баримтат
+
+[C1] id 929  stichhaltig
+  Current : үндэслэлтэй / баримттай
+  Google  : хүчинтэй
+
+[C1] id 930  trügerisch
+  Current : хуурамч
+  Google  : хууран мэхлэгч
+
+[C1] id 932  undifferenziert
+  Current : ялгагдаагүй
+  Google  : ялгаварлан гадуурхаагүй
+
+[C1] id 933  unfundiert
+  Current : үндэсгүй
+  Google  : үндэслэлгүй
+
+[C1] id 934  unschlüssig
+  Current : эргэлзэж буй
+  Google  : шийдээгүй
+
+[C1] id 936  verallgemeinernd
+  Current : ерөнхийлсөн
+  Google  : ерөнхийлөх
+
+[C1] id 938  weitaus
+  Current : илүүтэй / хавьгүй
+  Google  : хол
+
+[C1] id 939  schlechterdings
+  Current : ерөөсөө / огт
+  Google  : бүрмөсөн
+
+[C1] id 942  unabhängig davon
+  Current : үүнээс үл хамааран
+  Google  : бие даан
+
+[C1] id 943  mit Nachdruck
+  Current : онцгой чухалчлан
+  Google  : онцлон тэмдэглэсэн
+
+[C1] id 944  in Anbetracht
+  Current : харгалзан үзвэл
+  Google  : авч үзэх
+
+[C1] id 946  im Rahmen
+  Current : хүрээнд
+  Google  : нэг хэсэг болгон
+
+[C1] id 947  in Bezug auf
+  Current : хамааран / талаар
+  Google  : холбоотойгоор
+
+[C1] id 956  Durchbruch
+  Current : нэвтрэлт / ахиц
+  Google  : нээлт
+
+[C1] id 958  Weichenstellung
+  Current : чиглэл тогтоолт
+  Google  : Курсийг тохируулах
+
+[C1] id 960  Kernkompetenz
+  Current : үндсэн чадвар
+  Google  : Гол чадамж
+
+[C1] id 964  Mehrwert
+  Current : нэмүү өртөг / нэмэлт ашиг
+  Google  : Нэмэгдсэн үнэ цэнэ
+
+[C1] id 976  herausarbeiten
+  Current : гаргаж авах / тодруулах
+  Google  : дасгал хийх
+
+[C1] id 977  ableiten
+  Current : гаргах / дүгнэлт хийх
+  Google  : гарган авах
+
+[C1] id 979  übertragen
+  Current : шилжүүлэх / дамжуулах
+  Google  : дамжуулсан
+
+[C1] id 985  ineinandergreifen
+  Current : нэгдэх / уялдах
+  Google  : түгжээний холболт
+
+[C1] id 987  einleuchtend
+  Current : ойлгомжтой / тодорхой
+  Google  : илэрхий
+
+[C1] id 988  stichhaltig
+  Current : баримттай
+  Google  : хүчинтэй
+
+[C1] id 991  nennenswert
+  Current : дурдах хэрэгтэй
+  Google  : анхаарал татахуйц
+
+[C1] id 992  bemerkenswert
+  Current : анхаарал татахуйц
+  Google  : гайхалтай
+
+[C1] id 993  bedeutsam
+  Current : ач холбогдолтой
+  Google  : чухал
+
+[C1] id 996  aufsehenerregend
+  Current : анхаарал татсан
+  Google  : гайхалтай
+
+[C1] id 998  unwiderlegbar
+  Current : маргаашгүй
+  Google  : үгүйсгэхийн аргагүй
+
+[C1] id 999  unumstößlich
+  Current : өөрчлөгдөшгүй / бат
+  Google  : үгүйсгэхийн аргагүй
+
+[A1] id 1006  Bad
+  Current : угаалгын өрөө
+  Google  : ванн
+
+[A1] id 1023  mögen
+  Current : дуртай байх
+  Google  : шиг
+
+[A1] id 1024  brauchen
+  Current : хэрэгтэй байх
+  Google  : хэрэгцээ
+
+[A1] id 1025  wissen
+  Current : мэдэх
+  Google  : мэдлэг
+
+[A1] id 1026  fragen
+  Current : асуух
+  Google  : асуултууд
+
+[A1] id 1031  lachen
+  Current : инээх
+  Google  : инээд
+
+[A1] id 1034  nass
+  Current : норсон
+  Google  : нойтон
+
+[A1] id 1040  gern
+  Current : дуртайяа
+  Google  : баяртайгаар
+
+[A2] id 1053  Aufzug
+  Current : лифт
+  Google  : Цахилгаан шат
+
+[A2] id 1054  Stockwerk
+  Current : давхар
+  Google  : шал
+
+[A2] id 1060  klingeln
+  Current : хонх дарах
+  Google  : бөгж
+
+[A2] id 1061  funktionieren
+  Current : ажиллах
+  Google  : функц
+
+[A2] id 1062  aussteigen
+  Current : буух
+  Google  : гарах
+
+[A2] id 1063  einsteigen
+  Current : суух
+  Google  : орох
+
+[A2] id 1070  freundlich
+  Current : найрсаг
+  Google  : ээлтэй
+
+[A2] id 1191  Ahnung
+  Current : ойлголт / мэдлэг
+  Google  : Санаа
+
+[A2] id 1192  Ampel
+  Current : замын гэрэл
+  Google  : Гэрлэн дохио
+
+[A2] id 1203  Bluse
+  Current : блузка
+  Google  : Цамц
+
+[A2] id 1204  Bohne
+  Current : буурцаг
+  Google  : шош
+
+[A2] id 1210  Fan
+  Current : фан / шүтэн биширэгч
+  Google  : сэнс
+
+[A2] id 1211  Ferien
+  Current : сургуулийн амралт
+  Google  : Баярын өдрүүд
+
+[A2] id 1212  Fernseher
+  Current : телевизор
+  Google  : ТВ
+
+[A2] id 1213  Fest
+  Current : баяр найр
+  Google  : Бат бөх
+
+[A2] id 1214  Festival
+  Current : фестиваль
+  Google  : наадам
+
+[A2] id 1217  Fluss
+  Current : гол мөрөн
+  Google  : Урсгал
+
+[A2] id 1220  Garage
+  Current : гараж
+  Google  : гарааш
+
+[A2] id 1223  Geldbörse
+  Current : хэтэвч
+  Google  : түрийвч
+
+[A2] id 1225  Gericht
+  Current : хоолны зүйл
+  Google  : Шүүх
+
+[A2] id 1243  Keller
+  Current : подвал / агуулах
+  Google  : зоорь
+
+[A2] id 1246  Klavier
+  Current : фортепиано
+  Google  : Төгөлдөр хуур
+
+[A2] id 1247  Kleid
+  Current : даашинз
+  Google  : Хувцаслалт
+
+[A2] id 1249  Krankheit
+  Current : өвчин
+  Google  : Өвчлөл
+
+[A2] id 1251  Kreuzung
+  Current : замын уулзвар
+  Google  : Гарц
+
+[A2] id 1252  Krimi
+  Current : детектив (ном/кино)
+  Google  : Гэмт хэргийн роман
+
+[A2] id 1254  Landschaft
+  Current : байгалийн үзэмж
+  Google  : Ландшафт
+
+[A2] id 1261  Medikament
+  Current : эм
+  Google  : мансууруулах бодис
+
+[A2] id 1269  Nudel
+  Current : нудель / гурилан хоол
+  Google  : гоймон
+
+[A2] id 1271  Orange
+  Current : жүрж
+  Google  : Улбар шар
+
+[A2] id 1272  Parfüm
+  Current : үнэртэй ус
+  Google  : үнэртэн
+
+[A2] id 1278  Plakat
+  Current : плакат / зар
+  Google  : зурагт хуудас
+
+[A2] id 1280  Pullover
+  Current : пуловер / sweater
+  Google  : Свитер
+
+[A2] id 1281  Quiz
+  Current : тааварын тоглоом
+  Google  : асуулт хариулт
+
+[A2] id 1289  Rock
+  Current : юбка
+  Google  : рок
+
+[A2] id 1291  Rücken
+  Current : нуруу
+  Google  : Буцах
+
+[A2] id 1292  Rucksack
+  Current : нуруун дэвүүр
+  Google  : Үүргэвч
+
+[A2] id 1293  Sache
+  Current : зүйл / хэрэг
+  Google  : Матер
+
+[A2] id 1296  Schirm
+  Current : шүхэр
+  Google  : дэлгэц
+
+[A2] id 1297  Schloss
+  Current : цайз / цоожин
+  Google  : Түгжээ
+
+[A2] id 1303  Ski
+  Current : ски
+  Google  : цана
+
+[A2] id 1305  Spaziergang
+  Current : зугаалга / алхалт
+  Google  : Алхах
+
+[A2] id 1320  Topf
+  Current : тогоо
+  Google  : Сав
+
+[A2] id 1324  Training
+  Current : бэлтгэл / дасгал
+  Google  : сургалт
+
+[A2] id 1325  T-Shirt
+  Current : Т-цамц
+  Google  : Футболк
+
+[A2] id 1327  Unterkunft
+  Current : буудах газар
+  Google  : Байр
+
+[A2] id 1328  Verspätung
+  Current : хоцрол
+  Google  : Хоцрох
+
+[A2] id 1331  Wagen
+  Current : тэрэг / вагон
+  Google  : Зориглох
+
+[A2] id 1332  Wald
+  Current : ой
+  Google  : Ой мод
+
+[A2] id 1334  Wettbewerb
+  Current : тэмцээн
+  Google  : Өрсөлдөөн
+
+[A2] id 1335  Witz
+  Current : онигоо
+  Google  : Хошигнол
+
+[A2] id 1343  Zeugnis
+  Current : гэрчилгээ / дүнгийн хуудас
+  Google  : Хуулбар
+
+[A2] id 1348  ärgern
+  Current : дургүйцэх / уурлах
+  Google  : уурлуулах
+
+[A2] id 1349  ausruhen
+  Current : амрах
+  Google  : тайвшир
+
+[A2] id 1353  bedanken
+  Current : талархах
+  Google  : баярлалаа
+
+[A2] id 1354  beeilen
+  Current : яарах
+  Google  : хурдлаарай
+
+[A2] id 1356  beraten
+  Current : зөвлөх
+  Google  : зөвлөгөө өгөх
+
+[A2] id 1358  bewerben
+  Current : ажлын өргөдөл гаргах
+  Google  : хэрэглэх
+
+[A2] id 1364  klappen
+  Current : амжилттай болох
+  Google  : амжилтанд хүрэх
+
+[A2] id 1365  kontrollieren
+  Current : шалгах
+  Google  : хяналт
+
+[A2] id 1367  kündigen
+  Current : ажлаас гарах / цуцлах
+  Google  : болих
+
+[A2] id 1368  lassen
+  Current : үлдээх / болих
+  Google  : зөвшөөрөх
+
+[A2] id 1370  liefern
+  Current : хүргэж өгөх
+  Google  : хүргэлт
+
+[A2] id 1372  malen
+  Current : зурах
+  Google  : будаг
+
+[A2] id 1373  merken
+  Current : анзаарах / ойлгох
+  Google  : санах
+
+[A2] id 1376  parken
+  Current : машин зогсоолд оруулах
+  Google  : цэцэрлэгт хүрээлэн
+
+[A2] id 1379  prüfen
+  Current : шалгах / нягтлах
+  Google  : чек
+
+[A2] id 1380  putzen
+  Current : цэвэрлэх
+  Google  : цэвэрлэгээ
+
+[A2] id 1381  rechnen
+  Current : тоолох / бодлого бодох
+  Google  : тооцоолох
+
+[A2] id 1382  reden
+  Current : ярих / харилцах
+  Google  : яриа
+
+[A2] id 1384  renovieren
+  Current : засварлах
+  Google  : шинэчлэх
+
+[A2] id 1388  schimpfen
+  Current : занах / дургүйцэх
+  Google  : загнах
+
+[A2] id 1389  schneiden
+  Current : таслах
+  Google  : зүсэлт
+
+[A2] id 1393  streiten
+  Current : маргалдах
+  Google  : маргах
+
+[A2] id 1395  tragen
+  Current : үүрэх / өмсөх
+  Google  : авч явах
+
+[A2] id 1396  trainieren
+  Current : дасгал хийх / бэлтгэх
+  Google  : галт тэрэг
+
+[A2] id 1397  träumen
+  Current : зүүдлэх
+  Google  : мөрөөдөл
+
+[A2] id 1398  umsteigen
+  Current : буулт хийх / дараагийн унаанд суух
+  Google  : шилжүүлэг
+
+[A2] id 1399  unterhalten
+  Current : ярилцах / зугаацах
+  Google  : зугаацуулах
+
+[A2] id 1400  unternehmen
+  Current : хийх / зохион байгуулах
+  Google  : компани
+
+[A2] id 1401  vereinbaren
+  Current : тохиролцох
+  Google  : санал нийлэх
+
+[A2] id 1402  verletzen
+  Current : гэмтэх
+  Google  : гэмтээх
+
+[A2] id 1404  verpassen
+  Current : алдах / дутуурах
+  Google  : хатагтай
+
+[A2] id 1406  verschieben
+  Current : хойшлуулах
+  Google  : нүүх
+
+[A2] id 1408  wünschen
+  Current : хүсэх / мөрөөдөх
+  Google  : хүсэл
+
+[A2] id 1409  zeichnen
+  Current : зурах (дүрс)
+  Google  : сугалах
+
+[A2] id 1417  bunt
+  Current : олон өнгийн
+  Google  : өнгөлөг
+
+[A2] id 1422  dünn
+  Current : нарийн / туранхай
+  Google  : нимгэн
+
+[A2] id 1423  echt
+  Current : бодит / үнэхээр
+  Google  : жинхэнэ
+
+[A2] id 1425  eng
+  Current : нарийн / хоцмог
+  Google  : ойроос
+
+[A2] id 1429  fleißig
+  Current : чармайлгатай / ажилсаг
+  Google  : хичээнгүй
+
+[A2] id 1432  genau
+  Current : яг / нарийн
+  Google  : Яг
+
+[A2] id 1434  hässlich
+  Current : муухай
+  Google  : царай муутай
+
+[A2] id 1438  mindestens
+  Current : наад зах нь
+  Google  : ядаж л
+
+[A2] id 1441  sauer
+  Current : гашуун / бухимдсан
+  Google  : исгэлэн
+
+[A2] id 1449  sonnig
+  Current : нарлаг
+  Google  : нартай
+
+[A2] id 1456  unbedingt
+  Current : заавал
+  Google  : үнэхээр
+
+[A2] id 1458  wach
+  Current : сэрсэн / нойр дуусаагүй
+  Google  : сэрүүн
+
+[A1] id 1077  Ausweis
+  Current : үнэмлэх
+  Google  : ID
+
+[A1] id 1079  Bahnsteig
+  Current : галт тэрэгний перрон
+  Google  : тавцан
+
+[A1] id 1082  Bauch
+  Current : хэвлий
+  Google  : Гэдэс
+
+[A1] id 1088  Brötchen
+  Current : жижиг булочка
+  Google  : Талхны ороомог
+
+[A1] id 1089  Buchstabe
+  Current : үсэг
+  Google  : захидал
+
+[A1] id 1092  Chef
+  Current : дарга
+  Google  : босс
+
+[A1] id 1109  Glück
+  Current : аз / жаргал
+  Google  : Аз
+
+[A1] id 1111  Haar
+  Current : үс
+  Google  : үс
+
+[A1] id 1113  Haltestelle
+  Current : буудал / зогсоол
+  Google  : зогсох
+
+[A1] id 1116  Junge
+  Current : хөвгүүн
+  Google  : Хүү
+
+[A1] id 1117  Karte
+  Current : карт / цэс
+  Google  : Газрын зураг
+
+[A1] id 1127  Mund
+  Current : ам
+  Google  : ам
+
+[A1] id 1130  Pause
+  Current : завсарлага
+  Google  : түр зогсолт
+
+[A1] id 1131  Platz
+  Current : суудал / талбай
+  Google  : Байршил
+
+[A1] id 1145  Wort
+  Current : үг
+  Google  : Үг
+
+[A1] id 1149  antworten
+  Current : хариулах
+  Google  : хариулт
+
+[A1] id 1154  dürfen
+  Current : болно / зөвшөөрөгдөх
+  Google  : тавдугаар сар
+
+[A1] id 1155  duschen
+  Current : шүршигдэх
+  Google  : шүршүүр
+
+[A1] id 1158  fernsehen
+  Current : телевиз үзэх
+  Google  : ТВ
+
+[A1] id 1159  fliegen
+  Current : нисэх
+  Google  : ялаа
+
+[A1] id 1160  gefallen
+  Current : таалагдах
+  Google  : унасан
+
+[A1] id 1162  können
+  Current : чадах
+  Google  : лааз
+
+[A1] id 1163  leben
+  Current : амьдрах
+  Google  : амьдрал
+
+[A1] id 1164  legen
+  Current : хэвтүүлэн тавих
+  Google  : газар
+
+[A1] id 1168  müssen
+  Current : ёстой / хийх хэрэгтэй
+  Google  : заавал
+
+[A1] id 1169  rauchen
+  Current : тамхи татах
+  Google  : утаа
+
+[A1] id 1171  schmecken
+  Current : амтлах
+  Google  : сайхан амттай
+
+[A1] id 1173  stellen
+  Current : босоо тавих
+  Google  : газар
+
+[A1] id 1176  übernachten
+  Current : буудаллах
+  Google  : хонох
+
+[A1] id 1181  fertig
+  Current : бэлэн / дуусган
+  Google  : бүрэн
+
+[A1] id 1182  geradeaus
+  Current : шулуун урагш
+  Google  : шууд
+
+[A1] id 1185  klar
+  Current : тодорхой / ойлгомжтой
+  Google  : цэвэрхэн
+
+[A1] id 1187  ruhig
+  Current : тайван
+  Google  : чимээгүй
+
+[B1] id 1465  Amt
+  Current : газар / байгууллага
+  Google  : Засгийн газрын алба
+
+[B1] id 1466  Anwalt
+  Current : хуульч
+  Google  : Өмгөөлөгч
+
+[B1] id 1469  Ärger
+  Current : уур / бухимдал
+  Google  : Асуудал
+
+[B1] id 1470  Aufenthalt
+  Current : хоноглол / байршил
+  Google  : Үлдэх
+
+[A2] id 1477  Batterie
+  Current : батарей
+  Google  : батерей
+
+[B1] id 1478  Bauer
+  Current : тариачин
+  Google  : фермер
+
+[B1] id 1480  Anrufbeantworter
+  Current : хариулт апарат
+  Google  : автомат хариулагч
+
+[B1] id 1481  Botschaft
+  Current : элчин сайдын яам / мэдэгдэл
+  Google  : Мессеж
+
+[B1] id 1490  ändern
+  Current : өөрчлөх
+  Google  : өөрчлөлт
+
+[B1] id 1491  anmelden
+  Current : бүртгүүлэх
+  Google  : бүртгэл
+
+[B1] id 1492  annehmen
+  Current : хүлээн авах
+  Google  : гэж үзэх
+
+[A2] id 1496  braten
+  Current : шарах
+  Google  : шарсан мах
+
+[B1] id 1497  brechen
+  Current : хугалах
+  Google  : завсарлага
+
+[B1] id 1498  buchstabieren
+  Current : үсэглэх
+  Google  : шившлэг
+
+[B1] id 1502  ängstlich
+  Current : айдастай / болгоомжтой
+  Google  : аймшигтай
+
+[B1] id 1504  anstrengend
+  Current : ядраах / хүнд
+  Google  : стресстэй
+
+[B1] id 1505  ärgerlich
+  Current : бухимдалтай
+  Google  : ядаргаатай
+
+[B1] id 1507  begeistert
+  Current : баяртай / сэтгэл дүүрэн
+  Google  : урам зоригтой
+
+[B1] id 1510  Durchsage
+  Current : дамжуулан мэдэгдэл
+  Google  : зарлал
+
+[B1] id 1517  Erinnerung
+  Current : дурсамж
+  Google  : Санах ой
+
+[B1] id 1519  Erlebnis
+  Current : туулсан зүйл / адал явдал
+  Google  : Туршлага
+
+[B1] id 1523  Feierabend
+  Current : ажлын өдрийн төгсгөл
+  Google  : Гарах цаг
+
+[A2] id 1525  Fieber
+  Current : халуун / температур
+  Google  : Халуурах
+
+[B1] id 1531  Gebiet
+  Current : салбар / газар нутаг
+  Google  : Талбай
+
+[B1] id 1538  Gewissen
+  Current : ухамсар
+  Google  : Мөс чанар
+
+[B1] id 1539  Gewohnheit
+  Current : дадал / заншил
+  Google  : зуршил
+
+[B1] id 1540  Hochzeit
+  Current : гэрлэлтийн ёслол
+  Google  : Хурим
+
+[B1] id 1547  erfinden
+  Current : шинэ зүйл зохиох
+  Google  : зохион бүтээх
+
+[B1] id 1548  sich erholen
+  Current : амрах / сэргэх
+  Google  : эдгэрэх
+
+[B1] id 1552  erleben
+  Current : туулах / мэдрэх
+  Google  : туршлага
+
+[B1] id 1553  erledigen
+  Current : шийдэж дуусгах
+  Google  : бүрэн
+
+[B1] id 1556  ersetzen
+  Current : орлуулах / сольж тавих
+  Google  : орлуулагч
+
+[B1] id 1557  fehlen
+  Current : дутагдах / байхгүй байх
+  Google  : хатагтай
+
+[B1] id 1559  führen
+  Current : удирдах / тэргүүлэх
+  Google  : хар тугалга
+
+[B1] id 1560  kämpfen
+  Current : тэмцэх / байлдах
+  Google  : тулаан
+
+[B1] id 1561  klären
+  Current : тодруулах
+  Google  : цэвэрлэгээ хийх
+
+[B1] id 1564  leisten
+  Current : гүйцэтгэх / чадах
+  Google  : боломжийн
+
+[B1] id 1565  leiten
+  Current : удирдах / хөтлөх
+  Google  : хар тугалга
+
+[B1] id 1566  genießen
+  Current : таашаах / эдлэх
+  Google  : таашаал авах
+
+[B1] id 1577  Mehrwertsteuer
+  Current : нэмэгдсэн өртгийн татвар
+  Google  : НӨАТ
+
+[B1] id 1584  Meldung
+  Current : мэдэгдэл / мэдээ
+  Google  : Тайлан
+
+[B1] id 1586  Mitarbeiter
+  Current : ажилтан / хамт олон
+  Google  : Ажилчид
+
+[B1] id 1588  Nachhilfe
+  Current : нэмэлт хичээл
+  Google  : Багшлах
+
+[B1] id 1593  Ordnung
+  Current : дэг журам / эмх цэгц
+  Google  : Захиалга
+
+[B1] id 1595  Orchester
+  Current : оркестр
+  Google  : найрал хөгжим
+
+[B1] id 1604  Rasen
+  Current : зүлэг
+  Google  : Уралдаан
+
+[B1] id 1605  loben
+  Current : магтах / сайшаах
+  Google  : магтаал
+
+[B1] id 1609  melden
+  Current : мэдэгдэх / бүртгүүлэх
+  Google  : тайлан
+
+[B1] id 1611  mischen
+  Current : хольж нэгтгэх
+  Google  : холимог
+
+[B1] id 1612  mitteilen
+  Current : мэдэгдэх / дамжуулах
+  Google  : харилцах
+
+[B1] id 1615  notieren
+  Current : тэмдэглэж бичих
+  Google  : тэмдэглэл
+
+[B1] id 1616  operieren
+  Current : мэс засал хийх
+  Google  : ажиллуулах
+
+[B1] id 1617  pflegen
+  Current : асрах / халамжлах
+  Google  : хадгалах
+
+[B1] id 1618  protestieren
+  Current : эсэргүүцэх
+  Google  : эсэргүүцэл
+
+[B1] id 1623  mager
+  Current : туранхай / нарийн
+  Google  : бөхийх
+
+[B1] id 1624  männlich
+  Current : эрэгтэй / эрэгтэйлэг
+  Google  : эршүүд
+
+[B1] id 1626  merkwürdig
+  Current : хачирхалтай / сонин
+  Google  : ер бусын
+
+[B1] id 1627  mündlich
+  Current : аман / ярган
+  Google  : амаар
+
+[B1] id 1638  pauschal
+  Current : нэгдсэн / багцын
+  Google  : бөөн төлбөр
+
+[B1] id 1639  parallel
+  Current : зэрэгцэн
+  Google  : зэрэгцээ
+
+[B1] id 1640  mittlerweile
+  Current : одоогоор / аль хэдийнэ
+  Google  : энэ хооронд
+
+[B1] id 1642  nämlich
+  Current : учир нь / тодруулбал
+  Google  : тухайлбал
+
+[B1] id 1643  nebenbei
+  Current : зэрэгцүүлж / хавсран
+  Google  : хажуугаар
+
+[B1] id 1644  offenbar
+  Current : тодорхойтой / ил тод
+  Google  : бололтой
+
+[B1] id 1650  Reinigung
+  Current : цэвэрлэгч / хими цэвэрлэгч
+  Google  : цэвэрлэгээ
+
+[B1] id 1655  Rückkehr
+  Current : буцаж ирэлт
+  Google  : буцах
+
+[B1] id 1657  Ruhe
+  Current : амгалан / тайвшрал
+  Google  : Чимээгүй
+
+[B1] id 1658  Runde
+  Current : эргэлт / тойрог
+  Google  : дугуй
+
+[B1] id 1662  Schalter
+  Current : тоолуур / товч
+  Google  : Сэлгүүр
+
+[B1] id 1665  Scheibe
+  Current : зүсэм / шилэн хавтан
+  Google  : диск
+
+[B1] id 1670  Schlaf
+  Current : нойр
+  Google  : Унтах
+
+[B1] id 1672  Schmerzmittel
+  Current : өвдөлт намдаах эм
+  Google  : Өвчин намдаагч
+
+[B1] id 1673  Schmuck
+  Current : зүүлт / гоёл чимэглэл
+  Google  : Үнэт эдлэл
+
+[B1] id 1676  Schuld
+  Current : буруу / гэм
+  Google  : Алдаа
+
+[B1] id 1677  Schulden
+  Current : өр
+  Google  : Өр
+
+[B1] id 1679  Schüssel
+  Current : аяга / тавган
+  Google  : Боул
+
+[B1] id 1694  Spritze
+  Current : тариа / дусаагуур
+  Google  : Тарилга
+
+[B1] id 1696  Stadion
+  Current : стадион
+  Google  : цэнгэлдэх хүрээлэн
+
+[B1] id 1697  Station
+  Current : буудал / тасаг
+  Google  : станц
+
+[B1] id 1707  Strecke
+  Current : зам / зай
+  Google  : Маршрут
+
+[B1] id 1708  Streichholz
+  Current : шүдэнз
+  Google  : тааруулалт
+
+[B1] id 1709  Streik
+  Current : ажил хаялт
+  Google  : цохилт
+
+[B1] id 1710  Streit
+  Current : маргаан / тэмцэл
+  Google  : Тулаан
+
+[B1] id 1715  Sucht
+  Current : донтолт
+  Google  : Хайлтууд
+
+[B1] id 1719  Tabelle
+  Current : хүснэгт
+  Google  : Ширээ
+
+[B1] id 1721  Tagesablauf
+  Current : өдрийн хуваарь
+  Google  : Өдөр тутмын хэвшил
+
+[B1] id 1728  Tätigkeit
+  Current : үйл ажиллагаа / ажил
+  Google  : Даалгавар
+
+[B1] id 1730  Technik
+  Current : техник / арга
+  Google  : Технологи
+
+[B1] id 1737  Trinkgeld
+  Current : өшиглөл / зөвлөгийн мөнгө
+  Google  : Зөвлөгөө
+
+[B1] id 1740  Überraschung
+  Current : гайхшрал / бэлэг
+  Google  : Гайхах зүйл
+
+[B1] id 1750  reduzieren
+  Current : бууруулах / хасах
+  Google  : багасгах
+
+[B1] id 1754  retten
+  Current : аврах / аюулаас гаргах
+  Google  : хадгалах
+
+[B1] id 1756  schalten
+  Current : унтраах / асаах / шилжүүлэх
+  Google  : унтраалга
+
+[B1] id 1757  schätzen
+  Current : үнэлэх / тааварлах
+  Google  : эрдэнэс
+
+[B1] id 1760  schütteln
+  Current : сэгсэрэх / даллах
+  Google  : сэгсрэх
+
+[B1] id 1763  sinken
+  Current : живэх / буурах
+  Google  : угаалтуур
+
+[B1] id 1767  spüren
+  Current : мэдрэх / анзаарах
+  Google  : мэдрэмж
+
+[B1] id 1771  stechen
+  Current : хатгах / зуух
+  Google  : хатгуулах
+
+[B1] id 1772  stecken
+  Current : хийх / байх
+  Google  : тавих
+
+[B1] id 1777  stoßen
+  Current : мөргөх / түлхэх
+  Google  : тулгаралт
+
+[B1] id 1778  streiken
+  Current : ажил хаях
+  Google  : цохилт
+
+[B1] id 1780  stürzen
+  Current : унах / нурах
+  Google  : уналт
+
+[B1] id 1784  teilen
+  Current : хуваах / хамтдаа хэрэглэх
+  Google  : хуваагдах
+
+[B1] id 1785  treten
+  Current : гишгэх / хөлдөх
+  Google  : алхам
+
+[B1] id 1786  überfahren
+  Current : дайрах / гажуудуулах
+  Google  : дайралт
+
+[B1] id 1790  überprüfen
+  Current : шалгах / нягтлах
+  Google  : чек
+
+[B1] id 1791  überqueren
+  Current : гатлах / нэвтрэх
+  Google  : хөндлөн гарах
+
+[B1] id 1792  überraschen
+  Current : гайхшруулах
+  Google  : гэнэтийн бэлэг
+
+[B1] id 1793  überreden
+  Current : ятгах / зориулах
+  Google  : итгүүлэх
+
+[B1] id 1795  überweisen
+  Current : мөнгө шилжүүлэх
+  Google  : шилжүүлэг
+
+[B1] id 1797  umdrehen
+  Current : эргүүлэх / буцаах
+  Google  : эргэх
+
+[B1] id 1798  umgehen
+  Current : харьцах / зохицох
+  Google  : бултах
+
+[B1] id 1807  satt
+  Current : цатгалан / ханасан
+  Google  : дүүрэн
+
+[B1] id 1810  selbstständig
+  Current : бие даасан / бие дааж
+  Google  : хувиараа хөдөлмөр эрхлэгч
+
+[B1] id 1812  seltsam
+  Current : сонин / хачирхалтай
+  Google  : хачин
+
+[B1] id 1814  sinnvoll
+  Current : утга учиртай / зохистой
+  Google  : ухаалаг
+
+[B1] id 1816  ständig
+  Current : байнгын / тасралтгүй
+  Google  : тогтмол
+
+[B1] id 1818  still
+  Current : чимээгүй / тайван
+  Google  : одоо ч
+
+[B1] id 1819  stolz
+  Current : бахархалтай
+  Google  : бахархаж байна
+
+[B1] id 1832  Unterhaltung
+  Current : зугаа / ярилцлага
+  Google  : Үзвэр үйлчилгээ
+
+[B1] id 1835  Umtausch
+  Current : буцаах / солих
+  Google  : солилцоо
+
+[B1] id 1838  Unglück
+  Current : гамшиг / аз гарамгүй явдал
+  Google  : осол
+
+[B1] id 1840  Abschied
+  Current : салах ёс / хагацал
+  Google  : Баяртай
+
+[B1] id 1841  Veranstaltung
+  Current : арга хэмжээ / тоглолт
+  Google  : Үйл явдал
+
+[B1] id 1842  Verbindung
+  Current : холбоо / нийлэл
+  Google  : Холболт
+
+[B1] id 1845  Verein
+  Current : клуб / нийгэмлэг
+  Google  : Холбоо
+
+[B1] id 1851  Verlag
+  Current : хэвлэлийн газар
+  Google  : Хэвлэн нийтлэгч
+
+[B1] id 1861  Verwandte
+  Current : төрөл саднынхан
+  Google  : Холбоотой
+
+[B1] id 1868  Vorschrift
+  Current : дүрэм / журам
+  Google  : Зохицуулалт
+
+[B1] id 1869  Vorsicht
+  Current : болгоомж
+  Google  : Анхааруулга
+
+[B1] id 1872  Vortrag
+  Current : илтгэл / лекц
+  Google  : Хэл яриа
+
+[B1] id 1879  Weiterbildung
+  Current : мэргэжил дээшлүүлэх
+  Google  : Үргэлжлүүлэн боловсрол эзэмших
+
+[B1] id 1880  Werkstatt
+  Current : засварын газар / цех
+  Google  : Семинар
+
+[B1] id 1897  Zeile
+  Current : мөр (текстийн)
+  Google  : Шугам
+
+[B1] id 1902  Zoll
+  Current : гааль
+  Google  : Гаалийн
+
+[B1] id 1905  Zugang
+  Current : хандах эрх / орох боломж
+  Google  : Хандалт
+
+[B1] id 1915  unterlassen
+  Current : хийхгүй орхих / зогсоох
+  Google  : орхигдуулах
+
+[B1] id 1918  umtauschen
+  Current : солих / буцаах
+  Google  : солилцоо
+
+[B1] id 1920  verabreden
+  Current : болзох / тохиролцох
+  Google  : болзоо товлох
+
+[B1] id 1921  verabschieden
+  Current : үдэх / салах
+  Google  : баяртай гэж хэлэх
+
+[B1] id 1923  verbrennen
+  Current : шатаах / халах
+  Google  : түлэгдэлт
+
+[B1] id 1924  verhaften
+  Current : баривчлах
+  Google  : баривчилгаа
+
+[B1] id 1930  verlaufen
+  Current : замаа алдах / буруу явах
+  Google  : төөрөх
+
+[B1] id 1933  vermissen
+  Current : санах / дутаах
+  Google  : хатагтай
+
+[B1] id 1934  vermuten
+  Current : сэжиглэх / таамаглах
+  Google  : гэж үзэх
+
+[B1] id 1935  verpacken
+  Current : савлах / боох
+  Google  : баглаа боодол
+
+[B1] id 1936  verraten
+  Current : урвах / задруулах
+  Google  : урвасан
+
+[B1] id 1937  versäumen
+  Current : алдах / хоцрох
+  Google  : хатагтай
+
+[B1] id 1940  versichern
+  Current : даатгах / батлах
+  Google  : баталгаа өгөх
+
+[B1] id 1941  versprechen
+  Current : амлах
+  Google  : амлалт
+
+[B1] id 1945  verurteilen
+  Current : шийтгэх / буруутгах
+  Google  : буруушаах
+
+[B1] id 1946  verwechseln
+  Current : андуурах / хольж хутгах
+  Google  : -тай андуурч байна
+
+[B1] id 1948  verzeihen
+  Current : уучлах
+  Google  : өршөөл
+
+[B1] id 1949  verzichten
+  Current : татгалзах / орхих
+  Google  : чөлөөлөх
+
+[B1] id 1950  verursachen
+  Current : үүсгэх / шалтгаалах
+  Google  : шалтгаан
+
+[B1] id 1951  vorhaben
+  Current : төлөвлөх / санаатай байх
+  Google  : төлөвлөгөө
+
+[B1] id 1953  vorlesen
+  Current : уншиж сонсгох
+  Google  : чангаар унших
+
+[B1] id 1957  wecken
+  Current : сэрээх / босгох
+  Google  : сэрэх
+
+[B1] id 1960  werfen
+  Current : шидэх / хаях
+  Google  : шидэлт
+
+[B1] id 1961  wetten
+  Current : бооцоо тавих
+  Google  : мөрийтэй тоглоом
+
+[B1] id 1963  winken
+  Current : гар даллах
+  Google  : даллаж байна
+
+[B1] id 1964  wirken
+  Current : үйлчлэх / нөлөөлөх
+  Google  : бүтээлүүд
+
+[B1] id 1965  wundern
+  Current : гайхах / гайхмаар байх
+  Google  : гайхамшиг
+
+[B1] id 1970  zubereiten
+  Current : бэлдэх / хоол хийх
+  Google  : бэлтгэх
+
+[B1] id 1972  zurechtkommen
+  Current : дааж гарах / зохицох
+  Google  : даван туулах
+
+[B1] id 1973  zusagen
+  Current : зөвшөөрөх / хүлээн авах
+  Google  : амлалт өгөх
+
+[B1] id 1974  zuschauen
+  Current : харах / үзэх
+  Google  : цаг
+
+[B1] id 1975  zustimmen
+  Current : зөвшөөрөх / дэмжих
+  Google  : санал нийлэх
+
+[B1] id 1976  zweifeln
+  Current : эргэлзэх
+  Google  : эргэлзээ
+
+[B1] id 1977  zwingen
+  Current : албадах / зэрэглэх
+  Google  : хүч
+
+[B1] id 1982  verwandt
+  Current : төрөл садан
+  Google  : холбоотой
+
+[B1] id 1985  wahnsinnig
+  Current : галзуу / гайхалтай
+  Google  : солиотой
+
+[B1] id 1989  wütend
+  Current : уурласан / уурлаж байгаа
+  Google  : ууртай
+
+[B1] id 1992  zugänglich
+  Current : хандах боломжтой
+  Google  : хүртээмжтэй
+
+[B1] id 2000  vernünftig
+  Current : ухаалаг / утга учиртай
+  Google  : боломжийн
+
+[B1] id 2003  ziemlich
+  Current : нилээд / хэр нэгэн
+  Google  : нэлээд
+
+[B1] id 2004  zuständig
+  Current : эрх бүхий / хариуцсан
+  Google  : хариуцлагатай
+
+[B2] id 2006  Identität
+  Current : өөрийн мөн чанар
+  Google  : таних тэмдэг
+
+[B2] id 2017  Epidemie
+  Current : тахал / эпидеми
+  Google  : халдвар дэгдэлт
+
+[B2] id 2018  Klischee
+  Current : хэвшмэл ойлголт
+  Google  : улиг болсон зүйл
+
+[B2] id 2020  Vereinbarkeit
+  Current : нийцэл / хослуулах боломж
+  Google  : нийцтэй байдал
+
+[B2] id 2022  Täuschung
+  Current : хууран мэхлэлт
+  Google  : хуурмаг зүйл
+
+[B2] id 2024  Prognose
+  Current : урьдчилан таамаглал
+  Google  : урьдчилсан мэдээ
+
+[B2] id 2029  Wertschätzung
+  Current : үнэлэмж / хүндэтгэл
+  Google  : Талархал
+
+[B2] id 2031  Diagnose
+  Current : оношилгоо
+  Google  : оношлогоо
+
+[B2] id 2036  Demenz
+  Current : ухаан мартах өвчин
+  Google  : солиорол
+
+[B2] id 2037  Selbstbewusstsein
+  Current : өөртөө итгэлтэй байдал
+  Google  : өөрийгөө ухамсарлах
+
+[B2] id 2042  Faszination
+  Current : гайхал / сонирхол татах чанар
+  Google  : сэтгэл татам байдал
+
+[B2] id 2045  Austausch
+  Current : солилцоо
+  Google  : Бирж
+
+[B2] id 2047  Ausgrenzung
+  Current : гаргаж хаях / ялгаварлан гадуурхах
+  Google  : Хасах
+
+[B2] id 2050  bereuen
+  Current : харамсах / гэмших
+  Google  : харамсал
+
+[B2] id 2056  respektieren
+  Current : хүндэтгэх / хүлцэх
+  Google  : хүндэтгэл
+
+[B2] id 2058  prägen
+  Current : тодорхойлох / хэлбэрлэх
+  Google  : ул мөр
+
+[B2] id 2060  aussterben
+  Current : устах / мөхөх
+  Google  : устаж үгүй болох
+
+[B2] id 2061  verdrängen
+  Current : шахан гаргах / орлуулах
+  Google  : түлхэх
+
+[B2] id 2063  vermehren
+  Current : үржих / нэмэгдэх
+  Google  : үржүүлэх
+
+[B2] id 2066  thematisieren
+  Current : сэдэв болгох / хөндөх
+  Google  : хаяг
+
+[B2] id 2073  anspruchsvoll
+  Current : шаардлага ихтэй / нарийн
+  Google  : шаардаж буй
+
+[B2] id 2074  kooperativ
+  Current : хамтын / хамтарч чаддаг
+  Google  : хоршооллын
+
+[B2] id 2075  dauerhaft
+  Current : урт хугацааны / тогтвортой
+  Google  : байнга
+
+[B2] id 2087  langwierig
+  Current : удаан хугацаатай / зовлонтой
+  Google  : урт
+
+[B2] id 2088  überlebenswichtig
+  Current : амь насанд тустай / зайлшгүй
+  Google  : чухал
+
+[B1] id 2099  ernähren
+  Current : тэжээх / хооллох
+  Google  : тэжээл
+
+[B1] id 2103  erstellen
+  Current : үүсгэх / боловсруулах
+  Google  : бүтээх
+
+[B1] id 2105  erziehen
+  Current : хүмүүжүүлэх / өсгөх
+  Google  : сургах
+
+[A2] id 2106  die Erholung
+  Current : амралт / нөхөн сэргэлт
+  Google  : зугаа цэнгэл
+
+[B1] id 2107  die Erinnerung
+  Current : дурсамж
+  Google  : Санах ой
+
+[B1] id 2108  die Erhöhung
+  Current : нэмэгдэлт / өсөлт
+  Google  : нэмэгдүүлэх
+
+[B1] id 2111  das Erlebnis
+  Current : туулалт / тохиолдол
+  Google  : Туршлага
+
+[A2] id 2119  der Essig
+  Current : цуу
+  Google  : Уксус
+
+[A2] id 2133  die Fähre
+  Current : паром / усны завь
+  Google  : гатлага онгоц
+
+[A2] id 2144  der Feierabend
+  Current : ажлын дараагийн орой
+  Google  : Гарах цаг
+
+[A2] id 2145  der Feiertag
+  Current : баярын өдөр
+  Google  : Амралт
+
+[B1] id 2159  die Forderung
+  Current : шаардлага
+  Google  : Санхүүгийн дэмжлэг
+
+[B1] id 2161  die Fortbildung
+  Current : мэргэшлийн сургалт
+  Google  : Үргэлжлүүлэн боловсрол эзэмших
+
+[A2] id 2164  der Fotoapparat
+  Current : гэрэл зургийн аппарат
+  Google  : камер
+
+[A2] id 2172  fallen
+  Current : унах / буурах
+  Google  : уналт
+
+[B1] id 2180  fließen
+  Current : урсах
+  Google  : урсгал
+
+[B1] id 2181  folgen
+  Current : дагах
+  Google  : үр дагавар
+
+[B1] id 2182  fordern
+  Current : шаардах
+  Google  : эрэлт
+
+[A2] id 2184  freuen
+  Current : баярлах / хүлээж тэмүүлэх
+  Google  : аз жаргалтай бай
+
+[A2] id 2185  frieren
+  Current : хөлдөх / хүйтэн байх
+  Google  : хөлдөөх
+
+[B1] id 2201  der Gang
+  Current : коридор / хурд чиглэл
+  Google  : хонгил
+
+[A2] id 2205  die Gaststätte
+  Current : зоогийн газар / паб
+  Google  : ресторан
+
+[B1] id 2208  die Gebühr
+  Current : хураамж / үйлчилгээний хөлс
+  Google  : төлбөр
+
+[A2] id 2213  die Gegend
+  Current : бүс нутаг / орчин
+  Google  : Талбай
+
+[B1] id 2223  die Gewerkschaft
+  Current : үйлдвэрчний эвлэл
+  Google  : холбоо
+
+[A2] id 2226  das Gewürz
+  Current : хоолны амтлагч
+  Google  : халуун ногоо
+
+[A2] id 2228  das Gleis
+  Current : тавцан / перрон
+  Google  : Зам
+
+[B1] id 2236  das Grundstück
+  Current : газрын хэсэг
+  Google  : Үл хөдлөх хөрөнгө
+
+[B1] id 2241  gelten
+  Current : хүчин төгөлдөр байх
+  Google  : хэрэглэх
+
+[A2] id 2245  gießen
+  Current : услах / урсгах
+  Google  : цутгах
+
+[B1] id 2247  greifen
+  Current : авах / барих
+  Google  : шүүрэх
+
+[B1] id 2249  gründen
+  Current : байгуулах / үүсгэх
+  Google  : олдсон
+
+[A2] id 2251  gucken
+  Current : харах / ажиглах
+  Google  : харагдах
+
+[A2] id 2252  ganz
+  Current : бүтэн / огт / маш
+  Google  : нэлээд
+
+[A2] id 2253  gar
+  Current : огт ... үгүй
+  Google  : бүр
+
+[A2] id 2256  genauso
+  Current : адилхан / ижилхэн
+  Google  : яг л
+
+[B1] id 2259  gerecht
+  Current : шударга
+  Google  : зүгээр л
+
+[B1] id 2261  gespannt
+  Current : сонирхолтой байгаа / хүлээж буй
+  Google  : цаг хугацаатай
+
+[A2] id 2262  geschieden
+  Current : гэрлэлтээ цуцлуулсан
+  Google  : салсан
+
+[A2] id 2263  gewöhnlich
+  Current : ерөнхийдөө / энгийн
+  Google  : ихэвчлэн
+
+[B1] id 2264  gewohnt
+  Current : дассан
+  Google  : ашигласан
+
+[A2] id 2267  gleich
+  Current : адил / нэн даруй
+  Google  : бүр
+
+[B1] id 2269  gleichberechtigt
+  Current : тэгш эрхтэй
+  Google  : тэнцүү
+
+[A1] id 2276  das Haar
+  Current : үс
+  Google  : үс
+
+[A2] id 2283  die Haltestelle
+  Current : зогсоол / буудал
+  Google  : зогсох
+
+[A2] id 2291  der Hauptbahnhof
+  Current : төв өртөө
+  Google  : Гол галт тэрэгний буудал
+
+[B1] id 2294  der Hausmeister
+  Current : нарийн бичгийн дарга / байшингийн сахиул
+  Google  : Барилгын хянагч
+
+[A2] id 2297  die Heimat
+  Current : эх орон / нутаг
+  Google  : Төрсөн хот
+
+[A2] id 2299  die Heizung
+  Current : халаах систем / батерей
+  Google  : Халаалт
+
+[A2] id 2305  der Hit
+  Current : хит / алдартай дуу
+  Google  : цохилт
+
+[B1] id 2319  handeln
+  Current : үйлдэх / арилжаа хийх
+  Google  : үйлдэл
+
+[B1] id 2322  heben
+  Current : өргөх
+  Google  : өргөгч
+
+[A2] id 2324  heizen
+  Current : дулаацуулах
+  Google  : дулаан
+
+[B1] id 2327  hinweisen
+  Current : заах / анхааруулах
+  Google  : цэг
+
+[A2] id 2331  haltbar
+  Current : удаан хадгалагддаг
+  Google  : бат бөх
+
+[A2] id 2338  hoffentlich
+  Current : найдъя / болоосой
+  Google  : найдвараар
+
+[A2] id 2341  hübsch
+  Current : гоё / үзэсгэлэнтэй
+  Google  : хөөрхөн
+
+[A2] id 2342  der ICE
+  Current : хурдны галт тэрэг
+  Google  : мөс
+
+[A2] id 2353  installieren
+  Current : суурилуулах / тохируулах
+  Google  : суулгах
+
+[A2] id 2355  interessieren
+  Current : сонирхуулах / сонирхох
+  Google  : сонирхолтой байна
+
+[B1] id 2356  irren
+  Current : андуурах / буруу ойлгох
+  Google  : алдаа
+
+[A2] id 2358  inklusive
+  Current : оролцуулан / хамааруулан
+  Google  : үүнд багтсан
+
+[A2] id 2365  irgendwann
+  Current : хэзээ нэгэн цагт
+  Google  : заримдаа
+
+[A2] id 2367  der Jazz
+  Current : джаз хөгжим
+  Google  : жааз
+
+[A2] id 2371  das Jugendamt
+  Current : хүүхдийн асрамжийн газар
+  Google  : Залуучуудын халамжийн алба
+
+[A1] id 2373  der Junge
+  Current : хөвгүүн
+  Google  : Хүү
+
+[A2] id 2376  jederzeit
+  Current : хэдийд ч
+  Google  : хэзээ ч
+
+[A2] id 2382  die Kantine
+  Current : байгууллагын дотуур гуанз
+  Google  : цайны газар
+
+[A2] id 2397  die Kita
+  Current : цэцэрлэг / хүүхдийн байгууллага
+  Google  : өдөр өнжүүлэх
+
+[A2] id 2401  die Klimaanlage
+  Current : агааржуулалтын систем
+  Google  : агааржуулагч
+
+[A2] id 2404  der Kloß
+  Current : гурилан бөмбөлөг
+  Google  : банш
+
+[A2] id 2405  die Kneipe
+  Current : паб / архины дэлгүүр
+  Google  : Бар
+
+[A2] id 2407  der Knochen
+  Current : яс
+  Google  : Яс
+
+[A2] id 2409  der Koch
+  Current : тогооч
+  Google  : Хоол хийх
+
+[A2] id 2410  der Kofferraum
+  Current : машины ачааны тавиур
+  Google  : их бие
+
+[A2] id 2416  das Konto
+  Current : данс
+  Google  : Бүртгэл
+
+[A2] id 2422  das Kostüm
+  Current : костюм / дүлэглэл
+  Google  : хувцас
+
+[A2] id 2442  kleben
+  Current : наах / наалдах
+  Google  : саваа
+
+[A2] id 2443  klicken
+  Current : дарах (хулгана)
+  Google  : товшилт
+
+[A2] id 2444  klopfen
+  Current : тогшоох
+  Google  : тогших
+
+[A2] id 2449  korrigieren
+  Current : засах / залруулах
+  Google  : зөв
+
+[A1] id 2451  kosten
+  Current : үнэтэй байх
+  Google  : зардал
+
+[B1] id 2454  knapp
+  Current : дутмаг / бараг л
+  Google  : хомс
+
+[A2] id 2459  küssen
+  Current : үнсэх
+  Google  : үнсэлт
+
+[A2] id 2461  der Laden
+  Current : дэлгүүр
+  Google  : Ачаалал
+
+[B1] id 2462  die Lage
+  Current : байршил / нөхцөл байдал
+  Google  : Албан тушаал
+
+[A2] id 2463  das Lager
+  Current : агуулах / нөөц
+  Google  : Хадгалах сан
+
+[A2] id 2467  der Laster
+  Current : ачааны машин
+  Google  : дэд
+
+[B1] id 2473  die Lehre
+  Current : сургалт / гар урлалын сургалт
+  Google  : Заах
+
+[B1] id 2476  der Leiter
+  Current : удирдагч / дарга
+  Google  : Найруулагч
+
+[B1] id 2477  die Leitung
+  Current : удирдлага / дамжуулах хоолой
+  Google  : Шугам
+
+[A2] id 2482  der Lift
+  Current : лифт
+  Google  : өргөгч
+
+[A1] id 2483  die Limonade
+  Current : лимонад
+  Google  : нимбэгний ундаа
+
+[A2] id 2490  das Lokal
+  Current : зоогийн газар / локал
+  Google  : Орон нутгийн
+
+[A2] id 2493  lächeln
+  Current : инээмсэглэх
+  Google  : инээмсэглэл
+
+[A2] id 2502  losfahren
+  Current : хөдлөх / явах
+  Google  : эхлэх
+
+[B1] id 2505  längst
+  Current : аль хэдийн
+  Google  : эрт дээр үед
+
+[A2] id 2506  leidtun
+  Current : харамсах / уучлаарай гэх
+  Google  : гомдоох
+
+[B1] id 2511  die Mahnung
+  Current : сануулга / анхааруулга
+  Google  : Сануулагч
+
+[B1] id 2512  der Makler
+  Current : зуучлагч / риэлтор
+  Google  : брокер
+
+[A2] id 2513  das Mal
+  Current : удаа / тухай
+  Google  : Зүгээр л
+
+[A2] id 2526  die Medizin
+  Current : анагаах ухаан / эм
+  Google  : эм
+
+[B1] id 2531  die Meldung
+  Current : мэдээ / мэдэгдэл
+  Google  : Тайлан
+
+[B1] id 2533  die Messe
+  Current : арилжааны үзэсгэлэн
+  Google  : Шударга
+
+[B1] id 2538  die Migration
+  Current : шилжин суурьшилт
+  Google  : нүүдэл
+
+[A2] id 2543  der Moment
+  Current : минут / хором
+  Google  : мөч
+
+[A2] id 2549  der Mund
+  Current : ам
+  Google  : ам
+
+[B1] id 2557  messen
+  Current : хэмжих
+  Google  : хэмжилт
+
+[B1] id 2582  nachholen
+  Current : нөхөх / дараа хийх
+  Google  : гүйцэж түрүүлэх
+
+[A2] id 2583  nachschlagen
+  Current : толь бичгээс хайх
+  Google  : дээшээ хар
+
+[A2] id 2589  nebenan
+  Current : хажуудах / хөршид
+  Google  : хажуугийн хаалга
+
+[B1] id 2592  netto
+  Current : цэвэр (цалин / орлого)
+  Google  : тор
+
+[B1] id 2602  die Operation
+  Current : мэс засал
+  Google  : үйл ажиллагаа
+
+[A2] id 2606  die Ordnung
+  Current : дэг журам / эмх цэгц
+  Google  : Захиалга
+
+[A2] id 2608  der Ort
+  Current : газар / тосгон
+  Google  : Байршил
+
+[A2] id 2611  die Oper
+  Current : опер
+  Google  : дуурь
+
+[B1] id 2617  ordnen
+  Current : эмхлэх / ангилах
+  Google  : зохион байгуулах
+
+[A2] id 2628  die Pause
+  Current : завсарлага
+  Google  : түр зогсолт
+
+[A2] id 2629  das Pech
+  Current : аз муу / уй гашуу
+  Google  : Азгүй явдал
+
+[A2] id 2632  der Pfeffer
+  Current : перец
+  Google  : чинжүү
+
+[A2] id 2633  das Pflaster
+  Current : лейкопластир / боолт
+  Google  : Явган хүний зам
+
+[A2] id 2634  die Pflaume
+  Current : слива / хуслас
+  Google  : чавга
+
+[A2] id 2636  das Picknick
+  Current : пикник
+  Google  : зугаалга
+
+[A2] id 2637  die Pille
+  Current : шахмал эм
+  Google  : эм
+
+[A2] id 2641  die Portion
+  Current : хэмжээ / дун
+  Google  : хэсэг
+
+[B1] id 2646  die Praxis
+  Current : эмчийн кабинет / практик
+  Google  : Дадлага
+
+[A2] id 2648  der Prospekt
+  Current : брошур / каталог
+  Google  : товхимол
+
+[A2] id 2652  packen
+  Current : чемодан савлах / баглах
+  Google  : баглаа боодол
+
+[B1] id 2657  präsentieren
+  Current : танилцуулах / тайлагнах
+  Google  : одоогийн
+
+[A2] id 2663  prima
+  Current : маш сайн / хамгийн дээд
+  Google  : гайхалтай
+
+[A2] id 2666  der Quark
+  Current : зөөхий
+  Google  : кварк
+
+[B1] id 2667  das Quartal
+  Current : улирал (3 сар)
+  Google  : дөрөвний нэг
+
+[B1] id 2675  der Rat
+  Current : зөвлөгөө
+  Google  : Зөвлөл
+
+[B1] id 2681  die Rede
+  Current : яриа / илтгэл
+  Google  : үг хэллэг
+
+[B1] id 2687  der Rekord
+  Current : рекорд
+  Google  : бичлэг
+
+[A2] id 2692  der Rest
+  Current : үлдэгдэл / дахиад
+  Google  : амралт
+
+[B1] id 2699  die Rückkehr
+  Current : буцаж ирэлт
+  Google  : буцах
+
+[A2] id 2701  die Ruhe
+  Current : тайван / амгалан
+  Google  : Чимээгүй
+
+[A1] id 2717  rufen
+  Current : дуудах / орилох
+  Google  : дуудлага
+
+[B1] id 2723  relativ
+  Current : харьцангуй
+  Google  : хамаатан садан
+
+[A2] id 2728  rund
+  Current : дугуй / ойролцоогоор
+  Google  : эргэн тойронд
+
+[A2] id 2729  rückwärts
+  Current : ухраад / буцаад
+  Google  : хоцрогдсон
+
+[B1] id 2734  rechtlich
+  Current : хуулийн / эрх зүйн
+  Google  : хууль ёсны дагуу
+
+[A2] id 2736  der Saal
+  Current : танхим / зал
+  Google  : өрөө
+
+[A2] id 2737  der Sack
+  Current : уут / торго
+  Google  : цүнх
+
+[A2] id 2739  die Sahne
+  Current : цөцгий / зөөхий
+  Google  : тос
+
+[A2] id 2750  der Schalter
+  Current : унтраалга / лавлах цонх
+  Google  : Сэлгүүр
+
+[A2] id 2754  die Scheibe
+  Current : зүсэлт / шил
+  Google  : диск
+
+[B1] id 2755  die Scheidung
+  Current : гэрлэлт цуцлалт
+  Google  : салалт
+
+[A2] id 2756  der Schein
+  Current : мөнгөн дэвсгэрт / гэрэл
+  Google  : Гэрчилгээ
+
+[A2] id 2759  der Schinken
+  Current : жамбон / хиамны хэсэг
+  Google  : Гахайн утсан мах
+
+[A2] id 2760  der Schlaf
+  Current : унтлага
+  Google  : Унтах
+
+[A2] id 2763  das Schmerzmittel
+  Current : өвдөлт намдаах эм
+  Google  : Өвчин намдаагч
+
+[A2] id 2764  der Schmuck
+  Current : чимэглэл / гоёл
+  Google  : Үнэт эдлэл
+
+[A2] id 2766  der Schnupfen
+  Current : хамрын ханиад / ханиад
+  Google  : Хамар хамрах
+
+[A1] id 2767  der Schrank
+  Current : шкаф / тавилгын хайрцаг
+  Google  : Хувцасны шүүгээ
+
+[A2] id 2770  die Schrift
+  Current : бичиг / гар бичмэл
+  Google  : Бичих
+
+[B1] id 2771  die Schuld
+  Current : буруу / гэм / өр
+  Google  : Алдаа
+
+[A2] id 2782  der Sender
+  Current : телевизийн суваг / хэлхээ
+  Google  : Илгээгч
+
+[A2] id 2786  der Sessel
+  Current : кресс / суудал
+  Google  : Түшлэгтэй сандал
+
+[A2] id 2790  die SMS
+  Current : мессеж / текст
+  Google  : SMS
+
+[A2] id 2795  die Soße
+  Current : шөл / соус
+  Google  : сүмс
+
+[B1] id 2811  die Spur
+  Current : мөр / мөрдөлт
+  Google  : зам
+
+[B1] id 2813  die Staatsangehörigkeit
+  Current : иргэншил
+  Google  : үндэс угсаа
+
+[A2] id 2814  das Stadion
+  Current : стадион
+  Google  : цэнгэлдэх хүрээлэн
+
+[A2] id 2817  der Star
+  Current : алдартай хүн / од
+  Google  : од
+
+[A2] id 2818  der Start
+  Current : эхлэл / хөдлөлт
+  Google  : эхлэх
+
+[A2] id 2819  die Station
+  Current : буудал / тасаг
+  Google  : станц
+
+[A2] id 2824  der Stecker
+  Current : цахилгааны залгаас
+  Google  : Залгуур
+
+[A2] id 2827  der Stern
+  Current : од
+  Google  : од
+
+[A2] id 2828  die Stimme
+  Current : хоолой / дуу
+  Google  : Зөвшөөрч байна
+
+[B1] id 2829  die Stimmung
+  Current : байдал / уур амьсгал
+  Google  : Сэтгэл санаа
+
+[A2] id 2831  der Stock
+  Current : давхар
+  Google  : хувьцаа
+
+[B1] id 2837  die Strecke
+  Current : зам / зайн хэмжэ
+  Google  : Маршрут
+
+[A2] id 2838  das Streichholz
+  Current : шүдэнз
+  Google  : тааруулалт
+
+[B1] id 2839  der Streik
+  Current : ажил хаялт
+  Google  : цохилт
+
+[B1] id 2847  das Symbol
+  Current : тэмдэг / символ
+  Google  : бэлгэдэл
+
+[B1] id 2848  schaden
+  Current : хор хөнөөх / гэмтээх
+  Google  : хохирол
+
+[A2] id 2851  schauen
+  Current : харах / ажиглах
+  Google  : харагдах
+
+[B1] id 2852  scheiden lassen
+  Current : гэрлэлтээ цуцлуулах
+  Google  : салалт
+
+[B1] id 2856  schlagen
+  Current : цохих / дэлгэх
+  Google  : цохилт
+
+[A2] id 2857  schlank
+  Current : туранхай / нарийн
+  Google  : нарийхан
+
+[A2] id 2864  schwitzen
+  Current : хөлрөх
+  Google  : хөлс
+
+[A2] id 2866  setzen
+  Current : тавих / суулгах
+  Google  : багц
+
+[B1] id 2867  sichern
+  Current : хамгаалах / хадгалах
+  Google  : аюулгүй
+
+[A2] id 2881  stimmen
+  Current : зөв байх / тохирох
+  Google  : дуу хоолой
+
+[B1] id 2885  streichen
+  Current : будах / үгчлэх
+  Google  : цуцлах
+
+[A2] id 2887  studieren
+  Current : их сургуульд суралцах
+  Google  : судалгаа
+
+[B1] id 2901  senkrecht
+  Current : босоо / тэгш өнцгийн
+  Google  : перпендикуляр
+
+[B1] id 2904  sobald
+  Current : болмогц / ... -аар
+  Google  : аль болох хурдан
+
+[B1] id 2905  solange
+  Current : ... байгаа л бол
+  Google  : хэр удаан
+
+[B1] id 2910  sowohl als auch
+  Current : мөн ... мөн / аль аль
+  Google  : түүнчлэн
+
+[A2] id 2914  spitz
+  Current : хурц / заах
+  Google  : үзүүртэй
+
+[A2] id 2925  sympathisch
+  Current : таатай / дуртай
+  Google  : ээлтэй
+
+[B1] id 2926  die Tabelle
+  Current : хүснэгт / жагсаалт
+  Google  : Ширээ
+
+[A2] id 2928  der Tagesablauf
+  Current : өдрийн хуваарь
+  Google  : Өдөр тутмын хэвшил
+
+[B1] id 2939  die Tätigkeit
+  Current : үйл ажиллагаа / ажил
+  Google  : Даалгавар
+
+[B1] id 2944  die Teilnahme
+  Current : оролцолт
+  Google  : оролцоо

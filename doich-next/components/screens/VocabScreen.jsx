@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { WithSkeleton, VocabSkeleton } from '@/components/shared/ScreenSkeleton';
 import { Check, Search, X } from 'lucide-react';
 import { VOCAB, LEVELS, CEFR_META } from '@/lib/vocab';
 import MultiChips from '@/components/shared/MultiChips';
@@ -25,6 +26,10 @@ function toggle(arr, item) {
 }
 
 export default function VocabScreen({ t, state, toggleLearned }) {
+  return <WithSkeleton ms={250} skeleton={<VocabSkeleton t={t} />}><VocabScreenInner t={t} state={state} toggleLearned={toggleLearned} /></WithSkeleton>;
+}
+
+function VocabScreenInner({ t, state, toggleLearned }) {
   const [lF,          setLF]          = useState([]);
   const [tF,          setTF]          = useState([]);
   const [stF,         setStF]         = useState('all');

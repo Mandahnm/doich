@@ -1,6 +1,7 @@
 'use client';
 
 import { Heart, Trophy, ChevronRight, RefreshCw, Check, BookOpen, Gamepad2, MessageCircle, Pencil } from 'lucide-react';
+import { WithSkeleton, HomeSkeleton } from '@/components/shared/ScreenSkeleton';
 import { VOCAB, CEFR_META } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
 import { getDueCount, getNextDueLabel } from '@/lib/srs';
@@ -21,6 +22,10 @@ function getWordOfTheDay() {
 }
 
 export default function HomeScreen({ t, state, setTab, isDesktop }) {
+  return <WithSkeleton ms={250} skeleton={<HomeSkeleton t={t} />}><HomeScreenInner t={t} state={state} setTab={setTab} isDesktop={isDesktop} /></WithSkeleton>;
+}
+
+function HomeScreenInner({ t, state, setTab, isDesktop }) {
   const isDoneToday = state.lastDailyDate === new Date().toDateString();
   const h         = new Date().getHours();
   const greetWord = h < 5 ? 'Gute Nacht' : h < 12 ? 'Guten Morgen' : h < 18 ? 'Guten Tag' : 'Guten Abend';

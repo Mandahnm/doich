@@ -3,7 +3,12 @@
     "allow": [
       "Bash(node -e ' *)",
       "Bash(rm public/audio/test_Charlie.mp3 public/audio/test_Adam.mp3 public/audio/test_Bella.mp3)",
-      "Bash(node scripts/generate-audio.js)"
+      "Bash(node scripts/generate-audio.js)",
+      "Bash(python3 \".claude/skills/ui-ux-pro-max/scripts/search.py\" \"animation loading touch interaction\" --domain ux -n 6)",
+      "Bash(python3 \".claude/skills/ui-ux-pro-max/scripts/search.py\" \"nextjs mobile reading\" --stack nextjs)",
+      "Bash(node -e \"const lr = require\\('lucide-react'\\); console.log\\('Library:', !!lr.Library, 'BookMarked:', !!lr.BookMarked, 'BookOpenText:', !!lr.BookOpenText, 'Newspaper:', !!lr.Newspaper\\)\")",
+      "Bash(npx acorn *)",
+      "Bash(npx next *)"
     ]
   }
 }

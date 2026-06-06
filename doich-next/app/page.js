@@ -17,11 +17,13 @@ import VocabScreen       from '@/components/screens/VocabScreen';
 import ProfileScreen     from '@/components/screens/ProfileScreen';
 import DailyPracticeScreen   from '@/components/screens/DailyPracticeScreen';
 import AchievementsScreen    from '@/components/screens/AchievementsScreen';
+import ReadingScreen         from '@/components/screens/ReadingScreen';
 import AchievementToast      from '@/components/shared/AchievementToast';
 import BottomNav             from '@/components/shared/BottomNav';
 import DesktopSidebar        from '@/components/shared/DesktopSidebar';
 import { ACHIEVEMENTS, getUnlockedIds } from '@/lib/achievements';
 import { initSrsEntry, updateSrsEntry } from '@/lib/srs';
+import { VOCAB } from '@/lib/vocab';
 
 const DEFAULT_STATE = {
   userLevel: null,
@@ -30,7 +32,7 @@ const DEFAULT_STATE = {
   darkMode: false,
   completedStages: {},
   mistakes: {},
-  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, dailyCount: 0, srs: {} },
+  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, dailyCount: 0, srs: {}, customWords: {} },
   xp: 0,
   streak: 0,
   lastStreakDate: null,
@@ -69,6 +71,7 @@ export default function Page() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user && !userLoadedRef.current) {
         userLoadedRef.current = true;
+        setLoaded(false);
         setUser(session.user);
         loadProgress(session.user.id);
       }
@@ -230,6 +233,29 @@ export default function Page() {
     },
   }));
 
+  // Add a story word to SRS — matches against VOCAB first, falls back to customWords
+  const addCustomWord = (de, mn) => {
+    const key = de.toLowerCase().trim();
+    const match = VOCAB.find(w => w.de.toLowerCase() === key);
+    if (match) {
+      if (!state.learnedWords.includes(match.id)) toggleLearned(match.id);
+      return;
+    }
+    setState(s => {
+      if ((s.stats.customWords || {})[key]) return s; // already added
+      return {
+        ...s,
+        stats: {
+          ...s.stats,
+          customWords: {
+            ...(s.stats.customWords || {}),
+            [key]: { de, mn, srs: initSrsEntry() },
+          },
+        },
+      };
+    });
+  };
+
   const recordStat = (key, ok) => setState(s => ({
     ...s,
     stats: {
@@ -351,6 +377,13 @@ export default function Page() {
           onQuit={() => setTab('home')} />
       )}
       {tab === 'achievements' && <AchievementsScreen t={t} state={state} />}
+      {tab === 'reading'     && (
+        <ReadingScreen
+          t={t} state={state} user={user}
+          addXP={addXP} checkStreak={checkStreak}
+          toggleLearned={toggleLearned} addCustomWord={addCustomWord}
+        />
+      )}
     </>
   );
 

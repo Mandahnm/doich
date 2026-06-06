@@ -327,7 +327,7 @@ export default function AuthScreen({ isDark, onToggle }) {
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontWeight: 700, fontSize: 14, color: text }}>Level A1: Basics</div>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: text }}>A1 түвшин</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: goldTitle }}><Sparkles size={12} /> 35%</div>
                   </div>
                   <div style={{ height: 6, background: isDark ? '#333' : '#eae8e7', borderRadius: 3, marginTop: 6, overflow: 'hidden' }}>
