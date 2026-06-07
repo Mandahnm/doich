@@ -7,7 +7,7 @@ const pick    = (arr, n) => shuffle(arr).slice(0, n);
 
 export function buildDailyQueue(userLevel) {
   const words = VOCAB.filter(w => w.level === userLevel);
-  const nouns = words.filter(w => w.type === 'noun');
+  const nouns = words.filter(w => w.type === 'noun' && w.gender);
 
   const flashWords  = pick(words, 4);
   const genderWords = pick(nouns, 4);
