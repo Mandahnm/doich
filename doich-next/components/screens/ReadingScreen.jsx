@@ -299,8 +299,8 @@ function NewWordsPreview({ story, t, onStart, onBack, isDesktop }) {
         <span style={{ background: meta.pill, color: meta.pillTxt, fontSize: 10, fontWeight: 800, padding: '3px 9px', borderRadius: 6, flexShrink: 0 }}>{story.level}</span>
       </div>
       <div style={{ background: t.pinkBg, border: `1px solid ${t.pink}30`, borderRadius: 16, padding: '12px 16px', marginBottom: 20 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: t.pink, marginBottom: 2 }}>📖 Унших өмнө эдгээр үгийг тогтоо</div>
-        <div style={{ fontSize: 12, color: t.textMid }}>{words.length} шинэ үг энэ үлгэрт гарч ирнэ. Тэдгээрийг санасан бол унших илүү хялбар болно.</div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: t.pink, marginBottom: 2 }}>📖 Уншихийн өмнө эдгээр үгийг тогтоогоорой</div>
+        <div style={{ fontSize: 12, color: t.textMid }}>{words.length} шинэ үг энэ өгүүллэгт гарч ирнэ. Тэдгээрийг цээцжилсэн бол уншихад илүү хялбар болно.</div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? 'repeat(3,1fr)' : 'repeat(2,1fr)', gap: 10, marginBottom: 28 }}>
         {words.map((w, i) => (
@@ -318,6 +318,59 @@ function NewWordsPreview({ story, t, onStart, onBack, isDesktop }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+//  ParagraphBlock — module scope so React never unmounts on StoryReader re-render
+// ─────────────────────────────────────────────────────────────────────────────
+function ParagraphBlock({ para, activeSentIdx, onWordTap, newWords, t, isAdded }) {
+  const sentences = splitSentences(para.text);
+  return (
+    <div style={{ marginBottom: 22 }}>
+      <div style={{ fontSize: 16, lineHeight: 1.8, color: t.text, wordBreak: 'break-word' }}>
+        {sentences.map((sentence, sentIdx) => {
+          const isActive = activeSentIdx === sentIdx;
+          const tokens   = tokenizeText(sentence);
+          return (
+            <span key={sentIdx}>
+              <span style={{
+                background:   isActive ? t.pinkBg : 'transparent',
+                borderRadius: isActive ? 5 : 0,
+                padding:      isActive ? '2px 3px' : '2px 0',
+                transition:   'background 0.35s ease',
+                display:      'inline',
+              }}>
+                {tokens.map((tok, i) => {
+                  if (!tok.clean) return <span key={i}>{tok.raw}</span>;
+                  const found = lookupTranslation(tok.clean, newWords);
+                  const added = isAdded(tok.clean);
+                  return (
+                    <span key={i} onClick={e => onWordTap(e, tok.clean)}
+                      style={{
+                        cursor: 'pointer', borderRadius: 3, padding: '1px 0',
+                        color: added ? t.correct : (isActive ? t.pink : t.text),
+                        borderBottom: found
+                          ? `2px solid ${added ? t.correct + '90' : t.pink + '70'}`
+                          : '2px solid transparent',
+                        transition: 'color 0.15s',
+                      }}>
+                      {tok.raw}
+                    </span>
+                  );
+                })}
+              </span>
+              {sentIdx < sentences.length - 1 ? ' ' : ''}
+            </span>
+          );
+        })}
+      </div>
+      {para.translation && (
+        <div style={{ marginTop: 6, fontSize: 12, lineHeight: 1.6, color: t.textSoft, fontStyle: 'italic', paddingLeft: 14, borderLeft: `3px solid ${t.border}` }}>
+          {para.translation}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 //  StoryReader — tappable text + audio player + sentence highlighting
 // ─────────────────────────────────────────────────────────────────────────────
 function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, onFinish, isDesktop }) {
@@ -327,13 +380,6 @@ function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, on
 
   // Build sentence map once per story for audio sync
   const sentenceMap = useRef(buildSentenceMap(story.body)).current;
-
-  // Dismiss popup on outside click
-  useEffect(() => {
-    const close = e => { if (!e.target.closest('[data-popup]')) setPopup(null); };
-    document.addEventListener('click', close);
-    return () => document.removeEventListener('click', close);
-  }, []);
 
   const handleWordTap = (e, clean) => {
     e.stopPropagation();
@@ -370,60 +416,6 @@ function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, on
     setActiveSentence(hit ? { paraIdx: hit.paraIdx, sentIdx: hit.sentIdx } : null);
   };
 
-  // ── Paragraph block ─────────────────────────────────────────────────────
-  const ParagraphBlock = ({ para, paraIdx }) => {
-    const sentences   = splitSentences(para.text);
-    const activeSentIdx = activeSentence?.paraIdx === paraIdx ? activeSentence.sentIdx : null;
-
-    return (
-      <div style={{ marginBottom: 22 }}>
-        <div style={{ fontSize: 16, lineHeight: 1.8, color: t.text, wordBreak: 'break-word' }}>
-          {sentences.map((sentence, sentIdx) => {
-            const isActive = activeSentIdx === sentIdx;
-            const tokens   = tokenizeText(sentence);
-            return (
-              <span key={sentIdx}>
-                <span style={{
-                  background:   isActive ? t.pinkBg : 'transparent',
-                  borderRadius: isActive ? 5 : 0,
-                  padding:      isActive ? '2px 3px' : '2px 0',
-                  transition:   'background 0.35s ease',
-                  display:      'inline',
-                }}>
-                  {tokens.map((tok, i) => {
-                    if (!tok.clean) return <span key={i}>{tok.raw}</span>;
-                    const found = lookupTranslation(tok.clean, story.new_words);
-                    const added = isAdded(tok.clean);
-                    return (
-                      <span key={i} onClick={e => handleWordTap(e, tok.clean)}
-                        style={{
-                          cursor: 'pointer', borderRadius: 3, padding: '1px 0',
-                          color: added ? t.correct : (isActive ? t.pink : t.text),
-                          borderBottom: found
-                            ? `2px solid ${added ? t.correct + '90' : t.pink + '70'}`
-                            : '2px solid transparent',
-                          transition: 'color 0.15s',
-                        }}>
-                        {tok.raw}
-                      </span>
-                    );
-                  })}
-                </span>
-                {sentIdx < sentences.length - 1 ? ' ' : ''}
-              </span>
-            );
-          })}
-        </div>
-
-        {para.translation && (
-          <div style={{ marginTop: 6, fontSize: 12, lineHeight: 1.6, color: t.textSoft, fontStyle: 'italic', paddingLeft: 14, borderLeft: `3px solid ${t.border}` }}>
-            {para.translation}
-          </div>
-        )}
-      </div>
-    );
-  };
-
   const popupTranslation = popup ? lookupTranslation(popup.clean, story.new_words) : null;
 
   return (
@@ -451,7 +443,16 @@ function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, on
 
       {/* Story body */}
       <div style={{ background: t.bgCard, borderRadius: 20, border: `1px solid ${t.border}`, padding: isDesktop ? '28px 32px' : '20px 18px', boxShadow: t.shadow, marginBottom: 24 }}>
-        {(story.body || []).map((para, i) => <ParagraphBlock key={i} para={para} paraIdx={i} />)}
+        {(story.body || []).map((para, i) => (
+          <ParagraphBlock
+            key={i} para={para} paraIdx={i}
+            activeSentIdx={activeSentence?.paraIdx === i ? activeSentence.sentIdx : null}
+            onWordTap={handleWordTap}
+            newWords={story.new_words}
+            t={t}
+            isAdded={isAdded}
+          />
+        ))}
       </div>
 
       {/* Actions */}
@@ -464,13 +465,16 @@ function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, on
 
       {/* Floating word popup */}
       {popup && (
-        <WordPopup
-          clean={popup.clean} translation={popupTranslation}
-          x={popup.x} y={popup.y} t={t}
-          isAdded={isAdded(popup.clean)}
-          onAdd={() => handleAddWord(popup.clean)}
-          onClose={() => setPopup(null)}
-        />
+        <>
+          <div style={{ position: 'fixed', inset: 0, zIndex: 199 }} onClick={() => setPopup(null)} />
+          <WordPopup
+            clean={popup.clean} translation={popupTranslation}
+            x={popup.x} y={popup.y} t={t}
+            isAdded={isAdded(popup.clean)}
+            onAdd={() => handleAddWord(popup.clean)}
+            onClose={() => setPopup(null)}
+          />
+        </>
       )}
     </div>
   );

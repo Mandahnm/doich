@@ -21,6 +21,9 @@ export default function GenderCard({ t, stage, word, progress, onContinue, onQui
     setSel(g); setRevealed(true); setIsCorrect(ok);
   };
 
+  // Strip leading article so it doesn't give away the answer
+  const displayWord = word.de.replace(/^(der|die|das)\s+/i, '');
+
   const arts = [
     { v: 'der', color: t.sky,  bg: t.skyBg  },
     { v: 'die', color: t.rose, bg: t.roseBg },
@@ -33,8 +36,8 @@ export default function GenderCard({ t, stage, word, progress, onContinue, onQui
 
       <div style={{ background: t.bgCard, borderRadius: 24, padding: '32px 22px', marginBottom: 10, textAlign: 'center', boxShadow: t.shadowLg }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 8 }}>
-          <div className="fd" style={{ fontSize: word.de.length > 12 ? 28 : 48, fontWeight: 800, color: t.text, lineHeight: 1 }}>
-            {word.de}
+          <div className="fd" style={{ fontSize: displayWord.length > 12 ? 28 : 48, fontWeight: 800, color: t.text, lineHeight: 1 }}>
+            {displayWord}
           </div>
           {revealed && <PlayButton wordId={word.id} size={22} color={t.textMid} />}
         </div>

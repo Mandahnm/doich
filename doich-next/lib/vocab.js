@@ -1269,7 +1269,7 @@ export const VOCAB = [
   { id:1394, de:'surfen',         mn:'серфинг / интернет хэрэглэх', level:'A2', type:'verb',          example:'Surfst du oft im Internet?',                  emoji:'🌊' },
   { id:1395, de:'tragen',         mn:'үүрэх / өмсөх',          level:'A2', type:'verb',               example:'Er trägt heute einen blauen Anzug.',           emoji:'👔' },
   { id:1396, de:'trainieren',     mn:'дасгал хийх / бэлтгэх',  level:'A2', type:'verb',               example:'Wir trainieren einmal pro Woche.',             emoji:'🏋️' },
-  { id:1397, de:'träumen',        mn:'зүүдлэх',                level:'A2', type:'verb',               example:'Ich träume von einem großen Haus.',            emoji:'💭' },
+  { id:1397, de:'träumen',        mn:'зүүдлэх / мөрөөдөх',     level:'A2', type:'verb',               example:'Ich träume von einem großen Haus.',            emoji:'💭' },
   { id:1398, de:'umsteigen',      mn:'буулт хийх / дараагийн унаанд суух', level:'A2', type:'verb',   example:'Sie müssen in Mannheim umsteigen.',            emoji:'🚃' },
   { id:1399, de:'unterhalten',    mn:'ярилцах / зугаацах',     level:'A2', type:'verb',               example:'Wir haben uns über das Spiel unterhalten.',   emoji:'💬' },
   { id:1400, de:'unternehmen',    mn:'хийх / зохион байгуулах', level:'A2', type:'verb',              example:'Wollen wir heute Abend etwas unternehmen?',   emoji:'🎯' },
