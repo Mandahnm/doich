@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Send, Sparkles, Trash2, Bot } from 'lucide-react';
-import { WithSkeleton, ChatSkeleton } from '@/components/shared/ScreenSkeleton';
 
 const EXAMPLES = [
   { t: 'Akkusativ ба Dativ ялгаа юу вэ?',  e: '🔤' },
@@ -152,7 +151,7 @@ function Messages({ msgs, loading, isDark, t, endRef }) {
 }
 
 export default function ChatScreen({ t, state, onUpdateHistory }) {
-  return <WithSkeleton ms={250} skeleton={<ChatSkeleton t={t} />}><ChatScreenInner t={t} state={state} onUpdateHistory={onUpdateHistory} /></WithSkeleton>;
+  return <ChatScreenInner t={t} state={state} onUpdateHistory={onUpdateHistory} />;
 }
 
 function ChatScreenInner({ t, state, onUpdateHistory }) {
@@ -296,7 +295,7 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
 
   // ── MOBILE ────────────────────────────────────────────────────────────────
   return (
-    <div className="af" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 98px)' }}>
+    <div className="af" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 98px)' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
