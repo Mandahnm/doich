@@ -1,8 +1,8 @@
 'use client';
 
-import { Star, RefreshCw, ChevronRight } from 'lucide-react';
+import { Star, RefreshCw, ChevronRight, Crown } from 'lucide-react';
 
-export default function ResultScreen({ t, stage, score, xpEarned = 0, onReplay, onBack, onNext }) {
+export default function ResultScreen({ t, stage, score, xpEarned = 0, onReplay, onBack, onNext, onUpgrade }) {
   const total = stage?.words?.length || 1;
   const pct   = score / total;
   const stars = pct >= 0.87 ? 3 : pct >= 0.6 ? 2 : 1;
@@ -45,6 +45,12 @@ export default function ResultScreen({ t, stage, score, xpEarned = 0, onReplay, 
           <button onClick={onNext}
             style={{ width: '100%', padding: '16px', borderRadius: 16, fontWeight: 800, fontSize: 15, border: 'none', background: t.pinkBtn, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadowLg }}>
             Дараагийн шат <ChevronRight size={18} />
+          </button>
+        )}
+        {!onNext && onUpgrade && (
+          <button onClick={onUpgrade}
+            style={{ width: '100%', padding: '16px', borderRadius: 16, fontWeight: 800, fontSize: 15, border: 'none', background: 'linear-gradient(135deg, #FF6FA8, #A78BFA)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 8px 24px rgba(255,111,168,0.35)' }}>
+            <Crown size={18} /> Pro авах — шат нээх
           </button>
         )}
         <div style={{ display: 'flex', gap: 10 }}>

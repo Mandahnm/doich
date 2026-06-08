@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkAuthAndLimit } from '@/lib/rateLimit';
+import { requirePro } from '@/lib/rateLimit';
 
 const MAX_TEXT_LENGTH = 500;
 
@@ -10,8 +10,8 @@ If correct: {"corrected":"...","hasErrors":false,"errors":[],"feedback":"Маш 
 
 export async function POST(request) {
   try {
-    // Auth + rate limit (shared pool with /api/chat)
-    const { error: limitError } = await checkAuthAndLimit(request);
+    // Pro-only route
+    const { error: limitError } = await requirePro(request);
     if (limitError) return limitError;
 
     const { text } = await request.json();

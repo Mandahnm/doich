@@ -1,6 +1,6 @@
 'use client';
 
-import { Heart, Trophy, ChevronRight, RefreshCw, Check, BookOpen, Gamepad2, MessageCircle, Pencil } from 'lucide-react';
+import { Heart, Trophy, ChevronRight, RefreshCw, Check, BookOpen, Gamepad2, MessageCircle, Pencil, Crown } from 'lucide-react';
 import { WithSkeleton, HomeSkeleton } from '@/components/shared/ScreenSkeleton';
 import { VOCAB, CEFR_META } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
@@ -21,11 +21,11 @@ function getWordOfTheDay() {
   return VOCAB[dayIndex % VOCAB.length];
 }
 
-export default function HomeScreen({ t, state, setTab, isDesktop }) {
-  return <WithSkeleton ms={250} skeleton={<HomeSkeleton t={t} />}><HomeScreenInner t={t} state={state} setTab={setTab} isDesktop={isDesktop} /></WithSkeleton>;
+export default function HomeScreen({ t, state, setTab, isDesktop, plan, onUpgrade }) {
+  return <WithSkeleton ms={250} skeleton={<HomeSkeleton t={t} />}><HomeScreenInner t={t} state={state} setTab={setTab} isDesktop={isDesktop} plan={plan} onUpgrade={onUpgrade} /></WithSkeleton>;
 }
 
-function HomeScreenInner({ t, state, setTab, isDesktop }) {
+function HomeScreenInner({ t, state, setTab, isDesktop, plan, onUpgrade }) {
   const isDoneToday = state.lastDailyDate === new Date().toDateString();
   const h         = new Date().getHours();
   const greetWord = h < 5 ? 'Gute Nacht' : h < 12 ? 'Guten Morgen' : h < 18 ? 'Guten Tag' : 'Guten Abend';
@@ -176,7 +176,7 @@ function HomeScreenInner({ t, state, setTab, isDesktop }) {
 
         {/* Row 3: Quick Tools */}
         <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 14 }}>ДАСГАЛУУД</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 16 }}>
           {QUICK_TOOLS.map((tool, i) => (
             <button key={tool.tab} onClick={() => setTab(tool.tab)} className="au"
               style={{
@@ -191,6 +191,25 @@ function HomeScreenInner({ t, state, setTab, isDesktop }) {
             </button>
           ))}
         </div>
+
+        {/* Pro upgrade banner — only for free users */}
+        {plan !== 'pro' && (
+          <button onClick={onUpgrade} className="au" style={{
+            width: '100%', border: 'none', borderRadius: 20, padding: '20px 24px',
+            background: 'linear-gradient(135deg, #FF6FA8 0%, #A78BFA 100%)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 16,
+            boxShadow: '0 8px 28px rgba(255,111,168,0.35)',
+          }}>
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Crown size={24} color="#fff" strokeWidth={2} />
+            </div>
+            <div style={{ flex: 1, textAlign: 'left' }}>
+              <div style={{ fontWeight: 800, fontSize: 16, color: '#fff' }}>Pro эрхтэй болох</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>Бүх шат, өгүүллэг, хязгааргүй AI · Сарын 12,900₮-оос</div>
+            </div>
+            <ChevronRight size={20} color="rgba(255,255,255,0.8)" />
+          </button>
+        )}
 
       </div>
     );
@@ -316,7 +335,7 @@ function HomeScreenInner({ t, state, setTab, isDesktop }) {
 
       {/* Quick Tools */}
       <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 12 }}>ДАСГАЛУУД</div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 8 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 16 }}>
         {QUICK_TOOLS.map((tool, i) => (
           <button key={tool.tab} onClick={() => setTab(tool.tab)} className="au"
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0', animationDelay: `${i * 60}ms` }}>
@@ -327,6 +346,25 @@ function HomeScreenInner({ t, state, setTab, isDesktop }) {
           </button>
         ))}
       </div>
+
+      {/* Pro upgrade banner — only for free users */}
+      {plan !== 'pro' && (
+        <button onClick={onUpgrade} className="au" style={{
+          width: '100%', border: 'none', borderRadius: 18, padding: '16px 18px',
+          background: 'linear-gradient(135deg, #FF6FA8 0%, #A78BFA 100%)',
+          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14,
+          boxShadow: '0 8px 24px rgba(255,111,168,0.35)', marginBottom: 8,
+        }}>
+          <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Crown size={22} color="#fff" strokeWidth={2} />
+          </div>
+          <div style={{ flex: 1, textAlign: 'left' }}>
+            <div style={{ fontWeight: 800, fontSize: 15, color: '#fff' }}>Pro эрхтэй болох</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>Сарын 12,900₮-оос · Бүх үйлдэлүүд нээлттэй</div>
+          </div>
+          <ChevronRight size={18} color="rgba(255,255,255,0.8)" />
+        </button>
+      )}
     </div>
   );
 }

@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Clock, CheckCircle, ChevronRight, BookOpen,
-  ArrowLeft, Plus, Check, X, Play, Pause,
+  ArrowLeft, Plus, Check, X, Play, Pause, Crown,
 } from 'lucide-react';
 import { WithSkeleton, ReadingSkeleton } from '@/components/shared/ScreenSkeleton';
 import MultiChips from '@/components/shared/MultiChips';
 import { CEFR_META, LEVELS, VOCAB } from '@/lib/vocab';
+import { storyIsProLocked } from '@/lib/plans';
 import { supabase } from '@/lib/supabase';
 import { calcStageXP } from '@/lib/xp';
 
@@ -81,13 +82,14 @@ function lookupTranslation(clean, newWords) {
 const fmtTime = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ReadingScreen({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord }) {
+export default function ReadingScreen({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, plan, onUpgrade }) {
   return (
     <WithSkeleton ms={250} skeleton={<ReadingSkeleton t={t} />}>
       <ReadingScreenInner
         t={t} state={state} user={user}
         addXP={addXP} checkStreak={checkStreak}
         toggleLearned={toggleLearned} addCustomWord={addCustomWord}
+        plan={plan} onUpgrade={onUpgrade}
       />
     </WithSkeleton>
   );
@@ -96,7 +98,7 @@ export default function ReadingScreen({ t, state, user, addXP, checkStreak, togg
 // ─────────────────────────────────────────────────────────────────────────────
 //  Inner — manages view state + Supabase data
 // ─────────────────────────────────────────────────────────────────────────────
-function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord }) {
+function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, plan, onUpgrade }) {
   const [view,          setView]          = useState('list');
   const [stories,       setStories]       = useState([]);
   const [progress,      setProgress]      = useState({});
@@ -167,26 +169,40 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
       (story.body || []).reduce((n, p) => n + (p.text || '').split(/\s+/).length, 0) / 80
     ));
 
-  const StoryCard = ({ story, idx }) => {
-    const done = progress[story.id]?.completed;
-    const meta = CEFR_META[story.level];
+  const StoryCard = ({ story, idx, storyIndexInLevel }) => {
+    const done         = progress[story.id]?.completed;
+    const meta         = CEFR_META[story.level];
+    const isProLocked  = storyIsProLocked(plan, storyIndexInLevel);
     return (
-      <div className="au" onClick={() => openStory(story)}
+      <div className="au" onClick={() => isProLocked ? onUpgrade() : openStory(story)}
         style={{
           background: t.bgCard, borderRadius: 20,
-          border: `1px solid ${done ? t.correct + '55' : t.border}`,
+          border: `1px solid ${isProLocked ? 'rgba(255,111,168,0.35)' : done ? t.correct + '55' : t.border}`,
           overflow: 'hidden', cursor: 'pointer', position: 'relative',
           boxShadow: t.shadow, animationDelay: `${Math.min(idx * 40, 240)}ms`,
+          opacity: isProLocked ? 0.85 : 1,
         }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 4, background: meta.pill }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 4, background: isProLocked ? '#FF6FA8' : meta.pill }} />
+        {/* Pro badge */}
+        {isProLocked && (
+          <div style={{
+            position: 'absolute', top: 10, right: 10,
+            background: 'linear-gradient(135deg, #FF6FA8, #A78BFA)',
+            borderRadius: 8, padding: '3px 9px',
+            display: 'flex', alignItems: 'center', gap: 4,
+          }}>
+            <Crown size={10} color="#fff" />
+            <span style={{ fontSize: 10, color: '#fff', fontWeight: 800 }}>PRO</span>
+          </div>
+        )}
         <div style={{ padding: '14px 14px 14px 20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ background: meta.pill, color: meta.pillTxt, fontSize: 10, fontWeight: 800, padding: '3px 9px', borderRadius: 6, letterSpacing: '0.04em' }}>
+            <span style={{ background: isProLocked ? 'rgba(255,111,168,0.15)' : meta.pill, color: isProLocked ? '#FF6FA8' : meta.pillTxt, fontSize: 10, fontWeight: 800, padding: '3px 9px', borderRadius: 6, letterSpacing: '0.04em' }}>
               {story.level} · {meta.title}
             </span>
-            {done ? <CheckCircle size={18} color={t.correct} strokeWidth={2.5} /> : <ChevronRight size={16} color={t.textSoft} />}
+            {done && !isProLocked ? <CheckCircle size={18} color={t.correct} strokeWidth={2.5} /> : !isProLocked ? <ChevronRight size={16} color={t.textSoft} /> : null}
           </div>
-          <div className="fd" style={{ fontSize: 15, fontWeight: 800, color: t.text, lineHeight: 1.35, marginBottom: 10 }}>
+          <div className="fd" style={{ fontSize: 15, fontWeight: 800, color: isProLocked ? t.textMid : t.text, lineHeight: 1.35, marginBottom: 10 }}>
             {story.title}
           </div>
           <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
@@ -196,7 +212,7 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: t.textMid }}>
               <BookOpen size={11} /> {(story.new_words || []).length} шинэ үг
             </span>
-            {done && (
+            {done && !isProLocked && (
               <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 700, color: t.correct, background: t.correctBg, padding: '2px 8px', borderRadius: 6 }}>
                 ✓ Дууссан
               </span>
@@ -215,18 +231,18 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
         <div style={{ color: t.textSoft, fontSize: 13, padding: '24px 0' }}>Уншиж байна…</div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', color: t.textMid, padding: '48px 0' }}>
-          <div style={{ fontSize: 36, marginBottom: 8 }}>📚</div>Энэ түвшинд үлгэр олдсонгүй
+          <div style={{ fontSize: 36, marginBottom: 8 }}>📚</div>Энэ түвшинд өгүүллэг олдсонгүй
         </div>
       ) : (
         Object.entries(grouped).map(([level, items]) => (
           <div key={level} style={{ marginBottom: 28 }}>
             {levelFilter.length !== 1 && (
               <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.18em', color: t.textSoft, marginBottom: 10 }}>
-                {level} · {CEFR_META[level].title.toUpperCase()} — {items.length} үлгэр
+                {level} · {CEFR_META[level].title.toUpperCase()} — {items.length} өгүүллэг
               </div>
             )}
             <div style={{ display: 'grid', gridTemplateColumns: isDesktop ? '1fr 1fr' : '1fr', gap: 10 }}>
-              {items.map((s, i) => <StoryCard key={s.id} story={s} idx={i} />)}
+              {items.map((s, i) => <StoryCard key={s.id} story={s} idx={i} storyIndexInLevel={i} />)}
             </div>
           </div>
         ))
@@ -239,8 +255,8 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
       <div>
         <div style={{ marginBottom: 20 }}>
           <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 4 }}>УНШЛАГА 📚</div>
-          <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Үлгэрийн сан</div>
-          <div style={{ color: t.textSoft, fontSize: 13, marginTop: 2 }}>{stories.length} үлгэр · {completedCount} дууссан</div>
+          <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Өгүүллэгийн сан</div>
+          <div style={{ color: t.textSoft, fontSize: 13, marginTop: 2 }}>{stories.length} өгүүллэг · {completedCount} дууссан</div>
         </div>
         <ListBody />
       </div>
@@ -250,8 +266,8 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
     <div className="af">
       <div style={{ marginBottom: 16 }}>
         <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 2 }}>УНШЛАГА 📚</div>
-        <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Үлгэрийн сан</div>
-        <div style={{ color: t.textSoft, fontSize: 12, marginTop: 2 }}>{stories.length} үлгэр · {completedCount} дууссан</div>
+        <div className="fd" style={{ fontSize: 26, fontWeight: 800, color: t.text }}>Өгүүллэгийн сан</div>
+        <div style={{ color: t.textSoft, fontSize: 12, marginTop: 2 }}>{stories.length} өгүүллэг · {completedCount} дууссан</div>
       </div>
       <ListBody />
     </div>

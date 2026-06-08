@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft, Mic } from 'lucide-react';
+import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft, Mic, Crown } from 'lucide-react';
 import { LEVELS, CEFR_META, getStages } from '@/lib/vocab';
+import { stageIsProLocked, gameIsProOnly } from '@/lib/plans';
 import { calcStageXP } from '@/lib/xp';
 import FlashCard           from '@/components/shared/FlashCard';
 import GenderCard          from '@/components/shared/GenderCard';
@@ -44,11 +45,11 @@ const STAT_KEY = {
 };
 
 // ─── Main coordinator ──────────────────────────────────────────────────────────
-export default function GamesScreen({ t, state, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
-  return <WithSkeleton ms={250} skeleton={<GamesSkeleton t={t} />}><GamesScreenInner t={t} state={state} recordStat={recordStat} completeStage={completeStage} recordMistake={recordMistake} clearMistake={clearMistake} addXP={addXP} checkStreak={checkStreak} /></WithSkeleton>;
+export default function GamesScreen({ t, state, plan, onUpgrade, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
+  return <WithSkeleton ms={250} skeleton={<GamesSkeleton t={t} />}><GamesScreenInner t={t} state={state} plan={plan} onUpgrade={onUpgrade} recordStat={recordStat} completeStage={completeStage} recordMistake={recordMistake} clearMistake={clearMistake} addXP={addXP} checkStreak={checkStreak} /></WithSkeleton>;
 }
 
-function GamesScreenInner({ t, state, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
+function GamesScreenInner({ t, state, plan, onUpgrade, recordStat, completeStage, recordMistake, clearMistake, addXP, checkStreak }) {
   const [view,         setView]         = useState('hub');
   const [gameType,     setGameType]     = useState(null);
   const [activeCefr,   setActiveCefr]   = useState(null);
@@ -91,8 +92,9 @@ function GamesScreenInner({ t, state, recordStat, completeStage, recordMistake, 
   };
 
   if (view === 'hub') return (
-    <GamesHub t={t} state={state} userLevel={state.userLevel}
+    <GamesHub t={t} state={state} userLevel={state.userLevel} plan={plan}
       onSelect={(type, level) => {
+        if (gameIsProOnly(plan, type)) { onUpgrade(); return; }
         setGameType(type);
         setActiveCefr(CONJ_TYPES.has(type) ? null : level);
         setView('stages');
@@ -105,7 +107,7 @@ function GamesScreenInner({ t, state, recordStat, completeStage, recordMistake, 
                     : null;
     return (
       <StageSelect t={t} gameType={gameType} cefr={activeCefr} stages={preStages}
-        state={state}
+        state={state} plan={plan} onUpgrade={onUpgrade}
         onBack={() => setView('hub')}
         onSelect={startStage} />
     );
@@ -138,26 +140,32 @@ function GamesScreenInner({ t, state, recordStat, completeStage, recordMistake, 
 
   if (view === 'result') {
     let nextStage = null;
+    let nextStageIdx = -1;
     if (activeCefr) {
-      const all    = getStages(gameType, activeCefr);
+      const all = getStages(gameType, activeCefr);
       const curIdx = all.findIndex(s => s.id === activeStage.id);
       nextStage = all[curIdx + 1] ?? null;
+      nextStageIdx = curIdx + 1;
     } else if (gameType === 'conjugation') {
-      const all    = getConjugationStages();
+      const all = getConjugationStages();
       const curIdx = all.findIndex(s => s.id === activeStage.id);
       nextStage = all[curIdx + 1] ?? null;
+      nextStageIdx = curIdx + 1;
     } else if (gameType === 'adjective') {
-      const all    = getAdjectiveStages();
+      const all = getAdjectiveStages();
       const curIdx = all.findIndex(s => s.id === activeStage.id);
       nextStage = all[curIdx + 1] ?? null;
+      nextStageIdx = curIdx + 1;
     }
+    const nextProLocked = nextStage && stageIsProLocked(plan, nextStageIdx);
     return (
       <ResultScreen t={t} stage={activeStage}
         score={activeStage?.finalScore ?? sessionScore}
         xpEarned={activeStage?.xpEarned ?? 0}
         onReplay={() => startStage(activeStage)}
         onBack={() => setView('stages')}
-        onNext={nextStage ? () => startStage(nextStage) : null} />
+        onNext={nextStage && !nextProLocked ? () => startStage(nextStage) : null}
+        onUpgrade={nextProLocked ? onUpgrade : null} />
     );
   }
 
@@ -177,7 +185,7 @@ const ALL_GAMES = [
   { type: 'speaking',   title: 'Дуудлага хийх',        sub: 'Микрофонд дуудлага хий', Icon: Mic,        iconColor: '#7c3aed', bg: '#f3e8ff' },
 ];
 
-function GamesHub({ t, state, userLevel, onSelect }) {
+function GamesHub({ t, state, userLevel, plan, onSelect }) {
   const [selectedLevel, setSelectedLevel] = useState(userLevel || 'A1');
 
   return (
@@ -212,50 +220,65 @@ function GamesHub({ t, state, userLevel, onSelect }) {
         })}
       </div>
 
-      {/* All 8 games in uniform 2×4 grid */}
+      {/* All games in uniform 2-column grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        {ALL_GAMES.map((g, i) => (
-          <button key={g.type} onClick={() => onSelect(g.type, selectedLevel)} className="au"
-            style={{
-              position: 'relative', overflow: 'hidden',
-              background: t.bgCard, borderRadius: 20,
-              padding: '18px 14px 16px',
-              border: `1px solid ${t.border}`,
-              cursor: 'pointer', textAlign: 'left',
-              boxShadow: t.shadow, minHeight: 148,
-              display: 'flex', flexDirection: 'column',
-              animationDelay: `${i * 45}ms`,
-            }}>
-            {/* Decorative circle top-right */}
-            <div style={{
-              position: 'absolute', top: -20, right: -20,
-              width: 86, height: 86, borderRadius: '50%',
-              background: t.darkMode ? (g.bg + '28') : (g.bg + 'bb'),
-              pointerEvents: 'none',
-            }} />
-            {/* Icon box */}
-            <div style={{
-              width: 46, height: 46, borderRadius: 13,
-              background: t.darkMode ? (g.bg + '35') : g.bg,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              marginBottom: 'auto',
-            }}>
-              <g.Icon size={22} color={g.iconColor} strokeWidth={2} />
-            </div>
-            {/* Text */}
-            <div style={{ marginTop: 28 }}>
-              <div style={{ fontWeight: 800, color: t.text, fontSize: 14, lineHeight: 1.2 }}>{g.title}</div>
-              <div style={{ color: t.textSoft, fontSize: 12, marginTop: 3 }}>{g.sub}</div>
-            </div>
-          </button>
-        ))}
+        {ALL_GAMES.map((g, i) => {
+          const isProOnly = gameIsProOnly(plan, g.type);
+          return (
+            <button key={g.type} onClick={() => onSelect(g.type, selectedLevel)} className="au"
+              style={{
+                position: 'relative', overflow: 'hidden',
+                background: t.bgCard, borderRadius: 20,
+                padding: '18px 14px 16px',
+                border: `1px solid ${isProOnly ? 'rgba(255,111,168,0.35)' : t.border}`,
+                cursor: 'pointer', textAlign: 'left',
+                boxShadow: t.shadow, minHeight: 148,
+                display: 'flex', flexDirection: 'column',
+                animationDelay: `${i * 45}ms`,
+              }}>
+              {/* Decorative circle top-right */}
+              <div style={{
+                position: 'absolute', top: -20, right: -20,
+                width: 86, height: 86, borderRadius: '50%',
+                background: t.darkMode ? (g.bg + '28') : (g.bg + 'bb'),
+                pointerEvents: 'none',
+              }} />
+              {/* Pro badge */}
+              {isProOnly && (
+                <div style={{
+                  position: 'absolute', top: 10, right: 10,
+                  background: 'linear-gradient(135deg, #FF6FA8, #A78BFA)',
+                  borderRadius: 8, padding: '3px 8px',
+                  display: 'flex', alignItems: 'center', gap: 4,
+                }}>
+                  <Crown size={10} color="#fff" />
+                  <span style={{ fontSize: 10, color: '#fff', fontWeight: 800 }}>PRO</span>
+                </div>
+              )}
+              {/* Icon box */}
+              <div style={{
+                width: 46, height: 46, borderRadius: 13,
+                background: t.darkMode ? (g.bg + '35') : g.bg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 'auto',
+              }}>
+                <g.Icon size={22} color={g.iconColor} strokeWidth={2} />
+              </div>
+              {/* Text */}
+              <div style={{ marginTop: 28 }}>
+                <div style={{ fontWeight: 800, color: t.text, fontSize: 14, lineHeight: 1.2 }}>{g.title}</div>
+                <div style={{ color: t.textSoft, fontSize: 12, marginTop: 3 }}>{g.sub}</div>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 // ─── Journey / Stage path ──────────────────────────────────────────────────────
-function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onSelect }) {
+function StageSelect({ t, gameType, cefr, stages: stagesProp, state, plan, onUpgrade, onBack, onSelect }) {
   const stages = stagesProp ?? getStages(gameType, cefr);
   const m      = cefr ? CEFR_META[cefr] : null;
   const isConj = CONJ_TYPES.has(gameType);
@@ -292,15 +315,18 @@ function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onS
       <div style={{ background: t.bgCard, borderRadius: 24, padding: '28px 20px 24px', border: `1px solid ${t.border}` }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {stages.map((stage, i) => {
-            const done     = !!state.completedStages?.[stage.id];
-            const isNext   = !done && (i === 0 || !!state.completedStages?.[stages[i - 1]?.id]);
-            const isLocked = !done && !isNext;
+            const done        = !!state.completedStages?.[stage.id];
+            const isProLocked = !done && stageIsProLocked(plan, i);
+            const isNext      = !done && !isProLocked && (i === 0 || !!state.completedStages?.[stages[i - 1]?.id]);
+            const isLocked    = !done && !isNext && !isProLocked;
 
-            const circleBg = done   ? (t.darkMode ? '#2e2300' : '#3d2c00')
-                           : isNext ? (t.darkMode ? '#002050' : '#003470')
+            const circleBg = done        ? (t.darkMode ? '#2e2300' : '#3d2c00')
+                           : isProLocked ? 'linear-gradient(135deg, rgba(255,111,168,0.18), rgba(167,139,250,0.18))'
+                           : isNext      ? (t.darkMode ? '#002050' : '#003470')
                            : t.bgTag;
-            const circleBorder = done   ? `3px solid ${t.darkMode ? '#6b5200' : '#5a3e00'}`
-                               : isNext ? `3px solid ${t.darkMode ? '#0050b3' : '#00449a'}`
+            const circleBorder = done        ? `3px solid ${t.darkMode ? '#6b5200' : '#5a3e00'}`
+                               : isProLocked ? '2px solid rgba(255,111,168,0.6)'
+                               : isNext      ? `3px solid ${t.darkMode ? '#0050b3' : '#00449a'}`
                                : `2px solid ${t.border}`;
             const circleSize = isNext ? 92 : 72;
             const lineColor  = done ? (t.darkMode ? '#5c4800' : '#6b4e00') : t.border;
@@ -316,7 +342,10 @@ function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onS
                   {/* Circle button */}
                   <button
                     disabled={isLocked}
-                    onClick={() => !isLocked && onSelect(stage)}
+                    onClick={() => {
+                      if (isProLocked) { onUpgrade(); return; }
+                      if (!isLocked) onSelect(stage);
+                    }}
                     style={{
                       width: circleSize, height: circleSize,
                       borderRadius: circleSize / 2,
@@ -324,6 +353,8 @@ function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onS
                       border: circleBorder,
                       boxShadow: isNext
                         ? `0 0 0 10px ${t.darkMode ? 'rgba(0,52,112,0.28)' : 'rgba(0,52,112,0.1)'}, ${t.shadow}`
+                        : isProLocked
+                        ? '0 4px 16px rgba(255,111,168,0.2)'
                         : t.shadow,
                       cursor: isLocked ? 'not-allowed' : 'pointer',
                       opacity: isLocked ? 0.48 : 1,
@@ -331,6 +362,8 @@ function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onS
                     }}>
                     {done ? (
                       <Star size={30} color={t.darkMode ? '#f1c100' : '#ffcc00'} fill={t.darkMode ? '#f1c100' : '#ffcc00'} strokeWidth={0} />
+                    ) : isProLocked ? (
+                      <Crown size={22} color="#FF6FA8" strokeWidth={2} />
                     ) : isNext ? (
                       <Play size={28} color="#ffffff" fill="#ffffff" strokeWidth={0} />
                     ) : (
@@ -363,12 +396,11 @@ function StageSelect({ t, gameType, cefr, stages: stagesProp, state, onBack, onS
                 </div>
 
                 {/* Label */}
-                <div style={{ fontWeight: 800, fontSize: 14, color: done ? t.pink : isNext ? t.sky : t.textSoft }}>
+                <div style={{ fontWeight: 800, fontSize: 14, color: done ? t.pink : isProLocked ? '#FF6FA8' : isNext ? t.sky : t.textSoft }}>
                   {stage.stageNum}-р шат
                 </div>
-                {isNext && (
-                  <div style={{ color: t.sky, fontSize: 12, fontWeight: 600, marginTop: 1 }}>Эхлэх</div>
-                )}
+                {isNext      && <div style={{ color: t.sky,    fontSize: 12, fontWeight: 600, marginTop: 1 }}>Эхлэх</div>}
+                {isProLocked && <div style={{ color: '#FF6FA8', fontSize: 11, fontWeight: 700, marginTop: 1 }}>PRO</div>}
                 <div style={{ color: t.textSoft, fontSize: 11, marginTop: 2, marginBottom: 6 }}>
                   {stage.words.length} {isConj ? 'дасгал' : 'үг'}
                 </div>

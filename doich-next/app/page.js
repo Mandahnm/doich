@@ -22,6 +22,7 @@ import ReadingScreen         from '@/components/screens/ReadingScreen';
 import AchievementToast      from '@/components/shared/AchievementToast';
 import BottomNav             from '@/components/shared/BottomNav';
 import DesktopSidebar        from '@/components/shared/DesktopSidebar';
+import PricingScreen         from '@/components/screens/PricingScreen';
 import { ACHIEVEMENTS, getUnlockedIds } from '@/lib/achievements';
 import { initSrsEntry, updateSrsEntry } from '@/lib/srs';
 import { VOCAB } from '@/lib/vocab';
@@ -46,6 +47,7 @@ export default function Page() {
   const [tab,         setTab]         = useState('home');
   const [loaded,      setLoaded]      = useState(false);
   const [user,        setUser]        = useState(null);
+  const [plan,        setPlan]        = useState('free');
   const [showRecovery, setShowRecovery] = useState(false);
   const [toast,       setToast]       = useState(null);
   const [isDesktop,   setIsDesktop]   = useState(false);
@@ -63,6 +65,7 @@ export default function Page() {
           userLoadedRef.current = true;
           setUser(session.user);
           loadProgress(session.user.id);
+          loadPlan(session.user.id);
         } else {
           setLoaded(true);
         }
@@ -75,6 +78,7 @@ export default function Page() {
         setLoaded(false);
         setUser(session.user);
         loadProgress(session.user.id);
+        loadPlan(session.user.id);
       }
       if (event === 'PASSWORD_RECOVERY' && session?.user) {
         userLoadedRef.current = true;
@@ -85,6 +89,7 @@ export default function Page() {
       if (event === 'SIGNED_OUT') {
         userLoadedRef.current = false;
         setUser(null);
+        setPlan('free');
         setShowRecovery(false);
         setState(s => ({ ...DEFAULT_STATE, darkMode: s.darkMode }));
         setTab('home');
@@ -143,6 +148,22 @@ export default function Page() {
       }
     } finally {
       setLoaded(true);
+    }
+  };
+
+  const loadPlan = async (userId) => {
+    try {
+      const { data } = await supabase
+        .from('user_plans')
+        .select('plan, pro_expires_at')
+        .eq('user_id', userId)
+        .single();
+      if (data?.plan === 'pro') {
+        const active = !data.pro_expires_at || new Date(data.pro_expires_at) > new Date();
+        if (active) setPlan('pro');
+      }
+    } catch {
+      // Table may not exist yet — remain on free
     }
   };
 
@@ -350,16 +371,16 @@ export default function Page() {
 
   const screenContent = (
     <>
-      {tab === 'home'     && <HomeScreen     t={t} state={state} setTab={setTab} isDesktop={isDesktop} />}
+      {tab === 'home'     && <HomeScreen     t={t} state={state} setTab={setTab} isDesktop={isDesktop} plan={plan} onUpgrade={() => setTab('pricing')} />}
       {tab === 'review'   && (
         <ReviewScreen  t={t} state={state} setTab={setTab}
           recordStat={recordStat} recordMistake={recordMistake} clearMistake={clearMistake}
           updateSRS={updateSRS} />
       )}
-      {tab === 'chat'     && <ChatScreen    t={t} state={state} onUpdateHistory={msgs => update({ chatHistory: msgs })} />}
-      {tab === 'grammar'  && <GrammarScreen t={t} state={state} />}
+      {tab === 'chat'     && <ChatScreen    t={t} state={state} plan={plan} onUpdateHistory={msgs => update({ chatHistory: msgs })} onUpgrade={() => setTab('pricing')} />}
+      {tab === 'grammar'  && <GrammarScreen t={t} state={state} plan={plan} onUpgrade={() => setTab('pricing')} />}
       {tab === 'games'    && (
-        <GamesScreen   t={t} state={state}
+        <GamesScreen   t={t} state={state} plan={plan} onUpgrade={() => setTab('pricing')}
           recordStat={recordStat} completeStage={completeStage}
           recordMistake={recordMistake} clearMistake={clearMistake}
           addXP={addXP} checkStreak={checkStreak} />
@@ -383,8 +404,10 @@ export default function Page() {
           t={t} state={state} user={user}
           addXP={addXP} checkStreak={checkStreak}
           toggleLearned={toggleLearned} addCustomWord={addCustomWord}
+          plan={plan} onUpgrade={() => setTab('pricing')}
         />
       )}
+      {tab === 'pricing'     && <PricingScreen t={t} onBack={() => setTab('home')} />}
     </>
   );
 

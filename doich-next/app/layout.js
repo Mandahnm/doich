@@ -18,6 +18,16 @@ const montserrat = Montserrat({
 export const metadata = {
   title: 'Дойч',
   description: 'Монгол хэлээр герман хэл сурах хөгжилтэй апп',
+  manifest: '/manifest.json',
+  themeColor: '#ffcc00',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Дойч',
+  },
+  icons: {
+    apple: '/icon-192.png',
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Wand2, Check, RefreshCw } from 'lucide-react';
+import ProGate from '@/components/shared/ProGate';
+import { isPro } from '@/lib/plans';
 
 const EXAMPLES = [
   'Ich gehe in der Schule jeden Tag.',
@@ -11,7 +13,10 @@ const EXAMPLES = [
 
 const MAX_CHARS = 500;
 
-export default function GrammarScreen({ t, state }) {
+export default function GrammarScreen({ t, state, plan, onUpgrade }) {
+  if (!isPro(plan)) {
+    return <ProGate t={t} feature="Дүрмийн шалгуурыг" onUpgrade={onUpgrade} />;
+  }
   const [text, setText]       = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult]   = useState(null);

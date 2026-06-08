@@ -1,23 +1,10 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-function getServerSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-}
+import { requirePro } from '@/lib/rateLimit';
 
 export async function POST(request) {
-  // Auth check (no rate limit — each request is ~$0.0003)
-  const token = request.headers.get('authorization')?.replace(/^Bearer /i, '');
-  if (!token) {
-    return NextResponse.json({ error: 'Нэвтрэх шаардлагатай' }, { status: 401 });
-  }
-  const { data: { user }, error: authError } = await getServerSupabase().auth.getUser(token);
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Нэвтрэх шаардлагатай' }, { status: 401 });
-  }
+  // Pro-only: Whisper transcription costs per request
+  const { error: authError } = await requirePro(request);
+  if (authError) return authError;
 
   const formData = await request.formData();
   const audio = formData.get('audio');

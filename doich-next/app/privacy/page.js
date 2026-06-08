@@ -102,10 +102,10 @@ export default function PrivacyPage() {
       {c.sections.map(s => (
         <div key={s.h}>
           <h2 style={{ fontSize: 20, fontWeight: 700, marginTop: 40, marginBottom: 12 }}>{s.h}</h2>
-          {s.body && <p dangerouslySetInnerHTML={{ __html: s.body }} />}
+          {s.body && <p>{s.body}</p>}
           {s.items && (
             <ul style={{ paddingLeft: 20 }}>
-              {s.items.map((it, i) => <li key={i} dangerouslySetInnerHTML={{ __html: it }} />)}
+              {s.items.map((it, i) => <li key={i}>{it}</li>)}
             </ul>
           )}
           {s.email && <p><a href={`mailto:${s.email}`} style={{ color: '#0062a1' }}>{s.email}</a></p>}

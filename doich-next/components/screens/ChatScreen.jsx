@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Send, Sparkles, Trash2, Bot } from 'lucide-react';
+import { Send, Sparkles, Trash2, Bot, Crown } from 'lucide-react';
+import { isPro, FREE_AI_TUTOR_DAILY } from '@/lib/plans';
 
 const EXAMPLES = [
   { t: 'Akkusativ ба Dativ ялгаа юу вэ?',  e: '🔤' },
@@ -150,15 +151,16 @@ function Messages({ msgs, loading, isDark, t, endRef }) {
   );
 }
 
-export default function ChatScreen({ t, state, onUpdateHistory }) {
-  return <ChatScreenInner t={t} state={state} onUpdateHistory={onUpdateHistory} />;
+export default function ChatScreen({ t, state, onUpdateHistory, plan, onUpgrade }) {
+  return <ChatScreenInner t={t} state={state} onUpdateHistory={onUpdateHistory} plan={plan} onUpgrade={onUpgrade} />;
 }
 
-function ChatScreenInner({ t, state, onUpdateHistory }) {
-  const [msgs,     setMsgs]     = useState(() => state.chatHistory || []);
-  const [input,    setInput]    = useState('');
-  const [loading,  setLoading]  = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+function ChatScreenInner({ t, state, onUpdateHistory, plan, onUpgrade }) {
+  const [msgs,        setMsgs]        = useState(() => state.chatHistory || []);
+  const [input,       setInput]       = useState('');
+  const [loading,     setLoading]     = useState(false);
+  const [limitReached, setLimitReached] = useState(false);
+  const [isDesktop,   setIsDesktop]   = useState(false);
   const ref      = useRef(null);
   const inputRef = useRef(null);
   const isDark   = t.darkMode;
@@ -188,8 +190,14 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
         body: JSON.stringify({ level: state.userLevel, message: msg, history: msgs }),
       });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || 'API error');
-      setMsgs(m => [...m, { role: 'assistant', content: d.text }]);
+      if (r.status === 429) {
+        setLimitReached(true);
+        setMsgs(m => [...m, { role: 'assistant', content: d.error }]);
+      } else if (!r.ok) {
+        throw new Error(d.error || 'API error');
+      } else {
+        setMsgs(m => [...m, { role: 'assistant', content: d.text }]);
+      }
     } catch (e) {
       setMsgs(m => [...m, { role: 'assistant', content: `Алдаа: ${e.message}` }]);
     }
@@ -243,10 +251,21 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
             </div>
           </div>
 
+          {/* Free tier / upgrade card */}
+          {!isPro(plan) && (
+            <button onClick={onUpgrade} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 16, background: 'linear-gradient(135deg, rgba(255,111,168,0.12), rgba(167,139,250,0.12))', border: '1.5px solid rgba(255,111,168,0.3)', cursor: 'pointer', textAlign: 'left', marginTop: 'auto' }}>
+              <Crown size={18} color="#FF6FA8" />
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 13, color: t.text }}>Pro авах</div>
+                <div style={{ fontSize: 11, color: t.textSoft, marginTop: 1 }}>Өдөрт {FREE_AI_TUTOR_DAILY} чат → хязгааргүй</div>
+              </div>
+            </button>
+          )}
+
           {/* Clear button */}
           {msgs.length > 0 && (
             <button onClick={() => setMsgs([])}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', color: t.textMid, fontSize: 13, fontWeight: 700, marginTop: 'auto' }}>
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '10px', borderRadius: 14, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', color: t.textMid, fontSize: 13, fontWeight: 700, marginTop: isPro(plan) ? 'auto' : 0 }}>
               <Trash2 size={14} /> Чат цэвэрлэх
             </button>
           )}
@@ -275,18 +294,24 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
 
           {/* Input */}
           <div style={{ padding: '0 22px 20px' }}>
-            <div style={{ display: 'flex', gap: 8, paddingTop: 16, borderTop: `1px solid ${t.border}` }}>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
-                <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-                  placeholder="Герман хэлний асуулт..."
-                  style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
-                <button onClick={() => send()} disabled={!input.trim() || loading}
-                  style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-                  <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
-                </button>
+            {limitReached ? (
+              <button onClick={onUpgrade} style={{ width: '100%', padding: '14px', borderRadius: 16, fontWeight: 800, fontSize: 14, border: 'none', background: 'linear-gradient(135deg, #FF6FA8, #A78BFA)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 6px 20px rgba(255,111,168,0.35)' }}>
+                <Crown size={16} /> Pro авах — хязгааргүй чат
+              </button>
+            ) : (
+              <div style={{ display: 'flex', gap: 8, paddingTop: 16, borderTop: `1px solid ${t.border}` }}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
+                  <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+                    placeholder="Герман хэлний асуулт..."
+                    style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
+                  <button onClick={() => send()} disabled={!input.trim() || loading}
+                    style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+                    <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -318,24 +343,40 @@ function ChatScreenInner({ t, state, onUpdateHistory }) {
         )}
       </div>
 
+      {/* Free tier banner */}
+      {!isPro(plan) && !limitReached && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: isDark ? '#2a1a00' : '#fff8e8', borderRadius: 12, padding: '8px 14px', marginBottom: 10, border: `1px solid ${isDark ? '#c9a00030' : '#ffcc0060'}` }}>
+          <span style={{ fontSize: 12, color: t.textSoft }}>Өдөрт {FREE_AI_TUTOR_DAILY} чат боломжтой</span>
+          <button onClick={onUpgrade} style={{ fontSize: 11, fontWeight: 800, color: '#FF6FA8', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Crown size={11} /> Pro авах →
+          </button>
+        </div>
+      )}
+
       {/* Messages */}
       <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 4 }}>
         {msgs.length === 0 ? <EmptyState showQuestions={true} isDark={isDark} t={t} onSend={send} /> : <Messages msgs={msgs} loading={loading} isDark={isDark} t={t} endRef={ref} />}
       </div>
 
-      {/* Input */}
-      <div style={{ display: 'flex', gap: 8, paddingTop: 12, borderTop: `1px solid ${t.border}` }}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
-          <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-            placeholder="Герман хэлний асуулт..."
-            style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
-          <button onClick={() => send()} disabled={!input.trim() || loading}
-            style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-            <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
-          </button>
+      {/* Input — replaced with upgrade CTA when limit reached */}
+      {limitReached ? (
+        <button onClick={onUpgrade} style={{ width: '100%', padding: '15px', borderRadius: 18, fontWeight: 800, fontSize: 15, border: 'none', background: 'linear-gradient(135deg, #FF6FA8, #A78BFA)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: '0 8px 24px rgba(255,111,168,0.35)' }}>
+          <Crown size={18} /> Pro авах — хязгааргүй чат
+        </button>
+      ) : (
+        <div style={{ display: 'flex', gap: 8, paddingTop: 12, borderTop: `1px solid ${t.border}` }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: t.bgCard, border: `1.5px solid ${input ? (isDark ? '#f1c100' : '#ffcc00') : t.border}`, borderRadius: 20, padding: '0 6px 0 18px', boxShadow: t.shadow, transition: 'border-color 0.2s' }}>
+            <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
+              placeholder="Герман хэлний асуулт..."
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 14, color: t.text, padding: '13px 0' }} />
+            <button onClick={() => send()} disabled={!input.trim() || loading}
+              style={{ width: 38, height: 38, borderRadius: 14, background: input.trim() && !loading ? t.pinkBtn : t.bgTag, border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
+              <Send size={16} color={input.trim() && !loading ? t.pinkBtnText : t.textSoft} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

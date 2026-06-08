@@ -2,8 +2,10 @@
 const fs   = require('fs');
 const path = require('path');
 
-const API_KEY  = process.env.ELEVENLABS_API_KEY  || 'sk_e5f81e21302fb284ddc75844d0dd86bb3908d2245e1294aa';
-const VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'IKne3meq5aSn9XLyUdCD';
+const API_KEY  = process.env.ELEVENLABS_API_KEY;
+const VOICE_ID = process.env.ELEVENLABS_VOICE_ID;
+if (!API_KEY)  { console.error('Missing ELEVENLABS_API_KEY env var'); process.exit(1); }
+if (!VOICE_ID) { console.error('Missing ELEVENLABS_VOICE_ID env var'); process.exit(1); }
 const OUT_DIR  = path.join(__dirname, '..', 'public', 'audio');
 
 if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
