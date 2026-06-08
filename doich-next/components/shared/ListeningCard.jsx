@@ -27,7 +27,8 @@ export default function ListeningCard({ t, stage, word, progress, onContinue, on
   const playAudio = () => {
     if (playing) return;
     setPlaying(true);
-    const audio = new Audio(`/audio/${word.id}.mp3`);
+    const base  = process.env.NEXT_PUBLIC_AUDIO_BASE_URL || '/audio';
+    const audio = new Audio(`${base}/${word.id}.mp3`);
     audioRef.current = audio;
     audio.onended  = () => setPlaying(false);
     audio.onerror  = () => setPlaying(false);
