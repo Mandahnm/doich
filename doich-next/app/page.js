@@ -424,7 +424,7 @@ export default function Page() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: t.bgMain, color: t.text, paddingBottom: 86 }}>
+    <div style={{ minHeight: '100vh', background: t.bgMain, color: t.text, paddingBottom: 'calc(86px + env(safe-area-inset-bottom))' }}>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '24px 18px 0' }}>
         {screenContent}
       </div>

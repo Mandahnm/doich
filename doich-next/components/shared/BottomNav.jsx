@@ -16,8 +16,9 @@ export default function BottomNav({ t, tab, setTab }) {
       position: 'fixed', bottom: 0, left: 0, right: 0,
       background: t.navBg, borderTop: `1px solid ${t.border}`,
       backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)',
+      paddingBottom: 'env(safe-area-inset-bottom)',
     }}>
-      <div style={{ maxWidth: 480, margin: '0 auto', padding: '8px 4px 12px', display: 'flex', justifyContent: 'space-around', alignItems: 'flex-end' }}>
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '8px 4px 12px', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
         {ITEMS.map(({ id, Icon, label, center }) => {
           const active = tab === id;
 

@@ -22,12 +22,18 @@ export const metadata = {
   themeColor: '#ffcc00',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
+    statusBarStyle: 'black-translucent',
     title: 'Дойч',
   },
   icons: {
     apple: '/icon-192.png',
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }) {
