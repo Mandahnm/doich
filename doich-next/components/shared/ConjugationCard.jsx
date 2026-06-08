@@ -73,7 +73,9 @@ export default function ConjugationCard({ t, exercise, idx, total, onContinue, o
               {displayParts[1]}
             </>
           ) : (
-            <span style={{ fontStyle: 'italic' }}>{exercise.example}</span>
+            <span style={{ color: t.textSoft, fontSize: 14, fontStyle: 'italic' }}>
+              Зөв хэлбэрийг бич
+            </span>
           )}
         </div>
 

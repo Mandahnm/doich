@@ -98,10 +98,10 @@ export default function FillBlankCard({ t, stage, word, progress, onContinue, on
         ) : (
           <>
             <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', textAlign: 'center', marginBottom: 10 }}>
-              КОНТЕКСТ — АЛЬ ҮГ ТОХИРОХ ВЭ?
+              АЛЬ ҮГ ТОХИРОХ ВЭ?
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: t.text, lineHeight: 1.8, textAlign: 'center', fontStyle: 'italic' }}>
-              {word.example}
+            <div style={{ fontSize: 18, fontWeight: 700, color: t.text, textAlign: 'center', lineHeight: 1.6 }}>
+              {word.mn}
             </div>
           </>
         )}
