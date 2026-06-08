@@ -38,9 +38,9 @@ export default function ListeningCard({ t, stage, word, progress, onContinue, on
   const check = () => {
     if (revealed || !input.trim()) return;
     const typed   = input.trim().toLowerCase();
-    const base    = word.de.toLowerCase();
-    const withArt = word.gender ? `${word.gender} ${word.de}`.toLowerCase() : null;
-    const ok = typed === base || (withArt && typed === withArt);
+    const bare    = word.de.replace(/^(der|die|das|sich)\s+/i, '').toLowerCase();
+    const withArt = word.gender ? `${word.gender} ${bare}`.toLowerCase() : null;
+    const ok = typed === bare || typed === word.de.toLowerCase() || (withArt && typed === withArt);
     setRevealed(true);
     setIsCorrect(ok);
   };
