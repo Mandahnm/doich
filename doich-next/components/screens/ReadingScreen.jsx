@@ -79,6 +79,16 @@ function lookupTranslation(clean, newWords) {
   return hit ? { mn: hit.mn, de: hit.de, id: hit.id } : null;
 }
 
+// Returns true only if the word is in the story's new_words list
+function isInNewWords(clean, newWords) {
+  if (!clean || clean.length < 2 || !newWords?.length) return false;
+  const key = clean.toLowerCase();
+  return newWords.some(w => {
+    const de = w.de.toLowerCase();
+    return de === key || de.replace(ART_RE, '') === key;
+  });
+}
+
 const fmtTime = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -355,16 +365,15 @@ function ParagraphBlock({ para, activeSentIdx, onWordTap, newWords, t, isAdded }
               }}>
                 {tokens.map((tok, i) => {
                   if (!tok.clean) return <span key={i}>{tok.raw}</span>;
-                  const found = lookupTranslation(tok.clean, newWords);
-                  const added = isAdded(tok.clean);
+                  const tappable = isInNewWords(tok.clean, newWords);
+                  const added    = tappable && isAdded(tok.clean);
+                  if (!tappable) return <span key={i}>{tok.raw}</span>;
                   return (
                     <span key={i} onClick={e => onWordTap(e, tok.clean)}
                       style={{
                         cursor: 'pointer', borderRadius: 3, padding: '1px 0',
                         color: added ? t.correct : (isActive ? t.pink : t.text),
-                        borderBottom: found
-                          ? `2px solid ${added ? t.correct + '90' : t.pink + '70'}`
-                          : '2px solid transparent',
+                        borderBottom: `2px solid ${added ? t.correct + '90' : t.pink + '70'}`,
                         transition: 'color 0.15s',
                       }}>
                       {tok.raw}
@@ -454,7 +463,7 @@ function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, on
 
       {/* Tap hint */}
       <div style={{ background: t.bgTag, borderRadius: 12, padding: '8px 14px', marginBottom: 18, fontSize: 12, color: t.textMid, display: 'flex', alignItems: 'center', gap: 8 }}>
-        💡 Тодорсон үгийг дарж орчуулга харна уу
+        💡 Доогуур зураастай үгийг дарж орчуулга харна уу
       </div>
 
       {/* Story body */}
