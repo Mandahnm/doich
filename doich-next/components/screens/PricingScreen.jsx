@@ -154,17 +154,12 @@ export default function PricingScreen({ t, onBack }) {
       </div>
 
       {/* Refund policy link */}
-      <a href="/terms" target="_blank" rel="noopener noreferrer"
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: 6, width: '100%', padding: '11px 0',
-          borderRadius: 12, border: `1px solid ${t.border}`,
-          background: 'transparent', color: t.textMid,
-          fontSize: 13, fontWeight: 600, textDecoration: 'none',
-          cursor: 'pointer',
-        }}>
-        📄 Буцаан олголтын бодлого
-      </a>
+      <div style={{ textAlign: 'center', paddingBottom: 8 }}>
+        <a href="/terms" target="_blank" rel="noopener noreferrer"
+          style={{ fontSize: 12, color: t.textSoft, textDecoration: 'underline', cursor: 'pointer' }}>
+          Буцаан олголтын бодлого
+        </a>
+      </div>
     </div>
   );
 }
