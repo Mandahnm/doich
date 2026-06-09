@@ -145,13 +145,26 @@ export default function PricingScreen({ t, onBack }) {
       </div>
 
       {/* Fine print */}
-      <div style={{ background: t.bgCard, borderRadius: 16, padding: '14px 16px', border: `1px solid ${t.border}` }}>
+      <div style={{ background: t.bgCard, borderRadius: 16, padding: '14px 16px', border: `1px solid ${t.border}`, marginBottom: 12 }}>
         <div style={{ fontSize: 11, color: t.textSoft, lineHeight: 1.7 }}>
           • Одоо Pro эрх авахыг хүсвэл <span style={{ color: t.text, fontWeight: 700 }}>doichapp@gmail.com</span>-р холбоо барина уу<br />
           • Pro эрх нь автоматаар сунгагдахгүй<br />
           • Асуух зүйл байвал холбоо барина уу
         </div>
       </div>
+
+      {/* Refund policy link */}
+      <a href="/terms" target="_blank" rel="noopener noreferrer"
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 6, width: '100%', padding: '11px 0',
+          borderRadius: 12, border: `1px solid ${t.border}`,
+          background: 'transparent', color: t.textMid,
+          fontSize: 13, fontWeight: 600, textDecoration: 'none',
+          cursor: 'pointer',
+        }}>
+        📄 Буцаан олголтын бодлого
+      </a>
     </div>
   );
 }
