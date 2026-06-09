@@ -90,6 +90,7 @@ export default function AuthScreen({ isDark, onToggle }) {
       const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password });
       setLoading(false);
       if (e) { setError(translateError(e.message)); return; }
+      if (data.user?.identities?.length === 0) { setError('Энэ имэйл хаяг бүртгэлтэй байна. Нэвтрэх хэсэгт очно уу.'); return; }
       if (data.session) setMsg('Амжилттай бүртгүүллээ! Нэвтэрч байна...');
       else              setMsg('Имэйл хаягт баталгаажуулах холбоос илгээгдлээ. Имэйлээ шалгаад холбоос дээр дарна уу.');
     } else {

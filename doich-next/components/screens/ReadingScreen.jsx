@@ -1119,11 +1119,11 @@ function VocabFlashcard({ story, t, state, toggleLearned, addCustomWord, onDone 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <button onClick={() => answer(false)}
             style={{ background: t.wrongBg, color: t.wrong, border: `1.5px solid ${t.wrong}40`, borderRadius: 16, padding: '14px 0', fontWeight: 800, fontSize: 14, cursor: 'pointer' }}>
-            Дахин 🔄
+            Дахин харах 🔄
           </button>
           <button onClick={() => answer(true)}
             style={{ background: t.correctBg, color: t.correct, border: `1.5px solid ${t.correct}40`, borderRadius: 16, padding: '14px 0', fontWeight: 800, fontSize: 14, cursor: 'pointer' }}>
-            Мэдэж байна ✓
+            Сурсан ✓
           </button>
         </div>
       ) : (
