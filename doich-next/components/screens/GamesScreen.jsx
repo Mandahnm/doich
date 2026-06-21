@@ -9,8 +9,9 @@ import FlashCard           from '@/components/shared/FlashCard';
 import GenderCard          from '@/components/shared/GenderCard';
 import MatchCard           from '@/components/shared/MatchCard';
 import FillBlankCard       from '@/components/shared/FillBlankCard';
-import ConjugationCard     from '@/components/shared/ConjugationCard';
-import ListeningCard       from '@/components/shared/ListeningCard';
+import ConjugationCard          from '@/components/shared/ConjugationCard';
+import AdjectiveDeclensionCard  from '@/components/shared/AdjectiveDeclensionCard';
+import ListeningCard             from '@/components/shared/ListeningCard';
 import SentenceBuilderCard from '@/components/shared/SentenceBuilderCard';
 import SpeakingCard        from '@/components/shared/SpeakingCard';
 import { getConjugationStages } from '@/lib/conjugation';
@@ -114,28 +115,32 @@ function GamesScreenInner({ t, state, plan, onUpgrade, recordStat, completeStage
   }
 
   if (view === 'session') {
+    let card = null;
     if (gameType === 'match') {
-      return <MatchCard t={t} stage={activeStage} words={activeStage.words}
+      card = <MatchCard t={t} stage={activeStage} words={activeStage.words}
         onComplete={handleMatchComplete} onQuit={() => setView('stages')} />;
+    } else {
+      const ex       = activeStage.words[activeStage.idx];
+      const progress = activeStage.idx / activeStage.words.length;
+      if (!ex) return null;
+      if (gameType === 'conjugation') {
+        card = <ConjugationCard t={t} exercise={ex} idx={activeStage.idx} total={activeStage.words.length}
+          onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      } else if (gameType === 'adjective') {
+        card = <AdjectiveDeclensionCard t={t} exercise={ex} idx={activeStage.idx} total={activeStage.words.length}
+          onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      } else if (gameType === 'flashcard')  card = <FlashCard     t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      else if (gameType === 'gender')       card = <GenderCard    t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      else if (gameType === 'fillblank')    card = <FillBlankCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      else if (gameType === 'listening')    card = <ListeningCard       t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      else if (gameType === 'sentence')     card = <SentenceBuilderCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+      else if (gameType === 'speaking')     card = <SpeakingCard        t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
     }
-    const ex       = activeStage.words[activeStage.idx];
-    const progress = activeStage.idx / activeStage.words.length;
-    if (!ex) return null;
-    if (gameType === 'conjugation') {
-      return <ConjugationCard t={t} exercise={ex} idx={activeStage.idx} total={activeStage.words.length}
-        onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    }
-    if (gameType === 'adjective') {
-      return <ConjugationCard t={t} exercise={ex} idx={activeStage.idx} total={activeStage.words.length}
-        label="ТЭМДЭГ НЭРИЙН ТӨГСГӨЛИЙГ БИЧНЭ ҮҮ"
-        onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    }
-    if (gameType === 'flashcard')  return <FlashCard     t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'gender')     return <GenderCard    t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'fillblank')  return <FillBlankCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'listening')  return <ListeningCard       t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'sentence')   return <SentenceBuilderCard t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
-    if (gameType === 'speaking')   return <SpeakingCard        t={t} stage={activeStage} word={ex} progress={progress} onContinue={handleContinue} onQuit={() => setView('stages')} />;
+    return (
+      <div style={{ maxWidth: 680, margin: '0 auto', width: '100%' }}>
+        {card}
+      </div>
+    );
   }
 
   if (view === 'result') {
@@ -401,6 +406,11 @@ function StageSelect({ t, gameType, cefr, stages: stagesProp, state, plan, onUpg
                 </div>
                 {isNext      && <div style={{ color: t.sky,    fontSize: 12, fontWeight: 600, marginTop: 1 }}>Эхлэх</div>}
                 {isProLocked && <div style={{ color: '#FF6FA8', fontSize: 11, fontWeight: 700, marginTop: 1 }}>PRO</div>}
+                {stage.isNullartikel && (
+                  <div style={{ color: '#7c3aed', fontSize: 10, fontWeight: 800, marginTop: 1, letterSpacing: '0.05em' }}>
+                    NULLARTIKEL
+                  </div>
+                )}
                 <div style={{ color: t.textSoft, fontSize: 11, marginTop: 2, marginBottom: 6 }}>
                   {stage.words.length} {isConj ? 'дасгал' : 'үг'}
                 </div>

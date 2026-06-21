@@ -5,8 +5,9 @@ import FlashCard            from '@/components/shared/FlashCard';
 import GenderCard           from '@/components/shared/GenderCard';
 import MatchCard            from '@/components/shared/MatchCard';
 import FillBlankCard        from '@/components/shared/FillBlankCard';
-import ConjugationCard      from '@/components/shared/ConjugationCard';
-import ListeningCard        from '@/components/shared/ListeningCard';
+import ConjugationCard          from '@/components/shared/ConjugationCard';
+import AdjectiveDeclensionCard  from '@/components/shared/AdjectiveDeclensionCard';
+import ListeningCard             from '@/components/shared/ListeningCard';
 import SentenceBuilderCard  from '@/components/shared/SentenceBuilderCard';
 import { buildDailyQueue } from '@/lib/daily';
 import { calcStageXP } from '@/lib/xp';
@@ -78,40 +79,21 @@ export default function DailyPracticeScreen({ t, state, recordStat, addXP, check
   // Stage mock so existing card components get correct idx/total/cefr
   const mockStage = { id: `daily-${state.userLevel}`, idx, words: queue };
 
-  if (item.type === 'match') {
-    return <MatchCard t={t} stage={mockStage} words={item.words}
-      onComplete={handleMatchComplete} onQuit={onQuit} />;
-  }
-  if (item.type === 'flashcard') {
-    return <FlashCard t={t} stage={mockStage} word={item.word} progress={progress}
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  if (item.type === 'gender') {
-    return <GenderCard t={t} stage={mockStage} word={item.word} progress={progress}
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  if (item.type === 'fillblank') {
-    return <FillBlankCard t={t} stage={mockStage} word={item.word} progress={progress}
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  if (item.type === 'listening') {
-    return <ListeningCard t={t} stage={mockStage} word={item.word} progress={progress}
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  if (item.type === 'sentence') {
-    return <SentenceBuilderCard t={t} stage={mockStage} word={item.word} progress={progress}
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  if (item.type === 'conjugation') {
-    return <ConjugationCard t={t} exercise={item.exercise} idx={idx} total={queue.length}
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  if (item.type === 'adjective') {
-    return <ConjugationCard t={t} exercise={item.exercise} idx={idx} total={queue.length}
-      label="ТЭМДЭГ НЭРИЙН ТӨГСГӨЛИЙГ БИЧНЭ ҮҮ"
-      onContinue={handleContinue} onQuit={onQuit} />;
-  }
-  return null;
+  let card = null;
+  if (item.type === 'match')       card = <MatchCard t={t} stage={mockStage} words={item.words} onComplete={handleMatchComplete} onQuit={onQuit} />;
+  else if (item.type === 'flashcard')   card = <FlashCard t={t} stage={mockStage} word={item.word} progress={progress} onContinue={handleContinue} onQuit={onQuit} />;
+  else if (item.type === 'gender')      card = <GenderCard t={t} stage={mockStage} word={item.word} progress={progress} onContinue={handleContinue} onQuit={onQuit} />;
+  else if (item.type === 'fillblank')   card = <FillBlankCard t={t} stage={mockStage} word={item.word} progress={progress} onContinue={handleContinue} onQuit={onQuit} />;
+  else if (item.type === 'listening')   card = <ListeningCard t={t} stage={mockStage} word={item.word} progress={progress} onContinue={handleContinue} onQuit={onQuit} />;
+  else if (item.type === 'sentence')    card = <SentenceBuilderCard t={t} stage={mockStage} word={item.word} progress={progress} onContinue={handleContinue} onQuit={onQuit} />;
+  else if (item.type === 'conjugation') card = <ConjugationCard t={t} exercise={item.exercise} idx={idx} total={queue.length} onContinue={handleContinue} onQuit={onQuit} />;
+  else if (item.type === 'adjective')   card = <AdjectiveDeclensionCard t={t} exercise={item.exercise} idx={idx} total={queue.length} onContinue={handleContinue} onQuit={onQuit} />;
+
+  return (
+    <div style={{ maxWidth: 680, margin: '0 auto', width: '100%' }}>
+      {card}
+    </div>
+  );
 }
 
 function DailyResult({ t, score, total, xpEarned, onDone }) {

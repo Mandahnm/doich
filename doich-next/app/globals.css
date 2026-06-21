@@ -7,6 +7,8 @@
 html, body {
   margin: 0;
   padding: 0;
+  overscroll-behavior: none;
+  background-color: #faf9f7;
 }
 
 /* Montserrat for display/headline text (German words, titles, numbers) */

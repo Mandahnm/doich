@@ -98,7 +98,7 @@ export default function ConjugationCard({ t, exercise, idx, total, onContinue, o
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && check()}
-              placeholder="___"
+              placeholder={exercise.stem === '' ? 'бүтэн хэлбэрийг бич…' : '___'}
               style={{
                 flex: 1, border: 'none', background: 'transparent', outline: 'none',
                 fontSize: 17, fontWeight: 800, color: t.text, fontFamily: 'inherit',

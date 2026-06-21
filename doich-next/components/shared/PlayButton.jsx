@@ -11,7 +11,7 @@ export default function PlayButton({ wordId, size = 18, color }) {
     setPlaying(true);
     try {
       const base = process.env.NEXT_PUBLIC_AUDIO_BASE_URL || '/audio';
-      const audio = new Audio(`${base}/${wordId}.mp3`);
+      const audio = new Audio(`${base}/${wordId}.mp3?v=3`);
       audio.onended  = () => setPlaying(false);
       audio.onerror  = () => setPlaying(false);
       await audio.play();

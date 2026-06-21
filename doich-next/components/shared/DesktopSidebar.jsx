@@ -30,14 +30,30 @@ export default function DesktopSidebar({ tab, setTab, t, state }) {
       overflowY: 'auto',
     }}>
       {/* Brand */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36, paddingLeft: 8 }}>
-        <img src="/logo.png" alt="logo" width={32} height={32}
-          style={{ objectFit: 'contain' }}
-          onError={e => { e.target.style.display = 'none'; }}
-        />
-        <span style={{ fontSize: 20, fontWeight: 900, color: t.darkMode ? '#f1c100' : '#745b00', letterSpacing: '-0.5px' }}>
-          Дойч
-        </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 36, paddingLeft: 4 }}>
+        {/* Logo card */}
+        <div style={{
+          width: 46, height: 46, borderRadius: 14, flexShrink: 0,
+          background: '#ffffff',
+          border: '2px solid #e6b800',
+          boxShadow: '0 0 0 4px rgba(255,204,0,0.14), 0 4px 14px rgba(201,160,0,0.22)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          overflow: 'hidden',
+        }}>
+          <img src="/logo.png" alt="Дойч logo" width={30} height={30}
+            style={{ objectFit: 'contain', display: 'block' }}
+            onError={e => { e.target.style.display = 'none'; }}
+          />
+        </div>
+        {/* Brand name + tagline */}
+        <div>
+          <div style={{ fontSize: 21, fontWeight: 900, color: '#4a3800', letterSpacing: '-0.5px', lineHeight: 1.1 }}>
+            Дойч
+          </div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: '#745b00', letterSpacing: '0.05em', marginTop: 2 }}>
+            Герман хэл
+          </div>
+        </div>
       </div>
 
       {/* Nav items */}
@@ -67,7 +83,7 @@ export default function DesktopSidebar({ tab, setTab, t, state }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 10px', borderRadius: 12, background: t.bgTag }}>
         <div style={{
           width: 36, height: 36, borderRadius: 18,
-          background: t.darkMode ? '#c9a000' : '#ffcc00',
+          background: '#ffcc00',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 15, fontWeight: 800, color: '#241a00', flexShrink: 0,
         }}>

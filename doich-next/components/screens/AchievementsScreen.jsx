@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { ACHIEVEMENTS } from '@/lib/achievements';
 
 const CATEGORY_META = {
-  vocab:  { label: 'Үгсийн сан 📚',    color: '#34D399' },
-  streak: { label: 'Тасралтгүй 🔥',    color: '#FF6FA8' },
-  games:  { label: 'Тоглоомууд 🎮',    color: '#F59E0B' },
-  xp:     { label: 'Туршлага ⭐',      color: '#A78BFA' },
-  daily:  { label: 'Өдрийн дасгал 📅', color: '#60A5FA' },
-  stages: { label: 'Шатнууд 🗺️',       color: '#FB7185' },
+  vocab:  { label: 'Үгсийн сан 📚',    color: '#0062a1' },
+  streak: { label: 'Тасралтгүй 🔥',    color: '#c97800' },
+  games:  { label: 'Тоглоомууд 🎮',    color: '#bc0000' },
+  xp:     { label: 'Туршлага ⭐',      color: '#745b00' },
+  daily:  { label: 'Өдрийн дасгал 📅', color: '#006d3a' },
+  stages: { label: 'Шатнууд 🗺️',       color: '#7c5c00' },
 };
 
 const CATEGORIES = Object.keys(CATEGORY_META);
@@ -97,15 +97,15 @@ export default function AchievementsScreen({ t, state }) {
               <div style={{
                 height: '100%',
                 width: `${(unlockedCount / ACHIEVEMENTS.length) * 100}%`,
-                background: 'linear-gradient(90deg, #FF6FA8, #A78BFA)',
+                background: 'linear-gradient(90deg, #ffcc00, #c97800)',
                 borderRadius: 4, transition: 'width 0.6s ease',
               }} />
             </div>
           </div>
 
           {/* User avatar */}
-          <div style={{ width: 44, height: 44, borderRadius: 22, background: t.darkMode ? '#333' : '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: 17 }}>{initial}</span>
+          <div style={{ width: 44, height: 44, borderRadius: 22, background: t.pinkBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ color: t.pinkBtnText, fontWeight: 800, fontSize: 17 }}>{initial}</span>
           </div>
         </div>
 

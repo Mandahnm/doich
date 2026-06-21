@@ -125,7 +125,7 @@ export default function FillBlankCard({ t, stage, word, progress, onContinue, on
               style={{
                 padding: '14px 18px', borderRadius: 16,
                 border: `2px solid ${showOk ? t.correct : isWrong ? t.wrong : t.border}`,
-                background: showOk ? (t.darkMode ? t.correctBg : '#EDFAF5') : isWrong ? (t.darkMode ? t.wrongBg : '#FFEEEE') : t.bgCard,
+                background: showOk ? '#EDFAF5' : isWrong ? '#FFEEEE' : t.bgCard,
                 cursor: revealed ? 'default' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 boxShadow: t.shadow,

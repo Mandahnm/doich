@@ -77,9 +77,9 @@ export default function FlashCard({ t, stage, word, progress, onContinue, onQuit
                 padding: '15px 18px', borderRadius: 16,
                 border: `2px solid ${showOk ? t.correct : isWrong ? t.wrong : t.border}`,
                 background: showOk
-                  ? (t.darkMode ? t.correctBg : '#EDFAF5')
+                  ? '#EDFAF5'
                   : isWrong
-                  ? (t.darkMode ? t.wrongBg : '#FFEEEE')
+                  ? '#FFEEEE'
                   : t.bgCard,
                 cursor: revealed ? 'default' : 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',

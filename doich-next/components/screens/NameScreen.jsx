@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Moon, Sun } from 'lucide-react';
 
 export default function NameScreen({ isDark, onToggle, onSave }) {
   const [name,      setName]      = useState('');
@@ -94,26 +93,11 @@ export default function NameScreen({ isDark, onToggle, onSave }) {
     </div>
   );
 
-  const toggleBtn = (
-    <button onClick={onToggle} aria-label="Toggle dark mode"
-      style={{
-        position: 'absolute', top: 20, left: 20,
-        width: 44, height: 44, borderRadius: 22,
-        background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.72)',
-        border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)'}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        cursor: 'pointer', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-        zIndex: 10,
-        boxShadow: isDark ? 'none' : '0 2px 12px rgba(0,0,0,0.08)',
-      }}>
-      {isDark ? <Sun size={18} color="#b8a98a" /> : <Moon size={18} color="#80765f" />}
-    </button>
-  );
 
   if (isDesktop) {
     return (
       <div style={{ minHeight: '100vh', background: bgGrad, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-        {toggleBtn}
+
         <div style={{
           background: card,
           borderRadius: 28,

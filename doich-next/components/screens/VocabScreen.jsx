@@ -29,6 +29,44 @@ export default function VocabScreen({ t, state, toggleLearned }) {
   return <WithSkeleton ms={250} skeleton={<VocabSkeleton t={t} />}><VocabScreenInner t={t} state={state} toggleLearned={toggleLearned} /></WithSkeleton>;
 }
 
+function WordCard({ t, w, i, learnedWords, toggleLearned }) {
+  const learned  = learnedWords.includes(w.id);
+  const artStyle = w.gender ? ARTICLE_STYLE[w.gender] : null;
+  const emojiBg  = artStyle ? artStyle.emojiBg : (TYPE_EMOJI_BG[w.type] || t.bgTag);
+
+  return (
+    <div className="au"
+      style={{
+        background: t.bgCard, borderRadius: 14,
+        padding: '11px 14px',
+        display: 'flex', alignItems: 'center', gap: 10,
+        border: `1px solid ${t.border}`,
+        animationDelay: `${Math.min(i * 12, 280)}ms`,
+      }}>
+      <div style={{ width: 42, height: 42, borderRadius: 11, background: emojiBg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+        {w.emoji}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap', marginBottom: 2 }}>
+          {artStyle && (
+            <span style={{ background: artStyle.bg, color: artStyle.text, fontSize: 10, fontWeight: 800, padding: '2px 6px', borderRadius: 5, letterSpacing: '0.04em' }}>
+              {w.gender.toUpperCase()}
+            </span>
+          )}
+          <span className="fd" style={{ fontWeight: 800, color: t.text, fontSize: 14 }}>{w.de}</span>
+          <PlayButton wordId={w.id} size={13} color={t.textSoft} />
+          <span style={{ fontSize: 11, color: t.textSoft, fontWeight: 500 }}>{TYPE_LABEL[w.type] || w.type}</span>
+        </div>
+        <div style={{ color: t.textMid, fontSize: 12 }}>{w.mn}</div>
+      </div>
+      <button onClick={() => toggleLearned(w.id)} className={learned ? 'ap' : ''}
+        style={{ width: 32, height: 32, borderRadius: 16, background: learned ? t.pinkBg : t.bgTag, border: `1.5px solid ${learned ? t.pink : t.border}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <Check size={14} color={learned ? t.pink : t.textSoft} strokeWidth={learned ? 2.5 : 2} />
+      </button>
+    </div>
+  );
+}
+
 function VocabScreenInner({ t, state, toggleLearned }) {
   const [lF,          setLF]          = useState([]);
   const [tF,          setTF]          = useState([]);
@@ -73,45 +111,6 @@ function VocabScreenInner({ t, state, toggleLearned }) {
   }, [filtered]);
 
   const visible = filtered.slice(0, visibleCount);
-
-  // ── Shared word card ──────────────────────────────────────────────────────
-  const WordCard = ({ w, i }) => {
-    const learned  = state.learnedWords.includes(w.id);
-    const artStyle = w.gender ? ARTICLE_STYLE[w.gender] : null;
-    const emojiBg  = artStyle ? artStyle.emojiBg : (TYPE_EMOJI_BG[w.type] || t.bgTag);
-
-    return (
-      <div key={w.id} className="au"
-        style={{
-          background: t.bgCard, borderRadius: 14,
-          padding: '11px 14px',
-          display: 'flex', alignItems: 'center', gap: 10,
-          border: `1px solid ${t.border}`,
-          animationDelay: `${Math.min(i * 12, 280)}ms`,
-        }}>
-        <div style={{ width: 42, height: 42, borderRadius: 11, background: emojiBg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
-          {w.emoji}
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap', marginBottom: 2 }}>
-            {artStyle && (
-              <span style={{ background: artStyle.bg, color: artStyle.text, fontSize: 10, fontWeight: 800, padding: '2px 6px', borderRadius: 5, letterSpacing: '0.04em' }}>
-                {w.gender.toUpperCase()}
-              </span>
-            )}
-            <span className="fd" style={{ fontWeight: 800, color: t.text, fontSize: 14 }}>{w.de}</span>
-            <PlayButton wordId={w.id} size={13} color={t.textSoft} />
-            <span style={{ fontSize: 11, color: t.textSoft, fontWeight: 500 }}>{TYPE_LABEL[w.type] || w.type}</span>
-          </div>
-          <div style={{ color: t.textMid, fontSize: 12 }}>{w.mn}</div>
-        </div>
-        <button onClick={() => toggleLearned(w.id)} className={learned ? 'ap' : ''}
-          style={{ width: 32, height: 32, borderRadius: 16, background: learned ? t.pinkBg : t.bgTag, border: `1.5px solid ${learned ? t.pink : t.border}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Check size={14} color={learned ? t.pink : t.textSoft} strokeWidth={learned ? 2.5 : 2} />
-        </button>
-      </div>
-    );
-  };
 
   // ── DESKTOP ───────────────────────────────────────────────────────────────
   if (isDesktop) {
@@ -180,7 +179,7 @@ function VocabScreenInner({ t, state, toggleLearned }) {
 
         {/* 2-column word grid */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          {visible.map((w, i) => <WordCard key={w.id} w={w} i={i} />)}
+          {visible.map((w, i) => <WordCard key={w.id} t={t} w={w} i={i} learnedWords={state.learnedWords} toggleLearned={toggleLearned} />)}
           {filtered.length === 0 && (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: t.textMid, padding: '48px 0' }}>
               <div style={{ fontSize: 36, marginBottom: 8 }}>🌸</div>
@@ -227,7 +226,7 @@ function VocabScreenInner({ t, state, toggleLearned }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 4 }}>
-        {visible.map((w, i) => <WordCard key={w.id} w={w} i={i} />)}
+        {visible.map((w, i) => <WordCard key={w.id} t={t} w={w} i={i} learnedWords={state.learnedWords} toggleLearned={toggleLearned} />)}
         {filtered.length === 0 && (
           <div style={{ textAlign: 'center', color: t.textMid, padding: '48px 0' }}>
             <div style={{ fontSize: 36, marginBottom: 8 }}>🌸</div>

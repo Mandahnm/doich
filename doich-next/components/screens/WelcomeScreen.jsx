@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sun, Moon, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { LEVELS, CEFR_META } from '@/lib/vocab';
 
 const LEVEL_DESC = {
@@ -23,11 +23,6 @@ export default function WelcomeScreen({ t, onSelect, isDark, onToggle }) {
         : 'linear-gradient(160deg,#FFF0F7,#FFF8F3,#F0EAFF)',
       position: 'relative', overflow: 'hidden',
     }}>
-      <button onClick={onToggle}
-        style={{ position: 'absolute', top: 20, right: 20, width: 40, height: 40, borderRadius: 20, background: t.bgCard, border: `1px solid ${t.border}`, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: t.shadow }}>
-        {isDark ? <Sun size={17} color={t.textMid} /> : <Moon size={17} color={t.textMid} />}
-      </button>
-
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '60px 22px 30px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ display: 'inline-block', background: isDark ? t.pinkBg : '#FFE4F0', color: t.pink, padding: '4px 16px', borderRadius: 20, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 14 }}>

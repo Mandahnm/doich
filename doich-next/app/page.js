@@ -31,7 +31,6 @@ const DEFAULT_STATE = {
   userLevel: null,
   userName: '',
   learnedWords: [],
-  darkMode: false,
   completedStages: {},
   mistakes: {},
   stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, dailyCount: 0, srs: {}, customWords: {} },
@@ -57,8 +56,6 @@ export default function Page() {
 
   // ── Auth + initial load ──────────────────────────────────────────────────
   useEffect(() => {
-    setState(s => ({ ...s, darkMode: false }));
-
     supabase.auth.getSession()
       .then(({ data: { session } }) => {
         if (session?.user) {
@@ -75,6 +72,7 @@ export default function Page() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user && !userLoadedRef.current) {
         userLoadedRef.current = true;
+        prevUnlockedRef.current = null;
         setLoaded(false);
         setUser(session.user);
         loadProgress(session.user.id);
@@ -88,10 +86,11 @@ export default function Page() {
       }
       if (event === 'SIGNED_OUT') {
         userLoadedRef.current = false;
+        prevUnlockedRef.current = null;
         setUser(null);
         setPlan('free');
         setShowRecovery(false);
-        setState(s => ({ ...DEFAULT_STATE, darkMode: s.darkMode }));
+        setState(DEFAULT_STATE);
         setTab('home');
         setLoaded(true);
       }
@@ -132,7 +131,6 @@ export default function Page() {
       if (data) {
         setState(s => ({
           ...DEFAULT_STATE,
-          darkMode: s.darkMode,
           userLevel:       data.user_level,
           userName:        data.user_name        || '',
           learnedWords:    data.learned_words    || [],
@@ -287,14 +285,13 @@ export default function Page() {
     },
   }));
 
-  const t = getTheme(state.darkMode);
+  const t = getTheme();
 
   // ── Render ───────────────────────────────────────────────────────────────
   if (!loaded) {
-    const isDark = state.darkMode;
-    const sk = isDark ? 'sk-dark' : 'sk';
-    const bg = isDark ? '#1a1812' : '#f5f0e8';
-    const card = isDark ? '#1e1e1e' : '#ffffff';
+    const sk = 'sk';
+    const bg = '#f5f0e8';
+    const card = '#ffffff';
     return (
       <div style={{ minHeight: '100vh', display: 'flex' }}>
         {/* Desktop: left panel skeleton */}
@@ -331,31 +328,15 @@ export default function Page() {
   }
 
   if (showRecovery) {
-    return (
-      <PasswordResetScreen
-        isDark={state.darkMode}
-        onDone={() => setShowRecovery(false)}
-      />
-    );
+    return <PasswordResetScreen onDone={() => setShowRecovery(false)} />;
   }
 
   if (!user) {
-    return (
-      <AuthScreen
-        isDark={state.darkMode}
-        onToggle={() => update({ darkMode: !state.darkMode })}
-      />
-    );
+    return <AuthScreen />;
   }
 
   if (!state.userName) {
-    return (
-      <NameScreen
-        isDark={state.darkMode}
-        onToggle={() => update({ darkMode: !state.darkMode })}
-        onSave={name => update({ userName: name })}
-      />
-    );
+    return <NameScreen onSave={name => update({ userName: name })} />;
   }
 
   if (!state.userLevel) {
@@ -363,8 +344,6 @@ export default function Page() {
       <WelcomeScreen
         t={t}
         onSelect={lv => update({ userLevel: lv })}
-        isDark={state.darkMode}
-        onToggle={() => update({ darkMode: !state.darkMode })}
       />
     );
   }
@@ -436,13 +415,13 @@ export default function Page() {
           style={{
             position: 'fixed', bottom: 96, right: 20, zIndex: 100,
             width: 52, height: 52, borderRadius: 18,
-            background: state.darkMode ? '#f1c100' : '#ffcc00',
+            background: '#ffcc00',
             border: 'none', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 4px 20px rgba(255,180,0,0.45)',
           }}
         >
-          <Bot size={24} color={state.darkMode ? '#1a1812' : '#241a00'} strokeWidth={2.2} />
+          <Bot size={24} color="#241a00" strokeWidth={2.2} />
         </button>
       )}
       <AchievementToast achievement={toast} onDone={() => setToast(null)} />

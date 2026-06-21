@@ -195,19 +195,19 @@ function HomeScreenInner({ t, state, setTab, isDesktop, plan, onUpgrade }) {
         {/* Pro upgrade banner — only for free users */}
         {plan !== 'pro' && (
           <button onClick={onUpgrade} className="au" style={{
-            width: '100%', border: 'none', borderRadius: 20, padding: '20px 24px',
-            background: 'linear-gradient(135deg, #FF6FA8 0%, #A78BFA 100%)',
+            width: '100%', border: `1.5px solid #e6b800`, borderRadius: 20, padding: '20px 24px',
+            background: 'linear-gradient(135deg, #fff8d4 0%, #fff3b0 100%)',
             cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 16,
-            boxShadow: '0 8px 28px rgba(255,111,168,0.35)',
+            boxShadow: '0 6px 24px rgba(201,160,0,0.18)',
           }}>
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Crown size={24} color="#fff" strokeWidth={2} />
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: '#ffcc00', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(201,160,0,0.35)' }}>
+              <Crown size={24} color="#241a00" strokeWidth={2} />
             </div>
             <div style={{ flex: 1, textAlign: 'left' }}>
-              <div style={{ fontWeight: 800, fontSize: 16, color: '#fff' }}>Pro эрхтэй болох</div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>Бүх шат, өгүүллэг, хязгааргүй AI · Сарын 12,900₮-оос</div>
+              <div style={{ fontWeight: 800, fontSize: 16, color: '#4a3800' }}>Pro эрхтэй болох</div>
+              <div style={{ fontSize: 13, color: '#745b00', marginTop: 2 }}>Бүх шат, өгүүллэг, хязгааргүй AI · Сарын 12,900₮-оос</div>
             </div>
-            <ChevronRight size={20} color="rgba(255,255,255,0.8)" />
+            <ChevronRight size={20} color="#745b00" />
           </button>
         )}
 
@@ -350,19 +350,19 @@ function HomeScreenInner({ t, state, setTab, isDesktop, plan, onUpgrade }) {
       {/* Pro upgrade banner — only for free users */}
       {plan !== 'pro' && (
         <button onClick={onUpgrade} className="au" style={{
-          width: '100%', border: 'none', borderRadius: 18, padding: '16px 18px',
-          background: 'linear-gradient(135deg, #FF6FA8 0%, #A78BFA 100%)',
+          width: '100%', border: `1.5px solid #e6b800`, borderRadius: 18, padding: '16px 18px',
+          background: 'linear-gradient(135deg, #fff8d4 0%, #fff3b0 100%)',
           cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14,
-          boxShadow: '0 8px 24px rgba(255,111,168,0.35)', marginBottom: 8,
+          boxShadow: '0 4px 18px rgba(201,160,0,0.18)', marginBottom: 8,
         }}>
-          <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <Crown size={22} color="#fff" strokeWidth={2} />
+          <div style={{ width: 42, height: 42, borderRadius: 12, background: '#ffcc00', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 3px 10px rgba(201,160,0,0.35)' }}>
+            <Crown size={22} color="#241a00" strokeWidth={2} />
           </div>
           <div style={{ flex: 1, textAlign: 'left' }}>
-            <div style={{ fontWeight: 800, fontSize: 15, color: '#fff' }}>Pro эрхтэй болох</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>Сарын 12,900₮-оос · Бүх үйлдэлүүд нээлттэй</div>
+            <div style={{ fontWeight: 800, fontSize: 15, color: '#4a3800' }}>Pro эрхтэй болох</div>
+            <div style={{ fontSize: 12, color: '#745b00', marginTop: 2 }}>Сарын 12,900₮-оос · Бүх үйлдэлүүд нээлттэй</div>
           </div>
-          <ChevronRight size={18} color="rgba(255,255,255,0.8)" />
+          <ChevronRight size={18} color="#745b00" />
         </button>
       )}
     </div>

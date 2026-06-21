@@ -34,10 +34,11 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
   const [pwMsg,        setPwMsg]        = useState('');
   const [pwLoading,    setPwLoading]    = useState(false);
   const [isDesktop,    setIsDesktop]    = useState(false);
-  const [deleteOpen,   setDeleteOpen]   = useState(false);
-  const [deletePw,     setDeletePw]     = useState('');
-  const [deleteErr,    setDeleteErr]    = useState('');
+  const [deleteOpen,    setDeleteOpen]    = useState(false);
+  const [deletePw,      setDeletePw]      = useState('');
+  const [deleteErr,     setDeleteErr]     = useState('');
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [signOutConfirm, setSignOutConfirm] = useState(false);
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
@@ -98,162 +99,224 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
 
   // ── Settings sub-view ────────────────────────────────────────────────────
   if (showSettings) {
+    const STAT_KEYS = [
+      { e: '🎯', l: 'Үг таах',     v: `${state.stats.flashcardsCorrect}/${state.stats.flashcardsTotal}` },
+      { e: '🏷️', l: 'Артикль',     v: `${state.stats.genderCorrect}/${state.stats.genderTotal}` },
+      { e: '💖', l: 'Сурсан үг',   v: state.learnedWords.length },
+      { e: '🏆', l: 'Дууссан шат', v: Object.keys(state.completedStages || {}).length },
+    ];
+
+    const sLevelSection = (
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
+        <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Миний түвшин</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
+          {LEVELS.map(l => {
+            const a = state.userLevel === l;
+            return (
+              <button key={l} onClick={() => update({ userLevel: l })}
+                style={{ padding: '12px 0', borderRadius: 14, border: `2px solid ${a ? t.pink : border}`, background: a ? t.pinkBg : t.bgTag, color: a ? t.pink : mid, fontWeight: 800, fontSize: 13, cursor: 'pointer' }}>
+                {l}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+
+    const sStatsSection = (
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
+        <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Статистик</div>
+        {STAT_KEYS.map(s => (
+          <div key={s.l} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: t.bgTag, borderRadius: 12, padding: '10px 14px', marginBottom: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: mid, fontWeight: 600, fontSize: 14 }}>
+              <span>{s.e}</span>{s.l}
+            </div>
+            <div style={{ fontWeight: 800, color: t.text, fontSize: 14 }}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+    );
+
+    const sUserSection = user && (
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: '14px 16px', boxShadow: t.shadow, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ width: 38, height: 38, borderRadius: 19, background: t.pinkBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <span style={{ fontWeight: 800, color: t.pink, fontSize: 16 }}>{initial}</span>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em' }}>НЭВТЭРСЭН ХЭРЭГЛЭГЧ</div>
+          <div style={{ color: t.text, fontSize: 13, fontWeight: 700, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>
+        </div>
+      </div>
+    );
+
+    const sPasswordSection = user && (
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
+        <button onClick={() => { setChangePwOpen(o => !o); setPwErr(''); setPwMsg(''); }}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', width: '100%', padding: 0 }}>
+          <Lock size={16} color={t.pink} />
+          <div style={{ flex: 1, textAlign: 'left', fontWeight: 800, color: t.text, fontSize: 14 }}>Нууц үг солих</div>
+          <span style={{ color: mid, fontSize: 18 }}>{changePwOpen ? '▲' : '▼'}</span>
+        </button>
+        {changePwOpen && (
+          <div style={{ marginTop: 16 }}>
+            <div style={{ marginBottom: 10 }}>
+              <label style={{ color: mid, fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', display: 'block', marginBottom: 5 }}>ШИНЭ НУУЦ ҮГ</label>
+              <div style={{ position: 'relative' }}>
+                <input value={newPw} onChange={e => setNewPw(e.target.value)}
+                  type={showPw ? 'text' : 'password'} placeholder="••••••••"
+                  style={{ width: '100%', boxSizing: 'border-box', background: t.bgTag, border: `1.5px solid ${border}`, borderRadius: 12, padding: '10px 40px 10px 12px', fontSize: 14, color: t.text, outline: 'none' }} />
+                <button onClick={() => setShowPw(s => !s)}
+                  style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
+                  {showPw ? <EyeOff size={15} color={mid} /> : <Eye size={15} color={mid} />}
+                </button>
+              </div>
+              <div style={{ color: mid, fontSize: 11, marginTop: 3 }}>Хамгийн багадаа 6 тэмдэгт</div>
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ color: mid, fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', display: 'block', marginBottom: 5 }}>НУУЦ ҮГ ДАВТАХ</label>
+              <input value={confirmPw} onChange={e => setConfirmPw(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleChangePassword()}
+                type={showPw ? 'text' : 'password'} placeholder="••••••••"
+                style={{ width: '100%', boxSizing: 'border-box', background: t.bgTag, border: `1.5px solid ${border}`, borderRadius: 12, padding: '10px 12px', fontSize: 14, color: t.text, outline: 'none' }} />
+            </div>
+            {pwErr && <div style={{ color: t.wrong, fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{pwErr}</div>}
+            {pwMsg && <div style={{ color: t.correct, fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{pwMsg}</div>}
+            <button onClick={handleChangePassword} disabled={pwLoading}
+              style={{ width: '100%', padding: '12px', borderRadius: 14, border: 'none', cursor: pwLoading ? 'not-allowed' : 'pointer', fontWeight: 800, fontSize: 14, background: t.pinkBtn, color: t.pinkBtnText, opacity: pwLoading ? 0.7 : 1 }}>
+              {pwLoading ? '...' : 'Хадгалах'}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+
+    const sLegalSection = (
+      <div style={{ background: t.bgCard, borderRadius: 20, padding: '6px 8px', boxShadow: t.shadow }}>
+        {[
+          { href: '/terms',   Icon: FileText, label: 'Үйлчилгээний нөхцөл' },
+          { href: '/privacy', Icon: Shield,   label: 'Нууцлалын бодлого' },
+        ].map(({ href, Icon, label }) => (
+          <a key={href} href={href} target="_blank" rel="noopener noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', textDecoration: 'none', borderRadius: 14 }}>
+            <Icon size={16} color={t.textMid} />
+            <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: t.text }}>{label}</span>
+            <span style={{ color: t.textSoft, fontSize: 16 }}>›</span>
+          </a>
+        ))}
+      </div>
+    );
+
+    const sDangerSection = (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <button onClick={handleReset}
+          style={{ width: '100%', padding: '13px', borderRadius: 16, background: t.bgCard, border: '2px solid #FFD0D5', color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
+          <LogOut size={16} /> Бүх өгөгдлийг устгах
+        </button>
+        {onLogout && (
+          signOutConfirm ? (
+            <div style={{ background: t.bgCard, border: `2px solid ${border}`, borderRadius: 16, padding: '14px 16px', boxShadow: t.shadow }}>
+              <div style={{ color: t.text, fontWeight: 700, fontSize: 14, textAlign: 'center', marginBottom: 12 }}>Та гарахдаа итгэлтэй байна уу?</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <button onClick={() => setSignOutConfirm(false)}
+                  style={{ padding: '10px', borderRadius: 12, border: `1.5px solid ${border}`, background: t.bgTag, color: mid, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                  Үгүй
+                </button>
+                <button onClick={onLogout}
+                  style={{ padding: '10px', borderRadius: 12, border: 'none', background: t.pinkBtn, color: t.pinkBtnText, fontWeight: 800, fontSize: 13, cursor: 'pointer' }}>
+                  Тийм, гарах
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button onClick={() => setSignOutConfirm(true)}
+              style={{ width: '100%', padding: '13px', borderRadius: 16, background: t.bgCard, border: `2px solid ${border}`, color: mid, fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
+              <LogOut size={16} /> Гарах (Sign out)
+            </button>
+          )
+        )}
+        {user && (
+          <div style={{ background: '#FFF5F5', border: '2px solid #FEB2B2', borderRadius: 18, overflow: 'hidden', boxShadow: t.shadow }}>
+            <button onClick={() => { setDeleteOpen(o => !o); setDeleteErr(''); setDeletePw(''); }}
+              style={{ width: '100%', padding: '13px', background: 'none', border: 'none', color: '#C53030', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+              <Trash2 size={16} /> Бүртгэл устгах
+            </button>
+            {deleteOpen && (
+              <div style={{ padding: '0 16px 16px' }}>
+                <div style={{ background: '#FFF0F0', border: '1.5px solid #FEB2B2', borderRadius: 14, padding: '14px', marginBottom: 16 }}>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: '#C53030', marginBottom: 8, textAlign: 'center' }}>⚠️ Та итгэлтэй байна уу?</div>
+                  <div style={{ color: '#9B2C2C', fontSize: 13, marginBottom: 10 }}>Бүртгэл устгасан тохиолдолд дараах бүх зүйл үүрд устах болно:</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                    {[
+                      `📚 Сурсан үгс (${state.learnedWords.length} үг)`,
+                      `⭐ XP оноо (${state.xp || 0} XP)`,
+                      `🔥 Streak (${state.streak || 0} өдөр)`,
+                      '🏆 Бүх амжилт, дууссан шатууд',
+                    ].map(item => (
+                      <div key={item} style={{ fontSize: 13, color: '#9B2C2C' }}>{item}</div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 10, fontSize: 12, color: '#C53030', fontWeight: 700, textAlign: 'center' }}>Энэ үйлдлийг буцааж болохгүй.</div>
+                </div>
+                <div style={{ position: 'relative', marginBottom: 10 }}>
+                  <input type="password" value={deletePw} onChange={e => setDeletePw(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleDeleteAccount()}
+                    placeholder="Нууц үгээ оруулна уу"
+                    style={{ width: '100%', boxSizing: 'border-box', background: t.bgCard, border: `1.5px solid ${deleteErr ? '#C53030' : border}`, borderRadius: 12, padding: '10px 14px', fontSize: 14, color: t.text, outline: 'none' }} />
+                </div>
+                {deleteErr && <div style={{ color: '#C53030', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{deleteErr}</div>}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  <button onClick={() => { setDeleteOpen(false); setDeletePw(''); setDeleteErr(''); }}
+                    style={{ padding: '11px', borderRadius: 12, border: `1.5px solid ${border}`, background: t.bgCard, color: t.textMid, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                    Цуцлах
+                  </button>
+                  <button onClick={handleDeleteAccount} disabled={deleteLoading}
+                    style={{ padding: '11px', borderRadius: 12, border: 'none', background: '#C53030', color: '#fff', fontWeight: 800, fontSize: 13, cursor: deleteLoading ? 'not-allowed' : 'pointer', opacity: deleteLoading ? 0.7 : 1 }}>
+                    {deleteLoading ? '...' : 'Устгах'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+
     return (
-      <div className="af">
+      <div className="af" style={{ maxWidth: isDesktop ? 860 : '100%', margin: '0 auto', width: '100%' }}>
+        {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-          <button onClick={() => { setShowSettings(false); setChangePwOpen(false); setPwErr(''); setPwMsg(''); }}
+          <button onClick={() => { setShowSettings(false); setChangePwOpen(false); setPwErr(''); setPwMsg(''); setSignOutConfirm(false); }}
             style={{ background: t.bgTag, border: 'none', borderRadius: 12, padding: '8px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <ArrowLeft size={18} color={t.text} />
           </button>
-          <div className="fd" style={{ fontSize: 22, fontWeight: 800, color: t.text }}>Тохиргоо</div>
+          <div>
+            <div style={{ color: t.textSoft, fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', marginBottom: 2 }}>ТОХИРГОО</div>
+            <div className="fd" style={{ fontSize: 22, fontWeight: 800, color: t.text, lineHeight: 1 }}>Settings</div>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-
-          <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
-            <div style={{ fontWeight: 800, color: t.text, marginBottom: 12 }}>Миний түвшин</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 8 }}>
-              {LEVELS.map(l => {
-                const a = state.userLevel === l;
-                return (
-                  <button key={l} onClick={() => update({ userLevel: l })}
-                    style={{ padding: '12px 0', borderRadius: 14, border: `2px solid ${a ? t.pink : border}`, background: a ? t.pinkBg : t.bgTag, color: a ? t.pink : mid, fontWeight: 800, fontSize: 13, cursor: 'pointer' }}>
-                    {l}
-                  </button>
-                );
-              })}
+        {isDesktop ? (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {sLevelSection}
+              {sStatsSection}
+              {sUserSection}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {sPasswordSection}
+              {sLegalSection}
+              {sDangerSection}
             </div>
           </div>
-
-          {user && (
-            <div style={{ background: t.bgCard, borderRadius: 20, padding: 16, boxShadow: t.shadow }}>
-              <button onClick={() => { setChangePwOpen(o => !o); setPwErr(''); setPwMsg(''); }}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', width: '100%', padding: 0 }}>
-                <Lock size={16} color={t.pink} />
-                <div style={{ flex: 1, textAlign: 'left', fontWeight: 800, color: t.text, fontSize: 14 }}>Нууц үг солих</div>
-                <span style={{ color: mid, fontSize: 18 }}>{changePwOpen ? '▲' : '▼'}</span>
-              </button>
-              {changePwOpen && (
-                <div style={{ marginTop: 16 }}>
-                  <div style={{ marginBottom: 10 }}>
-                    <label style={{ color: mid, fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', display: 'block', marginBottom: 5 }}>ШИНЭ НУУЦ ҮГ</label>
-                    <div style={{ position: 'relative' }}>
-                      <input value={newPw} onChange={e => setNewPw(e.target.value)}
-                        type={showPw ? 'text' : 'password'} placeholder="••••••••"
-                        style={{ width: '100%', boxSizing: 'border-box', background: t.bgTag, border: `1.5px solid ${border}`, borderRadius: 12, padding: '10px 40px 10px 12px', fontSize: 14, color: t.text, outline: 'none' }} />
-                      <button onClick={() => setShowPw(s => !s)}
-                        style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 2 }}>
-                        {showPw ? <EyeOff size={15} color={mid} /> : <Eye size={15} color={mid} />}
-                      </button>
-                    </div>
-                    <div style={{ color: mid, fontSize: 11, marginTop: 3 }}>Хамгийн багадаа 6 тэмдэгт</div>
-                  </div>
-                  <div style={{ marginBottom: 12 }}>
-                    <label style={{ color: mid, fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', display: 'block', marginBottom: 5 }}>НУУЦ ҮГ ДАВТАХ</label>
-                    <input value={confirmPw} onChange={e => setConfirmPw(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleChangePassword()}
-                      type={showPw ? 'text' : 'password'} placeholder="••••••••"
-                      style={{ width: '100%', boxSizing: 'border-box', background: t.bgTag, border: `1.5px solid ${border}`, borderRadius: 12, padding: '10px 12px', fontSize: 14, color: t.text, outline: 'none' }} />
-                  </div>
-                  {pwErr && <div style={{ color: '#FF6B6B', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{pwErr}</div>}
-                  {pwMsg && <div style={{ color: '#34D399', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{pwMsg}</div>}
-                  <button onClick={handleChangePassword} disabled={pwLoading}
-                    style={{ width: '100%', padding: '12px', borderRadius: 14, border: 'none', cursor: pwLoading ? 'not-allowed' : 'pointer', fontWeight: 800, fontSize: 14, background: t.pinkBtn, color: t.pinkBtnText, opacity: pwLoading ? 0.7 : 1 }}>
-                    {pwLoading ? '...' : 'Хадгалах'}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Legal */}
-          <div style={{ background: t.bgCard, borderRadius: 20, padding: '6px 8px', boxShadow: t.shadow }}>
-            {[
-              { href: '/terms',   Icon: FileText, label: 'Үйлчилгээний нөхцөл' },
-              { href: '/privacy', Icon: Shield,   label: 'Нууцлалын бодлого' },
-            ].map(({ href, Icon, label }) => (
-              <a key={href} href={href} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', textDecoration: 'none', borderRadius: 14 }}>
-                <Icon size={16} color={t.textMid} />
-                <span style={{ flex: 1, fontWeight: 700, fontSize: 14, color: t.text }}>{label}</span>
-                <span style={{ color: t.textSoft, fontSize: 16 }}>›</span>
-              </a>
-            ))}
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {sLevelSection}
+            {sUserSection}
+            {sPasswordSection}
+            {sLegalSection}
+            {sDangerSection}
           </div>
-
-          <button onClick={handleReset}
-            style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${t.darkMode ? '#4A1F25' : '#FFD0D5'}`, color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
-            <LogOut size={16} /> Бүх өгөгдлийг устгах
-          </button>
-
-          {onLogout && (
-            <button onClick={() => { if (confirm('Гарах уу?')) onLogout(); }}
-              style={{ width: '100%', padding: '14px', borderRadius: 18, background: t.bgCard, border: `2px solid ${border}`, color: mid, fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
-              <LogOut size={16} /> Гарах (Sign out)
-            </button>
-          )}
-
-          {user && (
-            <div style={{ background: t.darkMode ? '#1A0A0A' : '#FFF5F5', border: `2px solid ${t.darkMode ? '#5A1A1A' : '#FEB2B2'}`, borderRadius: 18, overflow: 'hidden', boxShadow: t.shadow }}>
-              <button onClick={() => { setDeleteOpen(o => !o); setDeleteErr(''); setDeletePw(''); }}
-                style={{ width: '100%', padding: '14px', background: 'none', border: 'none', color: '#C53030', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <Trash2 size={16} /> Бүртгэл устгах
-              </button>
-
-              {deleteOpen && (
-                <div style={{ padding: '0 16px 16px' }}>
-                  {/* Warning block */}
-                  <div style={{ background: t.darkMode ? '#2A0A0A' : '#FFF0F0', border: `1.5px solid #FEB2B2`, borderRadius: 14, padding: '14px', marginBottom: 16 }}>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: '#C53030', marginBottom: 8, textAlign: 'center' }}>
-                      ⚠️ Та итгэлтэй байна уу?
-                    </div>
-                    <div style={{ color: t.darkMode ? '#ffaaaa' : '#9B2C2C', fontSize: 13, marginBottom: 10 }}>
-                      Бүртгэл устгасан тохиолдолд дараах бүх зүйл үүрд устах болно:
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                      {[
-                        `📚 Сурсан үгс (${state.learnedWords.length} үг)`,
-                        `⭐ XP оноо (${state.xp || 0} XP)`,
-                        `🔥 Streak (${state.streak || 0} өдөр)`,
-                        '🏆 Бүх амжилт, дууссан шатууд',
-                      ].map(item => (
-                        <div key={item} style={{ fontSize: 13, color: t.darkMode ? '#ffaaaa' : '#9B2C2C', display: 'flex', alignItems: 'center', gap: 6 }}>
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                    <div style={{ marginTop: 10, fontSize: 12, color: t.darkMode ? '#cc8888' : '#C53030', fontWeight: 700, textAlign: 'center' }}>
-                      Энэ үйлдлийг буцааж болохгүй.
-                    </div>
-                  </div>
-                  <div style={{ position: 'relative', marginBottom: 10 }}>
-                    <input
-                      type="password"
-                      value={deletePw}
-                      onChange={e => setDeletePw(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleDeleteAccount()}
-                      placeholder="Нууц үгээ оруулна уу"
-                      style={{ width: '100%', boxSizing: 'border-box', background: t.bgCard, border: `1.5px solid ${deleteErr ? '#C53030' : border}`, borderRadius: 12, padding: '10px 14px', fontSize: 14, color: t.text, outline: 'none' }}
-                    />
-                  </div>
-                  {deleteErr && (
-                    <div style={{ color: '#C53030', fontSize: 12, fontWeight: 600, marginBottom: 10, textAlign: 'center' }}>{deleteErr}</div>
-                  )}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                    <button onClick={() => { setDeleteOpen(false); setDeletePw(''); setDeleteErr(''); }}
-                      style={{ padding: '11px', borderRadius: 12, border: `1.5px solid ${border}`, background: t.bgCard, color: t.textMid, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
-                      Цуцлах
-                    </button>
-                    <button onClick={handleDeleteAccount} disabled={deleteLoading}
-                      style={{ padding: '11px', borderRadius: 12, border: 'none', background: '#C53030', color: '#fff', fontWeight: 800, fontSize: 13, cursor: deleteLoading ? 'not-allowed' : 'pointer', opacity: deleteLoading ? 0.7 : 1 }}>
-                      {deleteLoading ? '...' : 'Устгах'}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+        )}
       </div>
     );
   }
@@ -312,7 +375,7 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
                     <span style={{ color: t.textSoft, fontSize: 12 }}>{formatJoinDate(user.created_at)}</span>
                   )}
                   {state.userLevel && (
-                    <span style={{ background: t.darkMode ? '#1a2a3a' : '#dceeff', color: t.darkMode ? '#9ccaff' : '#0062a1', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>
+                    <span style={{ background: '#dceeff', color: '#0062a1', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>
                       {state.userLevel} түвшин
                     </span>
                   )}
@@ -321,7 +384,7 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
               <div style={{ textAlign: 'right', flexShrink: 0 }}>
                 <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.12em', marginBottom: 4 }}>CEFR</div>
                 {state.userLevel && (
-                  <span style={{ background: t.darkMode ? '#1a2a3a' : '#dceeff', color: t.darkMode ? '#9ccaff' : '#0062a1', fontSize: 13, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>
+                  <span style={{ background: '#dceeff', color: '#0062a1', fontSize: 13, fontWeight: 700, padding: '4px 12px', borderRadius: 20 }}>
                     {state.userLevel}
                   </span>
                 )}
@@ -457,7 +520,7 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
                 <span style={{ color: t.textSoft, fontSize: 12 }}>{formatJoinDate(user.created_at)}</span>
               )}
               {state.userLevel && (
-                <span style={{ background: t.darkMode ? '#1a2a3a' : '#dceeff', color: t.darkMode ? '#9ccaff' : '#0062a1', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>
+                <span style={{ background: '#dceeff', color: '#0062a1', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 20 }}>
                   {state.userLevel} түвшин
                 </span>
               )}
