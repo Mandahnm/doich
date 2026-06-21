@@ -17,8 +17,18 @@ const QUICK_TOOLS = [
 ];
 
 function getWordOfTheDay() {
-  const dayIndex = Math.floor(Date.now() / 86400000);
-  return VOCAB[dayIndex % VOCAB.length];
+  const day = Math.floor(Date.now() / 86400000);
+
+  // How often each level appears: A1-B2 equal, C1 rarer, C2 rarest
+  const WEIGHT = { A1: 15, A2: 15, B1: 15, B2: 15, C1: 5, C2: 3 };
+  const levelPool = Object.entries(WEIGHT).flatMap(([l, w]) => Array(w).fill(l));
+
+  const chosenLevel = levelPool[day % levelPool.length];
+  const words = VOCAB.filter(w => w.level === chosenLevel && w.de && w.mn);
+  if (!words.length) return VOCAB[day % VOCAB.length];
+
+  // Cycle through words within the chosen level independently
+  return words[day % words.length];
 }
 
 export default function HomeScreen({ t, state, setTab, isDesktop, plan, onUpgrade }) {
