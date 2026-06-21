@@ -403,12 +403,12 @@ export default function Page() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: t.bgMain, color: t.text, paddingBottom: 'calc(86px + env(safe-area-inset-bottom))' }}>
+    <div style={{ minHeight: '100vh', background: t.bgMain, color: t.text, paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'calc(68px + env(safe-area-inset-bottom))' }}>
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '24px 18px 0' }}>
         {screenContent}
       </div>
       <BottomNav t={t} tab={tab} setTab={setTab} />
-      {tab !== 'chat' && (
+      {tab === 'home' && (
         <button
           onClick={() => setTab('chat')}
           aria-label="AI багш нээх"
