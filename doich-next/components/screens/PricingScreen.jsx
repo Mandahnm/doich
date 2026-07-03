@@ -6,7 +6,38 @@ import { PRICING, PRO_FEATURES, FREE_AI_TUTOR_DAILY, FREE_STAGES_PER_LEVEL } fro
 
 export default function PricingScreen({ t, onBack }) {
   const [selected, setSelected] = useState('annual');
+  const [paying,   setPaying]   = useState(false);
+  const [payError, setPayError] = useState('');
   const selectedPlan = PRICING.find(p => p.id === selected);
+
+  const startPayment = async () => {
+    setPaying(true);
+    setPayError('');
+    try {
+      const { supabase } = await import('@/lib/supabase');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        setPayError('Төлбөр төлөхийн тулд нэвтэрнэ үү.');
+        setPaying(false);
+        return;
+      }
+      const r = await fetch('/api/payments/bonum/create', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+        body:    JSON.stringify({ planId: selected }),
+      });
+      const d = await r.json();
+      if (!r.ok || !d.followUpLink) {
+        setPayError(d.error || 'Төлбөр эхлүүлэхэд алдаа гарлаа. Дахин оролдоно уу.');
+        setPaying(false);
+        return;
+      }
+      window.location.href = d.followUpLink; // → Bonum checkout (QPay / card)
+    } catch {
+      setPayError('Сүлжээний алдаа. Дахин оролдоно уу.');
+      setPaying(false);
+    }
+  };
 
   const FREE_PERKS = [
     `A1–C1 бүх үг (үгийн сан бүтэн)`,
@@ -127,20 +158,28 @@ export default function PricingScreen({ t, onBack }) {
 
       {/* CTA Button */}
       <div style={{ marginBottom: 16 }}>
-        {/* TODO: Bonum HMAC-SHA256 webhook integration — wire up real payment here */}
         <button
-          disabled
+          onClick={startPayment}
+          disabled={paying}
           style={{
             width: '100%', padding: '18px', borderRadius: 18,
             fontWeight: 800, fontSize: 16, border: 'none',
-            background: t.bgTag, color: t.textMid,
-            cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            background: paying ? t.bgTag : 'linear-gradient(135deg, #FF6FA8, #A78BFA)',
+            color: paying ? t.textMid : '#fff',
+            cursor: paying ? 'wait' : 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            boxShadow: paying ? 'none' : '0 8px 28px rgba(255,111,168,0.35)',
           }}>
           <Crown size={18} />
-          Боловсруулж байна — удахгүй нэмэгдэнэ
+          {paying ? 'Түр хүлээнэ үү…' : `${selectedPlan.price.toLocaleString()}₮ төлөх`}
         </button>
+        {payError && (
+          <div style={{ textAlign: 'center', marginTop: 10, fontSize: 12, color: '#EF4444', fontWeight: 600 }}>
+            {payError}
+          </div>
+        )}
         <div style={{ textAlign: 'center', marginTop: 8, fontSize: 12, color: t.textSoft }}>
-          QPay / Bonum төлбөр удахгүй нэмэгдэнэ
+          QPay, карт болон бусад аргаар төлөх боломжтой
         </div>
       </div>
 

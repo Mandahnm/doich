@@ -1,1 +1,8 @@
 node_modules/
+
+# Secrets / credentials — never commit
+.env
+.env*.local
+*.postman_collection.json
+Gmail - BONUM*.pdf
+**/bonum-secrets*

@@ -158,12 +158,31 @@ export default function Page() {
         .single();
       if (data?.plan === 'pro') {
         const active = !data.pro_expires_at || new Date(data.pro_expires_at) > new Date();
-        if (active) setPlan('pro');
+        if (active) { setPlan('pro'); return true; }
       }
     } catch {
       // Table may not exist yet — remain on free
     }
+    return false;
   };
+
+  // ── Post-payment return: Bonum redirects to /?pay=return&tx=… ────────────
+  useEffect(() => {
+    if (!user) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('pay') !== 'return') return;
+    window.history.replaceState({}, '', window.location.pathname); // avoid re-trigger on refresh
+    setTab('pricing');
+    setToast('Төлбөрийг шалгаж байна…');
+    let tries = 0;
+    const iv = setInterval(async () => {
+      tries++;
+      const isPro = await loadPlan(user.id);
+      if (isPro) { setToast('Pro эрх амжилттай идэвхжлээ 👑'); clearInterval(iv); }
+      else if (tries >= 8) { setToast('Төлбөр хараахан баталгаажаагүй байна. Түр хүлээгээд дахин шалгана уу.'); clearInterval(iv); }
+    }, 2500);
+    return () => clearInterval(iv);
+  }, [user]);
 
   // ── Persist to Supabase (debounced 1.5s) ────────────────────────────────
   useEffect(() => {
