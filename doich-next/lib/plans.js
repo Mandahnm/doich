@@ -9,8 +9,7 @@ export const PRO_AI_TUTOR_DAILY     = 500;
 export const PRO_ONLY_GAMES = new Set(['speaking']);
 
 export const PRICING = [
-  // TEMP TEST PRICE — revert monthly to 12900 after Bonum end-to-end test
-  { id: 'monthly',  labelMn: 'Сарын',   price: 10,    perMonth: 10,    months: 1,  saving: 0  },
+  { id: 'monthly',  labelMn: 'Сарын',   price: 12900, perMonth: 12900, months: 1,  saving: 0  },
   { id: '3month',   labelMn: '3 Сарын', price: 32900, perMonth: 10967, months: 3,  saving: 15 },
   { id: 'annual',   labelMn: 'Жилийн',  price: 99900, perMonth: 8325,  months: 12, saving: 35 },
 ];
