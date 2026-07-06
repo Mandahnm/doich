@@ -21,6 +21,21 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Тариф олдсонгүй' }, { status: 400 });
     }
 
+    // Anti-spam: max 3 open invoices per user per 15 min (Bonum invoices live 15 min).
+    const windowStart = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const { count: openCount } = await supabase
+      .from('payments')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('status', 'pending')
+      .gte('created_at', windowStart);
+    if ((openCount ?? 0) >= 3) {
+      return NextResponse.json(
+        { error: 'Хэт олон төлбөрийн хүсэлт. Түр хүлээгээд дахин оролдоно уу.' },
+        { status: 429 }
+      );
+    }
+
     // Unique per-invoice id (≤80 chars) that ties the webhook back to this user + plan.
     const transactionId = `doich-${crypto.randomUUID()}`;
 
