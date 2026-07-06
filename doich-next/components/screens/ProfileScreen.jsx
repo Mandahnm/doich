@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Settings, ArrowLeft, LogOut, Lock, Eye, EyeOff, Trash2, Flame, BookOpen, Trophy, Calendar, FileText, Shield } from 'lucide-react';
+import { Settings, ArrowLeft, LogOut, Lock, Eye, EyeOff, Trash2, Flame, BookOpen, Trophy, Calendar, FileText, Shield, Crown } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { LEVELS } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
@@ -16,15 +16,27 @@ function formatJoinDate(isoStr) {
   return `${d.getFullYear()} оны ${MN_MONTHS[d.getMonth()]} сард нэгдсэн`;
 }
 
+function fmtDate(isoStr) {
+  if (!isoStr) return '—';
+  const d = new Date(isoStr);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function daysLeft(isoStr) {
+  if (!isoStr) return null;
+  const ms = new Date(isoStr) - new Date();
+  return ms > 0 ? Math.ceil(ms / 86400000) : 0;
+}
+
 function pct(correct, total) {
   return total > 0 ? Math.round(correct / total * 100) : 0;
 }
 
-export default function ProfileScreen({ t, state, update, user, onLogout, setTab }) {
-  return <WithSkeleton ms={250} skeleton={<ProfileSkeleton t={t} />}><ProfileScreenInner t={t} state={state} update={update} user={user} onLogout={onLogout} setTab={setTab} /></WithSkeleton>;
+export default function ProfileScreen({ t, state, update, user, onLogout, setTab, plan, proInfo }) {
+  return <WithSkeleton ms={250} skeleton={<ProfileSkeleton t={t} />}><ProfileScreenInner t={t} state={state} update={update} user={user} onLogout={onLogout} setTab={setTab} plan={plan} proInfo={proInfo} /></WithSkeleton>;
 }
 
-function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
+function ProfileScreenInner({ t, state, update, user, onLogout, setTab, plan, proInfo }) {
   const [showSettings, setShowSettings] = useState(false);
   const [changePwOpen, setChangePwOpen] = useState(false);
   const [newPw,        setNewPw]        = useState('');
@@ -338,6 +350,42 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
 
   const shown = ACHIEVEMENTS.slice(0, 6);
 
+  // ── Pro status ──────────────────────────────────────────────────────────────
+  const isProUser = plan === 'pro';
+  const dl = daysLeft(proInfo?.expiresAt);
+
+  const proBadge = isProUser ? (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: 'linear-gradient(135deg,#FF6FA8,#A78BFA)', color: '#fff', fontSize: 12, fontWeight: 800, padding: '3px 10px', borderRadius: 20 }}>
+      <Crown size={12} /> Pro
+    </span>
+  ) : null;
+
+  const proCard = isProUser ? (
+    <div style={{ borderRadius: 20, padding: '18px 20px', marginBottom: 14, background: 'linear-gradient(135deg, rgba(255,111,168,0.12), rgba(167,139,250,0.12))', border: '1.5px solid rgba(167,139,250,0.4)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg,#FF6FA8,#A78BFA)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Crown size={22} color="#fff" />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 800, fontSize: 16, color: t.text }}>Doich Pro</div>
+          <div style={{ color: '#A78BFA', fontSize: 12, fontWeight: 700 }}>
+            Идэвхтэй{dl != null ? ` · ${dl} өдөр үлдсэн` : ''}
+          </div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ flex: 1, background: t.bgCard, borderRadius: 12, padding: '10px 12px' }}>
+          <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', marginBottom: 4 }}>ХУДАЛДАН АВСАН</div>
+          <div style={{ color: t.text, fontSize: 14, fontWeight: 800 }}>{fmtDate(proInfo?.purchasedAt)}</div>
+        </div>
+        <div style={{ flex: 1, background: t.bgCard, borderRadius: 12, padding: '10px 12px' }}>
+          <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.1em', marginBottom: 4 }}>ДУУСАХ</div>
+          <div style={{ color: t.text, fontSize: 14, fontWeight: 800 }}>{fmtDate(proInfo?.expiresAt)}</div>
+        </div>
+      </div>
+    </div>
+  ) : null;
+
   // ── DESKTOP layout ────────────────────────────────────────────────────────
   if (isDesktop) {
     return (
@@ -358,6 +406,7 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
           {/* Left: user card + level card */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
+            {proCard}
             {/* User card */}
             <div style={{ background: t.bgCard, borderRadius: 20, padding: '20px 22px', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', gap: 16 }}>
               <div style={{ width: 68, height: 68, borderRadius: 34, background: t.pinkBtn, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 16px rgba(255,204,0,0.3)' }}>
@@ -371,6 +420,7 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
                   <div style={{ color: mid, fontSize: 13, marginBottom: 6 }}>{user?.email}</div>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                  {proBadge}
                   {user?.created_at && (
                     <span style={{ color: t.textSoft, fontSize: 12 }}>{formatJoinDate(user.created_at)}</span>
                   )}
@@ -516,6 +566,7 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
               <div style={{ color: mid, fontSize: 13, marginBottom: 8 }}>{user?.email}</div>
             )}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, flexWrap: 'wrap' }}>
+              {proBadge}
               {user?.created_at && (
                 <span style={{ color: t.textSoft, fontSize: 12 }}>{formatJoinDate(user.created_at)}</span>
               )}
@@ -528,6 +579,8 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab }) {
           </div>
         </div>
       </div>
+
+      {proCard}
 
       {/* ── Current level card ────────────────────────────────────────────── */}
       <div style={{ background: t.bgCard, borderRadius: 20, padding: '16px 18px', marginBottom: 14, border: `1px solid ${border}` }}>

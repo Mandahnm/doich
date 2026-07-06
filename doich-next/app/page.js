@@ -20,6 +20,7 @@ import DailyPracticeScreen   from '@/components/screens/DailyPracticeScreen';
 import AchievementsScreen    from '@/components/screens/AchievementsScreen';
 import ReadingScreen         from '@/components/screens/ReadingScreen';
 import AchievementToast      from '@/components/shared/AchievementToast';
+import PaymentResultModal    from '@/components/shared/PaymentResultModal';
 import BottomNav             from '@/components/shared/BottomNav';
 import DesktopSidebar        from '@/components/shared/DesktopSidebar';
 import PricingScreen         from '@/components/screens/PricingScreen';
@@ -47,6 +48,8 @@ export default function Page() {
   const [loaded,      setLoaded]      = useState(false);
   const [user,        setUser]        = useState(null);
   const [plan,        setPlan]        = useState('free');
+  const [proInfo,     setProInfo]     = useState(null); // { expiresAt, purchasedAt }
+  const [payFlow,     setPayFlow]     = useState(null); // 'checking' | 'success' | 'pending'
   const [showRecovery, setShowRecovery] = useState(false);
   const [toast,       setToast]       = useState(null);
   const [isDesktop,   setIsDesktop]   = useState(false);
@@ -158,7 +161,24 @@ export default function Page() {
         .single();
       if (data?.plan === 'pro') {
         const active = !data.pro_expires_at || new Date(data.pro_expires_at) > new Date();
-        if (active) { setPlan('pro'); return true; }
+        if (active) {
+          setPlan('pro');
+          // Purchase date = most recent paid payment
+          let purchasedAt = null;
+          try {
+            const { data: pay } = await supabase
+              .from('payments')
+              .select('paid_at')
+              .eq('user_id', userId)
+              .eq('status', 'paid')
+              .order('paid_at', { ascending: false })
+              .limit(1)
+              .single();
+            purchasedAt = pay?.paid_at || null;
+          } catch { /* payments row may not exist for legacy pro grants */ }
+          setProInfo({ expiresAt: data.pro_expires_at || null, purchasedAt });
+          return true;
+        }
       }
     } catch {
       // Table may not exist yet — remain on free
@@ -172,14 +192,14 @@ export default function Page() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('pay') !== 'return') return;
     window.history.replaceState({}, '', window.location.pathname); // avoid re-trigger on refresh
-    setTab('pricing');
-    setToast('Төлбөрийг шалгаж байна…');
+    setTab('home');
+    setPayFlow('checking');
     let tries = 0;
     const iv = setInterval(async () => {
       tries++;
       const isPro = await loadPlan(user.id);
-      if (isPro) { setToast('Pro эрх амжилттай идэвхжлээ 👑'); clearInterval(iv); }
-      else if (tries >= 8) { setToast('Төлбөр хараахан баталгаажаагүй байна. Түр хүлээгээд дахин шалгана уу.'); clearInterval(iv); }
+      if (isPro) { setPayFlow('success'); clearInterval(iv); }
+      else if (tries >= 8) { setPayFlow('pending'); clearInterval(iv); }
     }, 2500);
     return () => clearInterval(iv);
   }, [user]);
@@ -386,7 +406,7 @@ export default function Page() {
       {tab === 'vocab'    && <VocabScreen    t={t} state={state} toggleLearned={toggleLearned} />}
       {tab === 'profile' && (
         <ProfileScreen t={t} state={state} update={update}
-          user={user} setTab={setTab}
+          user={user} setTab={setTab} plan={plan} proInfo={proInfo}
           onLogout={() => supabase.auth.signOut()} />
       )}
       {tab === 'daily'    && (
@@ -417,6 +437,7 @@ export default function Page() {
           {screenContent}
         </main>
         <AchievementToast achievement={toast} onDone={() => setToast(null)} />
+        <PaymentResultModal payFlow={payFlow} proInfo={proInfo} t={t} onClose={() => setPayFlow(null)} />
       </div>
     );
   }
@@ -444,6 +465,7 @@ export default function Page() {
         </button>
       )}
       <AchievementToast achievement={toast} onDone={() => setToast(null)} />
+      <PaymentResultModal payFlow={payFlow} proInfo={proInfo} t={t} onClose={() => setPayFlow(null)} />
     </div>
   );
 }

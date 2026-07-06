@@ -52,17 +52,26 @@ function HomeScreenInner({ t, state, setTab, isDesktop, plan, onUpgrade }) {
   const wod  = getWordOfTheDay();
   const wodM = CEFR_META[wod.level];
 
+  const proChip = plan === 'pro' ? (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: 'linear-gradient(135deg,#FF6FA8,#A78BFA)', color: '#fff', fontSize: 11, fontWeight: 800, padding: '4px 11px', borderRadius: 20, flexShrink: 0, whiteSpace: 'nowrap' }}>
+      <Crown size={12} /> Pro
+    </span>
+  ) : null;
+
   // ── DESKTOP ───────────────────────────────────────────────────────────────
   if (isDesktop) {
     return (
       <div style={{ padding: '12px 8px', maxWidth: 1060, margin: '0 auto' }}>
 
         {/* Greeting */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ fontSize: 22, fontWeight: 800, color: t.text }}>
-            {greetWord}{state.userName ? `, ${state.userName}!` : '!'}
+        <div style={{ marginBottom: 28, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+          <div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: t.text }}>
+              {greetWord}{state.userName ? `, ${state.userName}!` : '!'}
+            </div>
+            <div style={{ color: t.textSoft, fontSize: 14, marginTop: 3 }}>Сурцгаая!</div>
           </div>
-          <div style={{ color: t.textSoft, fontSize: 14, marginTop: 3 }}>Сурцгаая!</div>
+          {proChip}
         </div>
 
         {/* Row 1: Streak card + mini stats */}
@@ -229,11 +238,14 @@ function HomeScreenInner({ t, state, setTab, isDesktop, plan, onUpgrade }) {
   return (
     <div className="af">
       {/* Greeting */}
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ color: t.textSoft, fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
-          {greetWord}{state.userName ? `, ${state.userName}` : ''}
+      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+        <div>
+          <div style={{ color: t.textSoft, fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
+            {greetWord}{state.userName ? `, ${state.userName}` : ''}
+          </div>
+          <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text, lineHeight: 1.1 }}>Сурцгаая!</div>
         </div>
-        <div className="fd" style={{ fontSize: 28, fontWeight: 800, color: t.text, lineHeight: 1.1 }}>Сурцгаая!</div>
+        {proChip}
       </div>
 
       {/* Streak + XP card */}
