@@ -117,7 +117,6 @@ export default function NameScreen({ isDark, onToggle, onSave }) {
 
   return (
     <div style={{ minHeight: '100vh', background: bgGrad, display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
-      {toggleBtn}
       <div style={{ flex: '0 0 38vh', minHeight: 140, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 52, fontWeight: 900, color: goldTitle, letterSpacing: '-2px', lineHeight: 1 }}>Дойч</div>
