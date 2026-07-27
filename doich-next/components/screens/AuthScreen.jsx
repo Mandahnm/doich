@@ -14,6 +14,7 @@ export default function AuthScreen({ isDark, onToggle }) {
   const [remember,  setRemember]  = useState(false);
   const [ageOk,     setAgeOk]     = useState(false);
   const [error,     setError]     = useState('');
+  const [emailTaken, setEmailTaken] = useState(false);
   const [msg,       setMsg]       = useState('');
   const [loading,   setLoading]   = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -68,11 +69,11 @@ export default function AuthScreen({ isDark, onToggle }) {
   };
 
   const switchMode = m => {
-    setMode(m); setError(''); setMsg(''); setPassword(''); setConfirmPw(''); setAgeOk(false);
+    setMode(m); setError(''); setMsg(''); setEmailTaken(false); setPassword(''); setConfirmPw(''); setAgeOk(false);
   };
 
   const submit = async () => {
-    setError(''); setMsg('');
+    setError(''); setMsg(''); setEmailTaken(false);
     if (mode === 'reset') {
       if (!email.trim()) { setError('Имэйл хаягаа оруулна уу'); return; }
       setLoading(true);
@@ -90,7 +91,7 @@ export default function AuthScreen({ isDark, onToggle }) {
       const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password });
       setLoading(false);
       if (e) { setError(translateError(e.message)); return; }
-      if (data.user?.identities?.length === 0) { setError('Энэ имэйл хаяг бүртгэлтэй байна. Нэвтрэх хэсэгт очно уу.'); return; }
+      if (data.user?.identities?.length === 0) { setError('Энэ имэйл хаяг өмнө нь бүртгүүлсэн байна.'); setEmailTaken(true); return; }
       if (data.session) setMsg('Амжилттай бүртгүүллээ! Нэвтэрч байна...');
       else              setMsg('Имэйл хаягт баталгаажуулах холбоос илгээгдлээ. Имэйлээ шалгаад холбоос дээр дарна уу.');
     } else {
@@ -191,6 +192,13 @@ export default function AuthScreen({ isDark, onToggle }) {
           )}
           {mode === 'signup' && <div style={{ marginBottom: 14 }} />}
           {error && <Feedback color="#ba1a1a" text={error} />}
+          {emailTaken && (
+            <div style={{ textAlign: 'center', marginTop: -8, marginBottom: 14 }}>
+              <button onClick={() => switchMode('signin')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: linkColor, fontWeight: 700, fontSize: 13, textDecoration: 'underline', padding: 0 }}>
+                Нэвтрэх хэсэг рүү очих →
+              </button>
+            </div>
+          )}
           {msg   && <Feedback color="#1a6e3c" text={msg} />}
           <div className="doich-anim" style={{ animationDelay: '0.18s' }}>
             {mode === 'signup' && signupFooter}
@@ -267,6 +275,13 @@ export default function AuthScreen({ isDark, onToggle }) {
           )}
           {mode === 'signup' && <div style={{ marginBottom: 4 }} />}
           {error && <Feedback color="#ba1a1a" text={error} />}
+          {emailTaken && (
+            <div style={{ textAlign: 'center', marginTop: -8, marginBottom: 14 }}>
+              <button onClick={() => switchMode('signin')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: linkColor, fontWeight: 700, fontSize: 13, textDecoration: 'underline', padding: 0 }}>
+                Нэвтрэх хэсэг рүү очих →
+              </button>
+            </div>
+          )}
           {msg   && <Feedback color="#1a6e3c" text={msg} />}
           <div className="doich-anim" style={{ animationDelay: '0.24s' }}>
             {mode === 'signup' && signupFooter}
