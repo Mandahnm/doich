@@ -18,6 +18,7 @@ export default function AuthScreen({ isDark, onToggle }) {
   const [msg,       setMsg]       = useState('');
   const [loading,   setLoading]   = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [showResend, setShowResend] = useState(false);
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth >= 1024);
@@ -29,10 +30,15 @@ export default function AuthScreen({ isDark, onToggle }) {
   // Detect expired / invalid confirmation link from Supabase URL hash
   useEffect(() => {
     const hash = window.location.hash;
-    if (hash.includes('error_code=otp_expired') || (hash.includes('error=access_denied') && hash.includes('error_description'))) {
+    if (hash.includes('error=')) {
       setMsg('');
-      setError('Имэйл баталгаажуулах холбоос хугацаа дууссан эсвэл хүчингүй байна. Шинэ холбоос авахын тулд дахин бүртгүүлнэ үү.');
+      setError(
+        hash.includes('error_code=otp_expired')
+          ? 'Имэйл баталгаажуулах холбоос хугацаа дууссан байна. Имэйл хаягаа оруулаад доорх товч дээр дараад шинэ холбоос авна уу.'
+          : 'Баталгаажуулах холбоост алдаа гарлаа. Имэйл хаягаа оруулаад доорх товч дээр дараад шинэ холбоос авна уу.'
+      );
       setMode('signup');
+      setShowResend(true);
       window.history.replaceState(null, '', window.location.pathname);
     }
   }, []);
@@ -69,11 +75,22 @@ export default function AuthScreen({ isDark, onToggle }) {
   };
 
   const switchMode = m => {
-    setMode(m); setError(''); setMsg(''); setEmailTaken(false); setPassword(''); setConfirmPw(''); setAgeOk(false);
+    setMode(m); setError(''); setMsg(''); setEmailTaken(false); setPassword(''); setConfirmPw(''); setAgeOk(false); setShowResend(false);
+  };
+
+  const resendConfirmation = async () => {
+    if (!email.trim()) { setError('Имэйл хаягаа оруулна уу'); return; }
+    setLoading(true);
+    const { error: e } = await supabase.auth.resend({ type: 'signup', email: email.trim(), options: { emailRedirectTo: window.location.origin } });
+    setLoading(false);
+    if (e) { setError(translateError(e.message)); return; }
+    setError('');
+    setShowResend(false);
+    setMsg('Баталгаажуулах холбоос дахин илгээгдлээ. Имэйлээ шалгаад холбоос дээр дарна уу.');
   };
 
   const submit = async () => {
-    setError(''); setMsg(''); setEmailTaken(false);
+    setError(''); setMsg(''); setEmailTaken(false); setShowResend(false);
     if (mode === 'reset') {
       if (!email.trim()) { setError('Имэйл хаягаа оруулна уу'); return; }
       setLoading(true);
@@ -88,7 +105,7 @@ export default function AuthScreen({ isDark, onToggle }) {
     if (mode === 'signup' && password !== confirmPw) { setError('Нууц үг таарахгүй байна'); return; }
     setLoading(true);
     if (mode === 'signup') {
-      const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password });
+      const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: window.location.origin } });
       setLoading(false);
       if (e) { setError(translateError(e.message)); return; }
       if (data.user?.identities?.length === 0) { setError('Энэ имэйл хаяг өмнө нь бүртгүүлсэн байна.'); setEmailTaken(true); return; }
@@ -97,7 +114,14 @@ export default function AuthScreen({ isDark, onToggle }) {
     } else {
       const { error: e } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       setLoading(false);
-      if (e) setError('Имэйл эсвэл нууц үг буруу байна');
+      if (e) {
+        if (e.message?.toLowerCase().includes('email not confirmed')) {
+          setError('Имэйл хаягаа баталгаажуулаагүй байна. Доорх товч дээр дараад баталгаажуулах холбоосыг дахин авна уу.');
+          setShowResend(true);
+        } else {
+          setError('Имэйл эсвэл нууц үг буруу байна');
+        }
+      }
     }
   };
 
@@ -199,6 +223,7 @@ export default function AuthScreen({ isDark, onToggle }) {
               </button>
             </div>
           )}
+          {showResend && <ResendLink onClick={resendConfirmation} loading={loading} linkColor={linkColor} />}
           {msg   && <Feedback color="#1a6e3c" text={msg} />}
           <div className="doich-anim" style={{ animationDelay: '0.18s' }}>
             {mode === 'signup' && signupFooter}
@@ -282,6 +307,7 @@ export default function AuthScreen({ isDark, onToggle }) {
               </button>
             </div>
           )}
+          {showResend && <ResendLink onClick={resendConfirmation} loading={loading} linkColor={linkColor} />}
           {msg   && <Feedback color="#1a6e3c" text={msg} />}
           <div className="doich-anim" style={{ animationDelay: '0.24s' }}>
             {mode === 'signup' && signupFooter}
@@ -427,6 +453,16 @@ function GoldButton({ loading, disabled, label, onClick }) {
 
 function Feedback({ color, text }) {
   return <div style={{ color, fontSize: 13, fontWeight: 600, marginBottom: 14, textAlign: 'center', lineHeight: 1.5 }}>{text}</div>;
+}
+
+function ResendLink({ onClick, loading, linkColor }) {
+  return (
+    <div style={{ textAlign: 'center', marginTop: -8, marginBottom: 14 }}>
+      <button onClick={onClick} disabled={loading} style={{ background: 'none', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', color: linkColor, fontWeight: 700, fontSize: 13, textDecoration: 'underline', padding: 0 }}>
+        Баталгаажуулах холбоос дахин илгээх →
+      </button>
+    </div>
+  );
 }
 
 function DoichStyles() {
