@@ -186,7 +186,6 @@ export default function PricingScreen({ t, onBack }) {
       {/* Fine print */}
       <div style={{ background: t.bgCard, borderRadius: 16, padding: '14px 16px', border: `1px solid ${t.border}`, marginBottom: 12 }}>
         <div style={{ fontSize: 11, color: t.textSoft, lineHeight: 1.7 }}>
-          • Одоо Pro эрх авахыг хүсвэл <span style={{ color: t.text, fontWeight: 700 }}>doichapp@gmail.com</span>-р холбоо барина уу<br />
           • Pro эрх нь автоматаар сунгагдахгүй<br />
           • Асуух зүйл байвал холбоо барина уу
         </div>

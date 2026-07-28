@@ -31,15 +31,6 @@ export default function SettingsScreen({ t, state, update, user, onLogout, onBac
     { e: '🏆', l: 'Дууссан шат', v: totalDone },
   ];
 
-  const handleReset = () => {
-    if (confirm('Бүх өгөгдлийг устгах уу?')) {
-      update({
-        userLevel: null, learnedWords: [], completedStages: {}, mistakes: {},
-        stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0 },
-      });
-    }
-  };
-
   const handleChangePassword = async () => {
     setPwErr(''); setPwMsg('');
     if (newPw.length < 6) { setPwErr('Хамгийн багадаа 6 тэмдэгт'); return; }
@@ -164,10 +155,6 @@ export default function SettingsScreen({ t, state, update, user, onLogout, onBac
 
   const dangerSection = (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <button onClick={handleReset}
-        style={{ width: '100%', padding: '13px', borderRadius: 16, background: t.bgCard, border: '2px solid #FFD0D5', color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
-        <LogOut size={16} /> Бүх өгөгдлийг устгах
-      </button>
       {onLogout && (
         <button onClick={() => { if (confirm('Гарах уу?')) onLogout(); }}
           style={{ width: '100%', padding: '13px', borderRadius: 16, background: t.bgCard, border: `2px solid ${border}`, color: mid, fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>

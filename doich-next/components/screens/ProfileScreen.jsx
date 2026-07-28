@@ -81,15 +81,6 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab, plan, pr
     setNewPw(''); setConfirmPw(''); setChangePwOpen(false);
   };
 
-  const handleReset = () => {
-    if (confirm('Бүх өгөгдлийг устгах уу?')) {
-      update({
-        userLevel: null, learnedWords: [], completedStages: {}, mistakes: {},
-        stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0 },
-      });
-    }
-  };
-
   const handleDeleteAccount = async () => {
     setDeleteErr('');
     if (!deletePw) { setDeleteErr('Нууц үгээ оруулна уу'); return; }
@@ -220,10 +211,6 @@ function ProfileScreenInner({ t, state, update, user, onLogout, setTab, plan, pr
 
     const sDangerSection = (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <button onClick={handleReset}
-          style={{ width: '100%', padding: '13px', borderRadius: 16, background: t.bgCard, border: '2px solid #FFD0D5', color: '#E53E4D', fontWeight: 800, fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, boxShadow: t.shadow }}>
-          <LogOut size={16} /> Бүх өгөгдлийг устгах
-        </button>
         {onLogout && (
           signOutConfirm ? (
             <div style={{ background: t.bgCard, border: `2px solid ${border}`, borderRadius: 16, padding: '14px 16px', boxShadow: t.shadow }}>
