@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { Check, X, Key } from 'lucide-react';
 import { VOCAB } from '@/lib/vocab';
+import { isCustomId } from '@/lib/customWords';
 import SessionHeader from './SessionHeader';
 import PlayButton from './PlayButton';
 
-const TYPE_LABEL = { noun: 'нэр үг', verb: 'үйл үг', adj: 'тэмдэг нэр', adv: 'дайвар үг' };
+const TYPE_LABEL = { noun: 'нэр үг', verb: 'үйл үг', adj: 'тэмдэг нэр', adv: 'дайвар үг', custom: 'түүхийн үг' };
 
 export default function FlashCard({ t, stage, word, progress, onContinue, onQuit }) {
   const [opts, setOpts]         = useState([]);
@@ -27,6 +28,10 @@ export default function FlashCard({ t, stage, word, progress, onContinue, onQuit
     setSel(opt); setRevealed(true); setIsCorrect(ok);
   };
 
+  // Story words added from a reading have no audio file and no example sentence.
+  const hasAudio = !isCustomId(word.id);
+  const hasClue  = !!word.example;
+
   return (
     <div className="af">
       <SessionHeader t={t} progress={progress} idx={stage.idx} total={stage.words.length} onQuit={onQuit} cefr={stage.id.split('-')[1]} />
@@ -37,21 +42,23 @@ export default function FlashCard({ t, stage, word, progress, onContinue, onQuit
             {word.gender && <span style={{ color: t.pink }}>{word.gender} </span>}
             {word.de}
           </div>
-          <PlayButton wordId={word.id} size={22} color={t.textMid} />
+          {hasAudio && <PlayButton wordId={word.id} size={22} color={t.textMid} />}
         </div>
         {(clueShown || revealed) && (
           <div className="af" style={{ marginTop: 14 }}>
-            <div style={{ display: 'inline-block', background: t.bgTag, color: t.textMid, fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20, marginBottom: 10 }}>
-              {TYPE_LABEL[word.type]} · {word.level}
+            <div style={{ display: 'inline-block', background: t.bgTag, color: t.textMid, fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20, marginBottom: hasClue ? 10 : 0 }}>
+              {[TYPE_LABEL[word.type], word.level].filter(Boolean).join(' · ')}
             </div>
-            <div style={{ color: t.textMid, fontSize: 13, padding: '10px 14px', background: t.bgTag, borderRadius: 14, lineHeight: 1.6, fontStyle: 'italic' }}>
-              {word.example}
-            </div>
+            {hasClue && (
+              <div style={{ color: t.textMid, fontSize: 13, padding: '10px 14px', background: t.bgTag, borderRadius: 14, lineHeight: 1.6, fontStyle: 'italic' }}>
+                {word.example}
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      {!revealed && (
+      {!revealed && hasClue && (
         <button onClick={() => setClueShown(s => !s)}
           style={{
             display: 'flex', alignItems: 'center', gap: 6, margin: '0 auto 10px',

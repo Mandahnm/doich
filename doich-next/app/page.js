@@ -26,7 +26,8 @@ import DesktopSidebar        from '@/components/shared/DesktopSidebar';
 import PricingScreen         from '@/components/screens/PricingScreen';
 import { ACHIEVEMENTS, getUnlockedIds } from '@/lib/achievements';
 import { initSrsEntry, updateSrsEntry } from '@/lib/srs';
-import { VOCAB } from '@/lib/vocab';
+import { customKey } from '@/lib/customWords';
+import { findVocabWord } from '@/lib/vocab';
 
 const DEFAULT_STATE = {
   userLevel: null,
@@ -34,7 +35,7 @@ const DEFAULT_STATE = {
   learnedWords: [],
   completedStages: {},
   mistakes: {},
-  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, dailyCount: 0, srs: {}, customWords: {} },
+  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, storyVocabCorrect: 0, storyVocabTotal: 0, dailyCount: 0, srs: {}, customWords: {} },
   xp: 0,
   streak: 0,
   lastStreakDate: null,
@@ -293,22 +294,24 @@ export default function Page() {
   }));
 
   // Add a story word to SRS — matches against VOCAB first, falls back to customWords
-  const addCustomWord = (de, mn) => {
-    const key = de.toLowerCase().trim();
-    const match = VOCAB.find(w => w.de.toLowerCase() === key);
+  const addCustomWord = (de, mn, level = null) => {
+    const match = findVocabWord(de);
     if (match) {
       if (!state.learnedWords.includes(match.id)) toggleLearned(match.id);
       return;
     }
+    const key = customKey(de);
     setState(s => {
       if ((s.stats.customWords || {})[key]) return s; // already added
+      const entry = initSrsEntry();
       return {
         ...s,
         stats: {
           ...s.stats,
+          srs: { ...(s.stats.srs || {}), [key]: entry },
           customWords: {
             ...(s.stats.customWords || {}),
-            [key]: { de, mn, srs: initSrsEntry() },
+            [key]: { de, mn, level, srs: entry },
           },
         },
       };
@@ -319,8 +322,8 @@ export default function Page() {
     ...s,
     stats: {
       ...s.stats,
-      [`${key}Correct`]: s.stats[`${key}Correct`] + (ok ? 1 : 0),
-      [`${key}Total`]:   s.stats[`${key}Total`]   + 1,
+      [`${key}Correct`]: (s.stats[`${key}Correct`] || 0) + (ok ? 1 : 0),
+      [`${key}Total`]:   (s.stats[`${key}Total`]   || 0) + 1,
     },
   }));
 
@@ -422,6 +425,8 @@ export default function Page() {
           t={t} state={state} user={user}
           addXP={addXP} checkStreak={checkStreak}
           toggleLearned={toggleLearned} addCustomWord={addCustomWord}
+          recordStat={recordStat} updateSRS={updateSRS}
+          recordMistake={recordMistake} clearMistake={clearMistake}
           plan={plan} onUpgrade={() => setTab('pricing')}
         />
       )}

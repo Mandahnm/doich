@@ -5,6 +5,7 @@ import { WithSkeleton, HomeSkeleton } from '@/components/shared/ScreenSkeleton';
 import { VOCAB, CEFR_META } from '@/lib/vocab';
 import { getLevelInfo } from '@/lib/xp';
 import { getDueCount, getNextDueLabel } from '@/lib/srs';
+import { mergedSrs, allLearnedIds } from '@/lib/customWords';
 import PlayButton from '@/components/shared/PlayButton';
 
 const TYPE_LABEL = { noun: 'Нэр үг', verb: 'Үйл үг', adj: 'Тэмдэг нэр', adv: 'Дайвар үг' };
@@ -45,9 +46,10 @@ function HomeScreenInner({ t, state, setTab, isDesktop, plan, onUpgrade }) {
   const streak    = state.streak || 0;
   const { level, xpInLevel, xpToNext, progress } = getLevelInfo(xp);
 
-  const srs     = state.stats?.srs || {};
-  const due     = getDueCount(state.learnedWords, srs);
-  const nextLbl = due === 0 ? getNextDueLabel(state.learnedWords, srs) : null;
+  const srs     = mergedSrs(state);
+  const deckIds = allLearnedIds(state);
+  const due     = getDueCount(deckIds, srs);
+  const nextLbl = due === 0 ? getNextDueLabel(deckIds, srs) : null;
 
   const wod  = getWordOfTheDay();
   const wodM = CEFR_META[wod.level];

@@ -3,17 +3,21 @@
 import { useState, useEffect } from 'react';
 import { Settings, X, RefreshCw, Star, Brain } from 'lucide-react';
 import { VOCAB, CEFR_META } from '@/lib/vocab';
-import { isDueToday, getDueCount, getNextDueLabel } from '@/lib/srs';
+import { isDueToday, getDueCount, getNextDueLabel, dueTime } from '@/lib/srs';
+import { customWordEntries, mergedSrs, allLearnedIds } from '@/lib/customWords';
 import FlashCard from '@/components/shared/FlashCard';
 
-const TYPE_LABELS = { noun: 'Нэр үг', verb: 'Үйл үг', adj: 'Тэмдэг нэр', adv: 'Дайвар үг' };
+const TYPE_LABELS = { noun: 'Нэр үг', verb: 'Үйл үг', adj: 'Тэмдэг нэр', adv: 'Дайвар үг', custom: 'Түүхийн үг' };
 
 export default function ReviewScreen({ t, state, setTab, recordStat, recordMistake, clearMistake, updateSRS }) {
-  const srs         = state.stats.srs || {};
-  const learnedPool = VOCAB.filter(w => state.learnedWords.includes(w.id));
+  const srs         = mergedSrs(state);
+  const learnedPool = [
+    ...VOCAB.filter(w => state.learnedWords.includes(w.id)),
+    ...customWordEntries(state.stats.customWords),
+  ];
   const duePool     = learnedPool.filter(w => isDueToday(srs[w.id]));
   const dueCount    = duePool.length;
-  const nextLabel   = getNextDueLabel(state.learnedWords, srs);
+  const nextLabel   = getNextDueLabel(allLearnedIds(state), srs);
 
   const [mode,       setMode]       = useState(dueCount > 0 ? 'due' : 'all'); // 'due' | 'all'
   const [levelFilters, setLevelFilters] = useState([]);
@@ -39,10 +43,9 @@ export default function ReviewScreen({ t, state, setTab, recordStat, recordMista
     if (!pool || pool.length === 0) return;
     // Sort: overdue first (older dueDate first), then shuffle the rest
     const sorted = [...pool].sort((a, b) => {
-      const da = srs[a.id]?.dueDate ?? '2000-01-01';
-      const db = srs[b.id]?.dueDate ?? '2000-01-01';
-      if (da < db) return -1;
-      if (da > db) return 1;
+      const da = dueTime(srs[a.id]);
+      const db = dueTime(srs[b.id]);
+      if (da !== db) return da - db;
       return Math.random() - 0.5;
     });
     setSession({ words: sorted, idx: 0, score: 0 });
@@ -82,7 +85,7 @@ export default function ReviewScreen({ t, state, setTab, recordStat, recordMista
     buildSession(mode, lvArr, tpArr);
   };
 
-  const availLevels = [...new Set(learnedPool.map(w => w.level))].sort();
+  const availLevels = [...new Set(learnedPool.map(w => w.level).filter(Boolean))].sort();
   const availTypes  = [...new Set(learnedPool.map(w => w.type))];
   const isFiltered  = levelFilters.length > 0 || typeFilters.length > 0;
 
@@ -132,7 +135,7 @@ export default function ReviewScreen({ t, state, setTab, recordStat, recordMista
     const total = session.words.length;
     const pct   = session.score / total;
     const stars = pct >= 0.87 ? 3 : pct >= 0.6 ? 2 : 1;
-    const newDue = getDueCount(state.learnedWords, state.stats.srs || {});
+    const newDue = getDueCount(allLearnedIds(state), mergedSrs(state));
     return (
       <div className="af" style={{ textAlign: 'center', paddingTop: 24 }}>
         <div style={{ fontSize: 72, marginBottom: 8 }} className="ap">{stars === 3 ? '🏆' : stars === 2 ? '🎉' : '✨'}</div>

@@ -308,7 +308,7 @@ export const VOCAB = [
   { id:300, de:'versuchen',        mn:'оролдох',                 level:'B1', type:'verb',               example:'Versuche es noch einmal!',                         emoji:'💪' },
   { id:301, de:'erreichen',        mn:'хүрэх / биелүүлэх',       level:'B1', type:'verb',               example:'Ich habe mein Ziel erreicht.',                     emoji:'🎯' },
   { id:302, de:'entscheiden',      mn:'шийдэх',                  level:'B1', type:'verb',               example:'Ich muss mich entscheiden.',                       emoji:'🤔' },
-  { id:303, de:'bedeuten',         mn:'утга илэрхийлэх',         level:'B1', type:'verb',               example:'Was bedeutet dieses Wort?',                        emoji:'💭' },
+  { id:303, de:'bedeuten',         mn:'утгатай байх / гэсэн утгатай', level:'B1', type:'verb',               example:'Was bedeutet dieses Wort?',                        emoji:'💭' },
   { id:304, de:'gehören',          mn:'харьяалагдах / байх',     level:'B1', type:'verb',               example:'Das Buch gehört mir.',                             emoji:'📖' },
   { id:305, de:'glauben',          mn:'итгэх',                   level:'B1', type:'verb',               example:'Ich glaube, das ist richtig.',                     emoji:'🙏' },
   { id:306, de:'hoffen',           mn:'найдах',                  level:'B1', type:'verb',               example:'Ich hoffe, dass du kommst.',                       emoji:'🌟' },
@@ -1339,7 +1339,7 @@ export const VOCAB = [
   { id:1076, de:'Arm',            mn:'гар (тохой хүртэл)',      level:'A1', type:'noun', gender:'der', example:'Mein Arm tut weh.',                                emoji:'💪' },
   { id:1077, de:'Ausweis',        mn:'үнэмлэх',                level:'A1', type:'noun', gender:'der', example:'Haben Sie Ihren Ausweis dabei?',                   emoji:'🪪' },
   { id:1078, de:'Bäckerei',       mn:'нарийн боовны дэлгүүр',  level:'A1', type:'noun', gender:'die', example:'Ich kaufe Brötchen in der Bäckerei.',              emoji:'🥐' },
-  { id:1079, de:'Bahnsteig',      mn:'галт тэрэгний перрон',   level:'A1', type:'noun', gender:'der', example:'Der Zug fährt an Bahnsteig 3 ab.',                 emoji:'🚉' },
+  { id:1079, de:'Bahnsteig',      mn:'галт тэрэгний тавцан',   level:'A1', type:'noun', gender:'der', example:'Der Zug fährt an Bahnsteig 3 ab.',                 emoji:'🚉' },
   { id:1080, de:'Balkon',         mn:'тагт',                   level:'A1', type:'noun', gender:'der', example:'Wir sitzen gern auf dem Balkon.',                  emoji:'🏠' },
   { id:1081, de:'Banane',         mn:'гадил жимс',             level:'A1', type:'noun', gender:'die', example:'Ich esse gern Bananen.',                           emoji:'🍌' },
   { id:1082, de:'Bauch',          mn:'хэвлий',                 level:'A1', type:'noun', gender:'der', example:'Mein Bauch tut weh.',                              emoji:'🤢' },
@@ -2887,6 +2887,147 @@ export const VOCAB = [
   { id:2951, de:'teilweise',         mn:'хэсэгчлэн / зарим нь',     level:'B1', type:'adv',                example:'War der Test schwierig? – Teilweise.',               emoji:'🔢' },
   // T adjectives/adverbs
   { id:2953, de:'technisch',         mn:'техникийн',                level:'B1', type:'adj',                example:'Es gab ein technisches Problem.',                   emoji:'⚙️' },
+  // ── Story words (from the reading exercises) ───────────────────────────────
+  // Appended at the end so existing game stages keep their word groupings.
+  // A1 — 11 words
+  { id:2954, de:'Mongolei',                   mn:'Монгол улс',                                    level:'A1', type:'noun', gender:'die', example:'Ich komme aus der Mongolei.',                  emoji:'🇲🇳' },
+  { id:2955, de:'weil',                       mn:'учраас / тул',                                  level:'A1', type:'adv',                example:'Ich lerne Deutsch, weil es Spaß macht.',       emoji:'📝' },
+  { id:2956, de:'Lieblingswort',              mn:'дуртай үг',                                     level:'A1', type:'noun', gender:'das', example:'Mein Lieblingswort ist Freiheit.',             emoji:'❤️' },
+  { id:2957, de:'Hausaufgaben',               mn:'гэрийн даалгавар',                              level:'A1', type:'noun', gender:'die', example:'Ich mache meine Hausaufgaben jeden Tag.',      emoji:'📚' },
+  { id:2958, de:'Sachen',                     mn:'юмс, зүйлс',                                    level:'A1', type:'noun', gender:'die', example:'Ich packe meine Sachen für die Reise.',        emoji:'🧳' },
+  { id:2959, de:'Deutschkurs',                mn:'герман хэлний хичээл/курс',                     level:'A1', type:'noun', gender:'der', example:'Der Deutschkurs beginnt um neun Uhr.',         emoji:'📖' },
+  { id:2960, de:'Klassenzimmer',              mn:'анги (танхим)',                                 level:'A1', type:'noun', gender:'das', example:'Das Klassenzimmer ist groß und hell.',         emoji:'🏫' },
+  { id:2961, de:'Lehrerin',                   mn:'багш (эмэгтэй)',                                level:'A1', type:'noun', gender:'die', example:'Die Lehrerin erklärt die Aufgabe gut.',        emoji:'👩‍🏫' },
+  { id:2962, de:'kommen aus',                 mn:'…-аас ирэх',                                    level:'A1', type:'verb',               example:'Ich komme aus Deutschland.',                   emoji:'🌍' },
+  { id:2963, de:'Wochenende',                 mn:'амралтын өдрүүд (бямба, ням)',                  level:'A1', type:'noun', gender:'das', example:'Am Wochenende besuche ich meine Freunde.',     emoji:'🎉' },
+  { id:2964, de:'spazieren gehen',            mn:'зугаалах',                                      level:'A1', type:'verb',               example:'Wir gehen im Park spazieren.',                 emoji:'🚶‍♂️' },
+  // A2 — 18 words
+  { id:2965, de:'Drache',                     mn:'луу (амьтан)',                                  level:'A2', type:'noun', gender:'der', example:'Der Drache fliegt hoch am Himmel.',            emoji:'🐉' },
+  { id:2966, de:'Berg',                       mn:'уул',                                           level:'A2', type:'noun', gender:'der', example:'Der Berg ist sehr hoch.',                      emoji:'⛰️' },
+  { id:2967, de:'Höhle',                      mn:'агуй',                                          level:'A2', type:'noun', gender:'die', example:'Die Höhle ist dunkel.',                        emoji:'🕳️' },
+  { id:2968, de:'von diesem Tag an',          mn:'тэр өдрөөс хойш',                               level:'A2', type:'adv',                example:'Von diesem Tag an war alles anders.',          emoji:'📅' },
+  { id:2969, de:'gemütlich',                  mn:'тав тухтай, дулаахан',                          level:'A2', type:'adj',                example:'Das Zimmer ist sehr gemütlich.',               emoji:'🛋️' },
+  { id:2970, de:'Speisekarte',                mn:'хоолны цэс',                                    level:'A2', type:'noun', gender:'die', example:'Kann ich die Speisekarte sehen?',              emoji:'📜' },
+  { id:2971, de:'bestellen',                  mn:'захиалах',                                      level:'A2', type:'verb',               example:'Ich möchte eine Pizza bestellen.',             emoji:'📦' },
+  { id:2972, de:'Ich hätte gern',             mn:'Би … авмаар байна (эелдэг хүсэлт)',             level:'A2', type:'adv',                example:'Ich hätte gern einen Kaffee.',                 emoji:'☕' },
+  { id:2973, de:'Regenschirm',                mn:'шүхэр',                                         level:'A2', type:'noun', gender:'der', example:'Ich habe meinen Regenschirm vergessen.',       emoji:'☂️' },
+  { id:2974, de:'Altstadt',                   mn:'хуучин хот (хотын төв)',                        level:'A2', type:'noun', gender:'die', example:'Die Altstadt ist sehr schön.',                 emoji:'🏘️' },
+  { id:2975, de:'krank werden',               mn:'өвдөх',                                         level:'A2', type:'verb',               example:'Ich hoffe, ich werde nicht krank.',            emoji:'🤒' },
+  { id:2976, de:'Kopfschmerzen',              mn:'толгой өвдөх',                                  level:'A2', type:'noun', gender:'die', example:'Ich habe starke Kopfschmerzen.',               emoji:'🤕' },
+  { id:2977, de:'Wartezimmer',                mn:'хүлээлгийн өрөө',                               level:'A2', type:'noun', gender:'das', example:'Ich sitze im Wartezimmer.',                    emoji:'⏳' },
+  { id:2978, de:'anschauen',                  mn:'харах, үзэх',                                   level:'A2', type:'verb',               example:'Wir schauen den Film an.',                     emoji:'👀' },
+  { id:2979, de:'Verkäuferin',                mn:'худалдагч эмэгтэй',                             level:'A2', type:'noun', gender:'die', example:'Die Verkäuferin hilft mir.',                   emoji:'🛍️' },
+  { id:2980, de:'anprobieren',                mn:'өмсөж үзэх',                                    level:'A2', type:'verb',               example:'Ich probiere die Jacke an.',                   emoji:'👗' },
+  { id:2981, de:'Umkleidekabine',             mn:'хувцас солих өрөө',                             level:'A2', type:'noun', gender:'die', example:'Die Umkleidekabine ist frei.',                 emoji:'🚪' },
+  { id:2982, de:'sich freuen',                mn:'(…-д) баярлах',                                 level:'A2', type:'verb',               example:'Ich freue mich über das Geschenk.',            emoji:'😊' },
+  // B1 — 32 words
+  { id:2983, de:'Nebenjob',                   mn:'хажуугийн ажил',                                level:'B1', type:'noun', gender:'der', example:'Er hat einen Nebenjob im Café.',               emoji:'💼' },
+  { id:2984, de:'Buchhandlung',               mn:'номын дэлгүүр',                                 level:'B1', type:'noun', gender:'die', example:'Ich kaufe ein Buch in der Buchhandlung.',      emoji:'📚' },
+  { id:2985, de:'üben',                       mn:'дасгал хийх, бэлтгэх',                          level:'B1', type:'verb',               example:'Ich übe jeden Tag Klavier.',                   emoji:'🎹' },
+  { id:2986, de:'Verkauf',                    mn:'худалдаа, борлуулалт',                          level:'B1', type:'noun', gender:'der', example:'Der Verkauf beginnt um 9 Uhr.',                emoji:'🛒' },
+  { id:2987, de:'aufgeregt',                  mn:'догдолсон, сандарсан',                          level:'B1', type:'adj',                example:'Ich bin vor der Prüfung aufgeregt.',           emoji:'😅' },
+  { id:2988, de:'Informatik',                 mn:'мэдээлэл зүй / компьютер шинжлэх ухаан',        level:'B1', type:'noun', gender:'die', example:'Informatik ist mein Lieblingsfach.',           emoji:'💻' },
+  { id:2989, de:'am Anfang',                  mn:'эхэндээ',                                       level:'B1', type:'adv',                example:'Am Anfang war alles neu.',                     emoji:'🔄' },
+  { id:2990, de:'anders',                     mn:'өөр / ялгаатай',                                level:'B1', type:'adj',                example:'Heute ist alles anders.',                      emoji:'🔀' },
+  { id:2991, de:'aufgeben',                   mn:'бууж өгөх / орхих',                             level:'B1', type:'verb',               example:'Er will nicht aufgeben.',                      emoji:'🏳️' },
+  { id:2992, de:'gegenseitig',                mn:'харилцан / бие биедээ',                         level:'B1', type:'adv',                example:'Sie helfen sich gegenseitig.',                 emoji:'🤝' },
+  { id:2993, de:'schüchtern',                 mn:'ичимхий, аймхай',                               level:'B1', type:'adj',                example:'Das Kind ist sehr schüchtern.',                emoji:'😳' },
+  { id:2994, de:'Mut zusammennehmen',         mn:'зоригоо цуглуулах',                             level:'B1', type:'verb',               example:'Ich muss Mut zusammennehmen.',                 emoji:'💪' },
+  { id:2995, de:'Bühne',                      mn:'тайз',                                          level:'B1', type:'noun', gender:'die', example:'Er steht auf der Bühne.',                      emoji:'🎭' },
+  { id:2996, de:'zittern',                    mn:'чичрэх, салгалах',                              level:'B1', type:'verb',               example:'Ihre Hände zittern leicht.',                   emoji:'😨' },
+  { id:2997, de:'klatschen',                  mn:'алга таших',                                    level:'B1', type:'verb',               example:'Die Zuschauer klatschen laut.',                emoji:'👏' },
+  { id:2998, de:'vorsingen',                  mn:'хэн нэгэнд дуулж өгөх',                         level:'B1', type:'verb',               example:'Sie will ihm vorsingen.',                      emoji:'🎤' },
+  { id:2999, de:'sich allein fühlen',         mn:'өөрийгөө ганцаар мэт мэдрэх',                   level:'B1', type:'verb',               example:'Er fühlt sich allein.',                        emoji:'😔' },
+  { id:3000, de:'Wohnungssuche',              mn:'орон сууц хайх (явц)',                          level:'B1', type:'noun', gender:'die', example:'Die Wohnungssuche ist schwierig.',             emoji:'🏠' },
+  { id:3001, de:'Anzeige',                    mn:'зар',                                           level:'B1', type:'noun', gender:'die', example:'Ich habe eine Anzeige in der Zeitung gesehen.', emoji:'📰' },
+  { id:3002, de:'besichtigen',                mn:'(байр) үзэх, танилцах',                         level:'B1', type:'verb',               example:'Wir besichtigen morgen die Wohnung.',          emoji:'🏠' },
+  { id:3003, de:'Besichtigung',               mn:'байр үзэх (уулзалт)',                           level:'B1', type:'noun', gender:'die', example:'Die Besichtigung beginnt um 14 Uhr.',          emoji:'👀' },
+  { id:3004, de:'Bewerber',                   mn:'өргөдөл гаргагч, нэр дэвшигч',                  level:'B1', type:'noun', gender:'der', example:'Der Bewerber hat gute Referenzen.',            emoji:'👨‍💼' },
+  { id:3005, de:'frustriert',                 mn:'урам хугарсан',                                 level:'B1', type:'adj',                example:'Er ist frustriert wegen der Absage.',          emoji:'😞' },
+  { id:3006, de:'geduldig',                   mn:'тэвчээртэй',                                    level:'B1', type:'adj',                example:'Sie ist sehr geduldig mit Kindern.',           emoji:'🕰️' },
+  { id:3007, de:'Vermieter',                  mn:'байр түрээслүүлэгч',                            level:'B1', type:'noun', gender:'der', example:'Der Vermieter ist sehr freundlich.',           emoji:'👔' },
+  { id:3008, de:'Zuhause',                    mn:'гэр, өөрийн орон гэр',                          level:'B1', type:'noun', gender:'das', example:'Ich fühle mich wohl in meinem Zuhause.',       emoji:'🏡' },
+  { id:3009, de:'Hindernis',                  mn:'саад бэрхшээл',                                 level:'B1', type:'noun', gender:'das', example:'Das Hindernis war schwer zu überwinden.',      emoji:'🚧' },
+  { id:3010, de:'sich freuen auf',            mn:'(ирээдүйн зүйлийг) баярлан хүлээх',             level:'B1', type:'verb',               example:'Ich freue mich auf den Urlaub.',               emoji:'🎉' },
+  { id:3011, de:'Anzeigetafel',               mn:'мэдээллийн самбар',                             level:'B1', type:'noun', gender:'die', example:'Die Anzeigetafel zeigt Verspätungen an.',      emoji:'📋' },
+  { id:3012, de:'Ausfall',                    mn:'цуцлалт (галт тэрэг гэх мэт)',                  level:'B1', type:'noun', gender:'der', example:'Der Ausfall des Zuges war ärgerlich.',         emoji:'🚂' },
+  { id:3013, de:'kennenlernen',               mn:'танилцах',                                      level:'B1', type:'verb',               example:'Wir wollen neue Freunde kennenlernen.',        emoji:'🤝' },
+  { id:3014, de:'sich Sorgen machen',         mn:'санаа зовох',                                   level:'B1', type:'verb',               example:'Ich mache mir Sorgen um dich.',                emoji:'😟' },
+  // B2 — 35 words
+  { id:3015, de:'Steppe',                     mn:'тал хээр',                                      level:'B2', type:'noun', gender:'die', example:'Die Steppe ist weit und trocken.',             emoji:'🌾' },
+  { id:3016, de:'einsam',                     mn:'ганцаардмал, ганцаардсан',                      level:'B2', type:'adj',                example:'Er fühlt sich oft einsam.',                    emoji:'😔' },
+  { id:3017, de:'angekommen sein',            mn:'шинэ газарт дасан зохицох, ирчихсэн мэт мэдрэх', level:'B2', type:'verb',               example:'Ich fühle mich hier angekommen.',              emoji:'🏡' },
+  { id:3018, de:'Bürgeramt',                  mn:'иргэний бүртгэлийн алба',                       level:'B2', type:'noun', gender:'das', example:'Ich gehe zum Bürgeramt.',                      emoji:'🏢' },
+  { id:3019, de:'Beamte',                     mn:'төрийн албан хаагч',                            level:'B2', type:'noun', gender:'der', example:'Der Beamte hilft uns weiter.',                 emoji:'👮' },
+  { id:3020, de:'sich einleben',              mn:'дасан зохицох',                                 level:'B2', type:'verb',               example:'Es dauert, bis man sich einlebt.',             emoji:'🌍' },
+  { id:3021, de:'Missverständnis',            mn:'буруу ойлголцол',                               level:'B2', type:'noun', gender:'das', example:'Ein Missverständnis kann passieren.',          emoji:'❓' },
+  { id:3022, de:'Bestellung',                 mn:'захиалга',                                      level:'B2', type:'noun', gender:'die', example:'Die Bestellung ist angekommen.',               emoji:'📦' },
+  { id:3023, de:'ohne Umschweife',            mn:'шууд, тойруулалгүй',                            level:'B2', type:'adv',                example:'Er sagte es ohne Umschweife.',                 emoji:'➡️' },
+  { id:3024, de:'versteinert sein',           mn:'(гайхширлаас) хөшиж орхих',                     level:'B2', type:'verb',               example:'Sie war vor Schreck versteinert.',             emoji:'🪨' },
+  { id:3025, de:'grübeln',                    mn:'гашуудан эргэцүүлэх',                           level:'B2', type:'verb',               example:'Er grübelt über das Problem.',                 emoji:'🤔' },
+  { id:3026, de:'überzeugt sein',             mn:'итгэлтэй байх',                                 level:'B2', type:'adv',                example:'Ich bin von der Idee überzeugt.',              emoji:'👍' },
+  { id:3027, de:'entlassen',                  mn:'ажлаас халах',                                  level:'B2', type:'verb',               example:'Er wurde gestern entlassen.',                  emoji:'🏢' },
+  { id:3028, de:'betrachten',                 mn:'авч үзэх, харах',                               level:'B2', type:'verb',               example:'Sie betrachtet das Gemälde lange.',            emoji:'🖼️' },
+  { id:3029, de:'unhöflich',                  mn:'эелдэг бус',                                    level:'B2', type:'adj',                example:'Das war sehr unhöflich von ihm.',              emoji:'🙄' },
+  { id:3030, de:'Direktheit',                 mn:'шулуун зан, шууд байдал',                       level:'B2', type:'noun', gender:'die', example:'Ihre Direktheit überrascht viele.',            emoji:'🔍' },
+  { id:3031, de:'Brieftasche',                mn:'түрийвч, хэтэвч',                               level:'B2', type:'noun', gender:'die', example:'Ich habe meine Brieftasche verloren.',         emoji:'👛' },
+  { id:3032, de:'zögern',                     mn:'эргэлзэх',                                      level:'B2', type:'verb',               example:'Er zögert mit der Antwort.',                   emoji:'⏳' },
+  { id:3033, de:'unwohl',                     mn:'эвгүй, тааламжгүй',                             level:'B2', type:'adj',                example:'Ich fühle mich heute unwohl.',                 emoji:'🤒' },
+  { id:3034, de:'beschließen',                mn:'шийдэх',                                        level:'B2', type:'verb',               example:'Wir beschließen, zu gehen.',                   emoji:'📝' },
+  { id:3035, de:'sprachlos',                  mn:'үг хэлж чадахгүй болсон',                       level:'B2', type:'adj',                example:'Sie war völlig sprachlos.',                    emoji:'😶' },
+  { id:3036, de:'den Tränen nahe',            mn:'уйлах шахсан',                                  level:'B2', type:'adv',                example:'Er war den Tränen nahe.',                      emoji:'😢' },
+  { id:3037, de:'sich herausstellen',         mn:'тодрох, илрэх',                                 level:'B2', type:'verb',               example:'Es stellte sich heraus, dass er recht hatte.', emoji:'🔍' },
+  { id:3038, de:'sich auszahlen',             mn:'эргэж ашиг тусаа өгөх',                         level:'B2', type:'verb',               example:'Die Mühe wird sich auszahlen.',                emoji:'💰' },
+  { id:3039, de:'vorhersehen',                mn:'урьдчилан харах',                               level:'B2', type:'verb',               example:'Man kann das Wetter nicht immer vorhersehen.', emoji:'🔮' },
+  { id:3040, de:'Bewerbungsfrist',            mn:'өргөдөл өгөх хугацаа',                          level:'B2', type:'noun', gender:'die', example:'Die Bewerbungsfrist endet nächste Woche.',     emoji:'📅' },
+  { id:3041, de:'ablaufen',                   mn:'(хугацаа) дуусах',                              level:'B2', type:'verb',               example:'Der Vertrag läuft bald ab.',                   emoji:'⏳' },
+  { id:3042, de:'Aufnahmeprüfung',            mn:'элсэлтийн шалгалт',                             level:'B2', type:'noun', gender:'die', example:'Er hat die Aufnahmeprüfung bestanden.',        emoji:'📝' },
+  { id:3043, de:'bestehen',                   mn:'(шалгалтад) тэнцэх',                            level:'B2', type:'verb',               example:'Ich habe die Prüfung bestanden!',              emoji:'✅' },
+  { id:3044, de:'Niveau',                     mn:'түвшин',                                        level:'B2', type:'noun', gender:'das', example:'Das Niveau des Kurses ist hoch.',              emoji:'📈' },
+  { id:3045, de:'durchfallen',                mn:'(шалгалтад) унах',                              level:'B2', type:'verb',               example:'Er ist im Test durchgefallen.',                emoji:'❌' },
+  { id:3046, de:'zugeben',                    mn:'хүлээн зөвшөөрөх',                              level:'B2', type:'verb',               example:'Ich muss zugeben, dass ich müde bin.',         emoji:'🤔' },
+  { id:3047, de:'begleiten',                  mn:'дагалдах',                                      level:'B2', type:'verb',               example:'Ich begleite dich zum Arzt.',                  emoji:'👫' },
+  { id:3048, de:'abschicken',                 mn:'илгээх',                                        level:'B2', type:'verb',               example:'Ich habe den Brief abgeschickt.',              emoji:'📤' },
+  { id:3049, de:'entschlossen',               mn:'шийдэмгий',                                     level:'B2', type:'adj',                example:'Er war entschlossen, das Ziel zu erreichen.',  emoji:'💪' },
+  // C1 — 38 words
+  { id:3050, de:'vermögen',                   mn:'чадах, чадвартай байх (уран зохиолын)',         level:'C1', type:'verb',               example:'Er vermag, schwierige Probleme zu lösen.',     emoji:'🧠' },
+  { id:3051, de:'meiden',                     mn:'үгнээс зайлсхийх, цээрлэх',                     level:'C1', type:'verb',               example:'Er meidet Konflikte, wo er kann.',             emoji:'🚫' },
+  { id:3052, de:'sich aneignen',              mn:'эзэмших, сурч авах',                            level:'C1', type:'verb',               example:'Sie eignete sich schnell neue Fähigkeiten an.', emoji:'📚' },
+  { id:3053, de:'verblüffen',                 mn:'гайхшруулах, цочирдуулах',                      level:'C1', type:'verb',               example:'Die Nachricht verblüffte alle Anwesenden.',    emoji:'😲' },
+  { id:3054, de:'freilich',                   mn:'мэдээж, үнэндээ (номын хэллэг)',                level:'C1', type:'adv',                example:'Freilich wusste er die Antwort schon.',        emoji:'🤔' },
+  { id:3055, de:'bisweilen',                  mn:'хааяа, заримдаа (номын хэллэг)',                level:'C1', type:'adv',                example:'Bisweilen liest er ein Buch.',                 emoji:'📖' },
+  { id:3056, de:'sich hüten',                 mn:'хийхээс цээрлэх, болгоомжлох',                  level:'C1', type:'verb',               example:'Er hütet sich, zu viel zu versprechen.',       emoji:'⚠️' },
+  { id:3057, de:'ans Herz wachsen',           mn:'сэтгэлд ойр болох, хайртай болох',              level:'C1', type:'adv',                example:'Das kleine Kätzchen wuchs ihm ans Herz.',      emoji:'❤️' },
+  { id:3058, de:'sich neu erfinden',          mn:'өөрийгөө дахин шинээр бүтээх',                  level:'C1', type:'verb',               example:'Er hat sich nach dem Umzug neu erfunden.',     emoji:'🔄' },
+  { id:3059, de:'in Erinnerung behalten',     mn:'санаандаа хадгалах',                            level:'C1', type:'adv',                example:'Ich werde diesen Tag in Erinnerung behalten.', emoji:'🧠' },
+  { id:3060, de:'insgeheim',                  mn:'дотроо, нууцаар',                               level:'C1', type:'adv',                example:'Insgeheim mag er sie sehr.',                   emoji:'🤫' },
+  { id:3061, de:'erwerben',                   mn:'олж авах, эзэмших',                             level:'C1', type:'verb',               example:'Er hat ein Haus erworben.',                    emoji:'🏠' },
+  { id:3062, de:'errichten',                  mn:'барих, босгох',                                 level:'C1', type:'verb',               example:'Sie errichten ein neues Gebäude.',             emoji:'🏗️' },
+  { id:3063, de:'irritieren',                 mn:'тээнэгэлзүүлэх, эргэлзүүлэх',                   level:'C1', type:'verb',               example:'Die Frage irritiert mich.',                    emoji:'😕' },
+  { id:3064, de:'gelten als',                 mn:'… гэж тооцогдох, үзэгдэх',                      level:'C1', type:'verb',               example:'Er gilt als Experte.',                         emoji:'👨‍🏫' },
+  { id:3065, de:'begreifen',                  mn:'ухаарах, гүн ойлгох',                           level:'C1', type:'verb',               example:'Ich begreife den Text nicht.',                 emoji:'🤔' },
+  { id:3066, de:'sich in Worte fassen lassen', mn:'үгээр илэрхийлэгдэх',                           level:'C1', type:'verb',               example:'Das Gefühl lässt sich nicht in Worte fassen.', emoji:'🗣️' },
+  { id:3067, de:'Möglichkeitsform',           mn:'боломжит хэлбэр (дүрмийн нэр томьёо)',          level:'C1', type:'noun', gender:'die', example:'Die Möglichkeitsform wird oft benutzt.',       emoji:'🔄' },
+  { id:3068, de:'Dazwischen',                 mn:'хоёрын хооронд байх байдал',                    level:'C1', type:'noun', gender:'das', example:'Das Dazwischen ist schwer zu definieren.',     emoji:'🔀' },
+  { id:3069, de:'Stellenangebot',             mn:'ажлын санал',                                   level:'C1', type:'noun', gender:'das', example:'Das Stellenangebot klingt interessant.',       emoji:'📄' },
+  { id:3070, de:'hinarbeiten',                mn:'(зорилго руу) тэмүүлэн ажиллах',                level:'C1', type:'verb',               example:'Er arbeitet auf sein Ziel hin.',               emoji:'🎯' },
+  { id:3071, de:'Umschlag',                   mn:'дугтуй',                                        level:'C1', type:'noun', gender:'der', example:'Der Umschlag ist rot.',                        emoji:'✉️' },
+  { id:3072, de:'Zusage',                     mn:'зөвшөөрөл, "тийм" гэсэн хариу',                 level:'C1', type:'noun', gender:'die', example:'Ich habe die Zusage erhalten.',                emoji:'✅' },
+  { id:3073, de:'freistellen',                mn:'сонгох эрхийг (хэн нэгэнд) өгөх',               level:'C1', type:'verb',               example:'Du kannst den Termin freistellen.',            emoji:'🗓️' },
+  { id:3074, de:'Verzicht',                   mn:'татгалзал, орхих',                              level:'C1', type:'noun', gender:'der', example:'Der Verzicht fiel ihm schwer.',                emoji:'🚫' },
+  { id:3075, de:'vollkommen',                 mn:'төгс',                                          level:'C1', type:'adj',                example:'Das Bild ist vollkommen schön.',               emoji:'🌟' },
+  { id:3076, de:'reglos',                     mn:'хөдөлгөөнгүй',                                  level:'C1', type:'adj',                example:'Er lag reglos auf dem Boden.',                 emoji:'🛌' },
+  { id:3077, de:'überlegen sein',             mn:'давуу байх',                                    level:'C1', type:'adj',                example:'Sie ist ihm überlegen.',                       emoji:'🏆' },
+  { id:3078, de:'Bitterkeit',                 mn:'гашуун сэтгэл',                                 level:'C1', type:'noun', gender:'die', example:'Die Bitterkeit war spürbar.',                  emoji:'🍋' },
+  { id:3079, de:'im Reinen sein',             mn:'(өөртэйгөө/шийдвэртэйгээ) эвлэрэн тайван байх', level:'C1', type:'adv',                example:'Ich bin mit mir im Reinen.',                   emoji:'🧘' },
+  { id:3080, de:'Stillstand',                 mn:'зогсонги байдал',                               level:'C1', type:'noun', gender:'der', example:'Der Verkehr kam zum Stillstand.',              emoji:'🛑' },
+  { id:3081, de:'Trost',                      mn:'тайтгарал',                                     level:'C1', type:'noun', gender:'der', example:'Sein Trost half mir sehr.',                    emoji:'🤗' },
+  { id:3082, de:'Fremdheit',                  mn:'харь, танихгүй байдал',                         level:'C1', type:'noun', gender:'die', example:'Die Fremdheit war überwältigend.',             emoji:'🌍' },
+  { id:3083, de:'auflösen',                   mn:'задлах, арилгах',                               level:'C1', type:'verb',               example:'Die Tablette löst sich schnell auf.',          emoji:'💊' },
+  { id:3084, de:'Zugehörigkeit',              mn:'харьяалагдах байдал',                           level:'C1', type:'noun', gender:'die', example:'Die Zugehörigkeit zur Gruppe ist wichtig.',    emoji:'🔗' },
+  { id:3085, de:'sich einfügen',              mn:'багтах, дасан нийлэх',                          level:'C1', type:'verb',               example:'Er konnte sich schnell einfügen.',             emoji:'🧩' },
+  { id:3086, de:'ahnen',                      mn:'зөнгөөрөө мэдрэх, таамаглах',                   level:'C1', type:'verb',               example:'Ich ahne, dass es regnen wird.',               emoji:'🌧️' },
+  { id:3087, de:'Anderssein',                 mn:'өөр байх байдал',                               level:'C1', type:'noun', gender:'das', example:'Das Anderssein macht uns einzigartig.',        emoji:'🌟' },
 ];
 
 export const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'];
@@ -2916,4 +3057,32 @@ export function getStages(gameType, cefr) {
     });
   }
   return stages;
+}
+
+// Story new_words are written the way a dictionary prints them — with placeholders
+// and parentheses ("sich freuen (über)", "jdm. gefallen", "(etw.) abwägen"). The
+// library stores the bare citation form, so both sides get normalised before matching.
+const PLACEHOLDER_RE = /\([^)]*\)|jdm\.|jmdm\.|jmdn\.|etw\.|…|\.\.\./g;
+const LEAD_ART_RE    = /^(der|die|das)\s+/i;
+
+export function normalizeDe(de = '') {
+  return de.replace(PLACEHOLDER_RE, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+const VOCAB_BY_DE = new Map();
+for (const w of VOCAB) {
+  const n = normalizeDe(w.de);
+  if (!VOCAB_BY_DE.has(n)) VOCAB_BY_DE.set(n, w);
+  const bare = n.replace(LEAD_ART_RE, '');
+  if (!VOCAB_BY_DE.has(bare)) VOCAB_BY_DE.set(bare, w);
+}
+
+/** Find the library entry for a German word however it was written. */
+export function findVocabWord(de) {
+  const n = normalizeDe(de);
+  if (n.length < 2) return null;
+  return VOCAB_BY_DE.get(n)
+      || VOCAB_BY_DE.get(n.replace(LEAD_ART_RE, ''))
+      || VOCAB_BY_DE.get(n.replace(/^sich\s+/, ''))
+      || null;
 }

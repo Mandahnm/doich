@@ -3,6 +3,11 @@
 const addDays = n => new Date(Date.now() + n * 86400000).toDateString();
 const today   = () => new Date().toDateString();
 
+// dueDate is stored as toDateString() ("Wed Jul 29 2026"), which is weekday-first
+// and so does NOT sort chronologically — always compare parsed timestamps.
+const startOfDay = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x.getTime(); };
+export const dueTime = entry => (entry?.dueDate ? startOfDay(entry.dueDate) : 0);
+
 /** Create a fresh SRS entry for a newly-learned word (due tomorrow) */
 export function initSrsEntry() {
   return { interval: 1, dueDate: addDays(1), ef: 2.5, reps: 0 };
@@ -40,8 +45,8 @@ export function updateSrsEntry(entry, isCorrect) {
 
 /** True if a word has no SRS entry yet or its dueDate is today or earlier */
 export function isDueToday(entry) {
-  if (!entry) return true;
-  return entry.dueDate <= today();
+  if (!entry?.dueDate) return true;
+  return dueTime(entry) <= startOfDay(Date.now());
 }
 
 /** Count of learned words due for review today */
@@ -54,9 +59,9 @@ export function getDueCount(learnedWordIds, srs) {
  * Returns null if all words are already due.
  */
 export function getNextDueLabel(learnedWordIds, srs) {
-  const t = today();
+  const t = startOfDay(Date.now());
   const futureDates = learnedWordIds
-    .filter(id => srs[id]?.dueDate > t)
+    .filter(id => dueTime(srs[id]) > t)
     .map(id => new Date(srs[id].dueDate));
 
   if (futureDates.length === 0) return null;

@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Clock, CheckCircle, ChevronRight, BookOpen,
-  ArrowLeft, Plus, Check, X, Play, Pause, Crown,
+  ArrowLeft, Plus, Check, X, Play, Pause, Crown, Star,
 } from 'lucide-react';
 import { WithSkeleton, ReadingSkeleton } from '@/components/shared/ScreenSkeleton';
 import MultiChips from '@/components/shared/MultiChips';
-import { CEFR_META, LEVELS, VOCAB } from '@/lib/vocab';
+import StoryVocabCard from '@/components/shared/StoryVocabCard';
+import { CEFR_META, LEVELS, VOCAB, findVocabWord } from '@/lib/vocab';
+import { customKey } from '@/lib/customWords';
 import { storyIsProLocked } from '@/lib/plans';
 import { supabase } from '@/lib/supabase';
 import { calcStageXP } from '@/lib/xp';
@@ -72,10 +74,7 @@ function lookupTranslation(clean, newWords) {
     if (de === key || de.replace(ART_RE, '') === key)
       return { mn: w.mn, de: w.de };
   }
-  const hit = VOCAB.find(w => {
-    const de = w.de.toLowerCase();
-    return de === key || de.replace(ART_RE, '') === key;
-  });
+  const hit = findVocabWord(clean);
   return hit ? { mn: hit.mn, de: hit.de, id: hit.id } : null;
 }
 
@@ -92,13 +91,15 @@ function isInNewWords(clean, newWords) {
 const fmtTime = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // ─────────────────────────────────────────────────────────────────────────────
-export default function ReadingScreen({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, plan, onUpgrade }) {
+export default function ReadingScreen({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, recordStat, updateSRS, recordMistake, clearMistake, plan, onUpgrade }) {
   return (
     <WithSkeleton ms={250} skeleton={<ReadingSkeleton t={t} />}>
       <ReadingScreenInner
         t={t} state={state} user={user}
         addXP={addXP} checkStreak={checkStreak}
         toggleLearned={toggleLearned} addCustomWord={addCustomWord}
+        recordStat={recordStat} updateSRS={updateSRS}
+        recordMistake={recordMistake} clearMistake={clearMistake}
         plan={plan} onUpgrade={onUpgrade}
       />
     </WithSkeleton>
@@ -108,7 +109,7 @@ export default function ReadingScreen({ t, state, user, addXP, checkStreak, togg
 // ─────────────────────────────────────────────────────────────────────────────
 //  Inner — manages view state + Supabase data
 // ─────────────────────────────────────────────────────────────────────────────
-function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, plan, onUpgrade }) {
+function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, recordStat, updateSRS, recordMistake, clearMistake, plan, onUpgrade }) {
   const [view,          setView]          = useState('list');
   const [stories,       setStories]       = useState([]);
   const [progress,      setProgress]      = useState({});
@@ -157,6 +158,8 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
         t={t} state={state} user={user}
         addXP={addXP} checkStreak={checkStreak}
         toggleLearned={toggleLearned} addCustomWord={addCustomWord}
+        recordStat={recordStat} updateSRS={updateSRS}
+        recordMistake={recordMistake} clearMistake={clearMistake}
         onBack={backToList} onProgressUpdate={refreshProgress}
         isDesktop={isDesktop}
       />
@@ -287,10 +290,21 @@ function ReadingScreenInner({ t, state, user, addXP, checkStreak, toggleLearned,
 // ─────────────────────────────────────────────────────────────────────────────
 //  StoryView — routes preview → reader → quiz
 // ─────────────────────────────────────────────────────────────────────────────
-function StoryView({ view, setView, story, storyProgress, t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, onBack, onProgressUpdate, isDesktop }) {
+function StoryView({ view, setView, story, storyProgress, t, state, user, addXP, checkStreak, toggleLearned, addCustomWord, recordStat, updateSRS, recordMistake, clearMistake, onBack, onProgressUpdate, isDesktop }) {
   if (view === 'preview')   return <NewWordsPreview story={story} t={t} onStart={() => setView('reader')} onBack={onBack} isDesktop={isDesktop} />;
   if (view === 'reader')    return <StoryReader story={story} t={t} state={state} toggleLearned={toggleLearned} addCustomWord={addCustomWord} onBack={onBack} onFinish={() => setView('quiz')} isDesktop={isDesktop} />;
-  if (view === 'flashcard') return <VocabFlashcard story={story} t={t} state={state} toggleLearned={toggleLearned} addCustomWord={addCustomWord} onDone={onBack} />;
+  if (view === 'vocab') {
+    if (!story.new_words?.length) return null;
+    return (
+      <VocabQuiz
+        story={story} t={t} state={state}
+        addXP={addXP} addCustomWord={addCustomWord}
+        recordStat={recordStat} updateSRS={updateSRS}
+        recordMistake={recordMistake} clearMistake={clearMistake}
+        onDone={onBack}
+      />
+    );
+  }
   if (view === 'quiz') {
     return (
       <QuizView
@@ -299,7 +313,7 @@ function StoryView({ view, setView, story, storyProgress, t, state, user, addXP,
         onBack={onBack} onProgressUpdate={onProgressUpdate}
         isDesktop={isDesktop}
         onReadAgain={() => setView('reader')}
-        onFlashcard={() => setView('flashcard')}
+        onVocabTest={() => setView('vocab')}
       />
     );
   }
@@ -422,15 +436,16 @@ function StoryReader({ story, t, state, toggleLearned, addCustomWord, onBack, on
   const handleAddWord = clean => {
     const found = lookupTranslation(clean, story.new_words);
     if (found?.id !== undefined) toggleLearned(found.id);
-    else addCustomWord(clean, found?.mn || '');
+    else addCustomWord(clean, found?.mn || '', story.level);
     setAddedWords(prev => new Set([...prev, clean.toLowerCase()]));
     setPopup(null);
   };
 
   const isAdded = clean => {
     if (addedWords.has(clean.toLowerCase())) return true;
-    const hit = VOCAB.find(w => w.de.toLowerCase() === clean.toLowerCase());
-    return hit ? state.learnedWords.includes(hit.id) : false;
+    const hit = findVocabWord(clean);
+    if (hit) return state.learnedWords.includes(hit.id);
+    return !!(state.stats?.customWords || {})[customKey(clean)];
   };
 
   // Called by AudioPlayer on every timeupdate
@@ -656,7 +671,7 @@ function WordPopup({ clean, translation, x, y, t, isAdded, onAdd, onClose }) {
 // ─────────────────────────────────────────────────────────────────────────────
 //  QuizView — comprehension questions + XP award + progress save
 // ─────────────────────────────────────────────────────────────────────────────
-function QuizView({ story, t, state, user, addXP, checkStreak, onBack, onProgressUpdate, isDesktop, onReadAgain, onFlashcard }) {
+function QuizView({ story, t, state, user, addXP, checkStreak, onBack, onProgressUpdate, isDesktop, onReadAgain, onVocabTest }) {
   const [questions,       setQuestions]       = useState(null);
   const [idx,             setIdx]             = useState(0);
   const [selected,        setSelected]        = useState(null);
@@ -816,9 +831,9 @@ function QuizView({ story, t, state, user, addXP, checkStreak, onBack, onProgres
 
         {/* Actions */}
         {story.new_words?.length > 0 && (
-          <button onClick={onFlashcard}
+          <button onClick={onVocabTest}
             style={{ background: t.pinkBtn, color: t.pinkBtnText, fontWeight: 800, fontSize: 15, border: 'none', borderRadius: 16, padding: '14px 0', cursor: 'pointer', width: '100%' }}>
-            Үгийн тест →
+            Үгийн тест ({story.new_words.length} үг) →
           </button>
         )}
         <button onClick={onReadAgain}
@@ -960,178 +975,150 @@ function QuizView({ story, t, state, user, addXP, checkStreak, onBack, onProgres
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  VocabFlashcard — flashcard drill on story's new_words
+//  VocabQuiz — multiple-choice test on the story's new_words
 // ─────────────────────────────────────────────────────────────────────────────
-function VocabFlashcard({ story, t, state, toggleLearned, addCustomWord, onDone }) {
+
+// Builds one question per new word: the correct Mongolian plus 3 distractors
+// drawn from the story's own words, so the learner has to tell apart the exact
+// words they just met. Deduped by the Mongolian string — the same German word
+// can appear in two stories with slightly different translations.
+function buildVocabQuestions(story) {
   const words = story.new_words || [];
+  const pool  = [...new Set(words.map(w => w.mn))];
 
-  const [cardIdx,  setCardIdx]  = useState(0);
-  const [flipped,  setFlipped]  = useState(false);
-  const [results,  setResults]  = useState([]);   // 'known' | 'again' per card
-  const [phase,    setPhase]    = useState('cards'); // 'cards' | 'done'
+  // Only needed for very short stories (none today have fewer than 6 words).
+  const filler = pool.length < 4
+    ? VOCAB.filter(v => v.level === story.level).map(v => v.mn)
+    : [];
 
-  if (words.length === 0) { onDone(); return null; }
+  return words.map(word => {
+    const wrong = [...new Set([...pool, ...filler])]
+      .filter(mn => mn !== word.mn)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3);
+    return {
+      word,
+      vocabHit: findVocabWord(word.de),
+      options: [word.mn, ...wrong].sort(() => Math.random() - 0.5),
+    };
+  });
+}
 
-  const word      = words[cardIdx];
-  const vocabHit  = VOCAB.find(w => w.de.toLowerCase() === word.de.toLowerCase().replace(ART_RE, ''));
-  const alreadyIn = vocabHit
-    ? state.learnedWords.includes(vocabHit.id)
-    : !!(state.stats?.customWords?.[word.de.toLowerCase()]);
+function VocabQuiz({ story, t, state, addXP, addCustomWord, recordStat, updateSRS, recordMistake, clearMistake, onDone }) {
+  const [round,   setRound]   = useState(0);            // bumped by "Дахин оролдох" to reshuffle
+  const [idx,     setIdx]     = useState(0);
+  const [results, setResults] = useState([]);           // true | false per word
+  const [phase,   setPhase]   = useState('quiz');       // 'quiz' | 'result'
+  const [xpEarned, setXpEarned] = useState(0);
 
-  const answer = (known) => {
-    const newResults = [...results, known ? 'known' : 'again'];
-    if (cardIdx < words.length - 1) {
-      setResults(newResults);
-      setCardIdx(i => i + 1);
-      setFlipped(false);
-    } else {
-      setResults(newResults);
-      setPhase('done');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const questions = useMemo(() => buildVocabQuestions(story), [story.id, round]);
+  const total     = questions.length;
+
+  const isLearned = hit => hit && state.learnedWords.includes(hit.id);
+
+  const answer = (ok) => {
+    const { vocabHit } = questions[idx];
+    recordStat?.('storyVocab', ok);
+    if (isLearned(vocabHit)) {
+      updateSRS?.(vocabHit.id, ok);
+      if (ok) clearMistake?.(vocabHit.id); else recordMistake?.(vocabHit.id, 'story');
     }
+
+    const next = [...results, ok];
+    setResults(next);
+
+    if (idx < total - 1) { setIdx(i => i + 1); return; }
+
+    // Finished — every missed word goes into the review deck automatically.
+    questions.forEach((q, i) => { if (!next[i]) addCustomWord(q.word.de, q.word.mn, story.level); });
+    const correct = next.filter(Boolean).length;
+    const xp = calcStageXP(story.level, correct, total);
+    setXpEarned(xp);
+    addXP(xp);
+    setPhase('result');
   };
 
-  const addToSRS = (w) => {
-    const hit = VOCAB.find(v => v.de.toLowerCase() === w.de.toLowerCase().replace(ART_RE, ''));
-    if (hit) { if (!state.learnedWords.includes(hit.id)) toggleLearned(hit.id); }
-    else addCustomWord(w.de, w.mn);
-  };
+  const retry = () => { setRound(r => r + 1); setIdx(0); setResults([]); setPhase('quiz'); };
 
-  // ── Done screen ───────────────────────────────────────────────────────────
-  if (phase === 'done') {
-    const knownCount = results.filter(r => r === 'known').length;
-    const againWords = words.filter((_, i) => results[i] === 'again');
+  // ── Result screen ─────────────────────────────────────────────────────────
+  if (phase === 'result') {
+    const correct = results.filter(Boolean).length;
+    const pct     = correct / total;
+    const stars   = pct >= 0.87 ? 3 : pct >= 0.6 ? 2 : 1;
+    const missed  = questions.filter((_, i) => !results[i]).map(q => q.word);
+    const knew    = questions.filter((_, i) =>  results[i]).map(q => q.word);
+    const addAll  = () => knew.forEach(w => addCustomWord(w.de, w.mn, story.level));
 
     return (
-      <div className="af" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div className="af" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em' }}>ҮГИЙН ТЕСТ 🗂</div>
 
-        {/* Score card */}
-        <div style={{ background: t.bgCard, borderRadius: 24, border: `1px solid ${t.border}`, padding: '28px 24px', boxShadow: t.shadowLg, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-          <div style={{ fontSize: 40, fontWeight: 900, color: knownCount === words.length ? t.correct : t.text }}>
-            {knownCount}/{words.length}
+        {/* Score */}
+        <div style={{ background: t.bgCard, borderRadius: 24, border: `1px solid ${t.border}`, padding: '26px 24px', boxShadow: t.shadowLg, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+          <div style={{ fontSize: 44 }} className="ap">{stars === 3 ? '🏆' : stars === 2 ? '🎉' : '✨'}</div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {[1, 2, 3].map(s => <Star key={s} size={26} color={s <= stars ? '#FFAA00' : t.border} fill={s <= stars ? '#FFAA00' : t.border} />)}
           </div>
-          <div style={{ fontSize: 14, color: t.textMid }}>цээжилсэн үг</div>
-          {knownCount === words.length && (
-            <div style={{ background: t.correctBg, color: t.correct, fontWeight: 700, fontSize: 13, padding: '6px 16px', borderRadius: 10 }}>
-              Бүх үгийг мэдэж байна! 🎉
+          <div className="fd" style={{ fontSize: 38, fontWeight: 900, color: correct === total ? t.correct : t.text }}>
+            {correct}<span style={{ fontSize: 20, color: t.textMid }}>/{total}</span>
+          </div>
+          <div style={{ fontSize: 13, color: t.textMid }}>зөв орчуулга</div>
+          {xpEarned > 0 && (
+            <div style={{ background: t.pinkBg, color: t.pink, fontWeight: 800, fontSize: 13, padding: '6px 16px', borderRadius: 10 }}>
+              +{xpEarned} XP
             </div>
           )}
         </div>
 
-        {/* "Again" words — offer to add to SRS */}
-        {againWords.length > 0 && (
-          <div style={{ background: t.bgCard, borderRadius: 20, border: `1px solid ${t.border}`, padding: '16px' }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: t.textSoft, letterSpacing: '0.14em', marginBottom: 12 }}>
-              ДАХИН ДАВТАХ ҮГҮҮД — SRS-Д НЭМЭХ
+        {/* Missed words — auto-added to the review deck */}
+        {missed.length > 0 && (
+          <div style={{ background: t.bgCard, borderRadius: 20, border: `1px solid ${t.border}`, padding: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: t.textSoft, letterSpacing: '0.14em', marginBottom: 4 }}>
+              ДАХИН ДАВТАХ ҮГҮҮД
+            </div>
+            <div style={{ fontSize: 12, color: t.correct, fontWeight: 700, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
+              <Check size={13} /> Эдгээр үг давталтад нэмэгдлээ
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {againWords.map((w, i) => {
-                const inDeck = VOCAB.find(v => v.de.toLowerCase() === w.de.toLowerCase().replace(ART_RE, ''))
-                  ? state.learnedWords.includes(VOCAB.find(v => v.de.toLowerCase() === w.de.toLowerCase().replace(ART_RE, ''))?.id)
-                  : !!(state.stats?.customWords?.[w.de.toLowerCase()]);
-                return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: t.text }}>{w.de}</div>
-                      <div style={{ fontSize: 12, color: t.textMid }}>{w.mn}</div>
-                    </div>
-                    <button onClick={() => addToSRS(w)} disabled={inDeck}
-                      style={{
-                        background: inDeck ? t.correctBg : t.pinkBtn,
-                        color:      inDeck ? t.correct   : t.pinkBtnText,
-                        border: 'none', borderRadius: 10, padding: '6px 12px',
-                        fontSize: 12, fontWeight: 700, cursor: inDeck ? 'default' : 'pointer',
-                        display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0,
-                      }}>
-                      {inDeck ? <><Check size={12} /> Нэмсэн</> : <><Plus size={12} /> Нэмэх</>}
-                    </button>
-                  </div>
-                );
-              })}
+              {missed.map((w, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: t.text, flexShrink: 0 }}>{w.de}</div>
+                  <div style={{ fontSize: 12, color: t.textMid, lineHeight: 1.4 }}>{w.mn}</div>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
-        <button onClick={onDone}
-          style={{ background: t.pinkBtn, color: t.pinkBtnText, fontWeight: 800, fontSize: 15, border: 'none', borderRadius: 16, padding: '14px 0', cursor: 'pointer', width: '100%' }}>
-          Жагсаалт руу →
-        </button>
+        {knew.length > 0 && (
+          <button onClick={addAll}
+            style={{ background: t.bgCard, color: t.text, fontWeight: 700, fontSize: 13, border: `1.5px solid ${t.border}`, borderRadius: 16, padding: '12px 0', cursor: 'pointer', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <Plus size={14} /> Мэдсэн {knew.length} үгийг ч бас давталтад нэмэх
+          </button>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <button onClick={retry}
+            style={{ background: t.bgCard, color: t.text, fontWeight: 700, fontSize: 14, border: `1.5px solid ${t.border}`, borderRadius: 16, padding: '13px 0', cursor: 'pointer' }}>
+            Дахин оролдох
+          </button>
+          <button onClick={onDone}
+            style={{ background: t.pinkBtn, color: t.pinkBtnText, fontWeight: 800, fontSize: 14, border: 'none', borderRadius: 16, padding: '13px 0', cursor: 'pointer' }}>
+            Жагсаалт руу →
+          </button>
+        </div>
       </div>
     );
   }
 
-  // ── Card screen ───────────────────────────────────────────────────────────
-  const progress = ((cardIdx) / words.length) * 100;
-
+  // ── Question screen ───────────────────────────────────────────────────────
+  const q = questions[idx];
   return (
-    <div className="af" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ color: t.textSoft, fontSize: 10, fontWeight: 800, letterSpacing: '0.18em' }}>ҮГИЙН ТЕСТ 🗂</div>
-        <div style={{ fontSize: 12, color: t.textSoft, fontWeight: 700 }}>{cardIdx + 1} / {words.length}</div>
-      </div>
-
-      {/* Progress bar */}
-      <div style={{ height: 6, background: t.bgTag, borderRadius: 3, overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${progress}%`, background: t.pinkBtn, borderRadius: 3, transition: 'width 0.3s ease' }} />
-      </div>
-
-      {/* Flashcard */}
-      <div onClick={() => !flipped && setFlipped(true)}
-        style={{
-          background: t.bgCard, borderRadius: 24,
-          border: `1.5px solid ${flipped ? t.border : t.pink + '60'}`,
-          boxShadow: flipped ? t.shadow : t.shadowLg,
-          padding: '40px 24px', cursor: flipped ? 'default' : 'pointer',
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: 12, minHeight: 200, justifyContent: 'center',
-          transition: 'all 0.2s',
-        }}>
-
-        {!flipped ? (
-          /* Front: German word */
-          <>
-            <div style={{ fontSize: 11, fontWeight: 800, color: t.textSoft, letterSpacing: '0.18em' }}>ГЕРМАН</div>
-            <div className="fd" style={{ fontSize: 28, fontWeight: 900, color: t.text, textAlign: 'center', lineHeight: 1.2 }}>
-              {word.de}
-            </div>
-            <div style={{ fontSize: 12, color: t.textSoft, marginTop: 8 }}>дарж орчуулга харах</div>
-          </>
-        ) : (
-          /* Back: Mongolian translation */
-          <>
-            <div style={{ fontSize: 11, fontWeight: 800, color: t.textSoft, letterSpacing: '0.18em' }}>МОНГОЛ</div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: t.textSoft, textAlign: 'center' }}>{word.de}</div>
-            <div className="fd" style={{ fontSize: 24, fontWeight: 900, color: t.text, textAlign: 'center', lineHeight: 1.3 }}>
-              {word.mn}
-            </div>
-            {alreadyIn && (
-              <div style={{ fontSize: 11, color: t.correct, fontWeight: 700, background: t.correctBg, padding: '3px 10px', borderRadius: 8 }}>
-                ✓ Үгсийн санд байна
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Action buttons — only shown after flip */}
-      {flipped ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <button onClick={() => answer(false)}
-            style={{ background: t.wrongBg, color: t.wrong, border: `1.5px solid ${t.wrong}40`, borderRadius: 16, padding: '14px 0', fontWeight: 800, fontSize: 14, cursor: 'pointer' }}>
-            Дахин харах 🔄
-          </button>
-          <button onClick={() => answer(true)}
-            style={{ background: t.correctBg, color: t.correct, border: `1.5px solid ${t.correct}40`, borderRadius: 16, padding: '14px 0', fontWeight: 800, fontSize: 14, cursor: 'pointer' }}>
-            Сурсан ✓
-          </button>
-        </div>
-      ) : (
-        <button onClick={() => setFlipped(true)}
-          style={{ background: t.pinkBtn, color: t.pinkBtnText, fontWeight: 800, fontSize: 15, border: 'none', borderRadius: 16, padding: '14px 0', cursor: 'pointer', width: '100%' }}>
-          Харах
-        </button>
-      )}
-    </div>
+    <StoryVocabCard
+      key={`${round}-${idx}`}
+      t={t} word={q.word} options={q.options} vocabHit={q.vocabHit}
+      idx={idx} total={total} onContinue={answer}
+    />
   );
 }
