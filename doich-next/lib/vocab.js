@@ -691,7 +691,7 @@ export const VOCAB = [
   { id:688, de:'Intuition',        mn:'зөн совин',                level:'C1', type:'noun', gender:'die', example:'Vertraue deiner Intuition.',                        emoji:'✨' },
   { id:689, de:'Empathie',         mn:'өрөвч сэтгэл',             level:'C1', type:'noun', gender:'die', example:'Empathie ist eine Stärke.',                         emoji:'❤️' },
   { id:690, de:'Toleranz',         mn:'тэвчээр / хүлцэл',         level:'C1', type:'noun', gender:'die', example:'Toleranz gegenüber anderen ist wichtig.',           emoji:'🕊️' },
-  { id:691, de:'Resilienz',        mn:'уян хатан байдал',         level:'C1', type:'noun', gender:'die', example:'Resilienz hilft in Krisenzeiten.',                  emoji:'🌱' },
+  { id:691, de:'Resilienz',        mn:'Сэтгэл зүйн тэсвэр хатуужил', level:'C1', type:'noun', gender:'die', example:'Resilienz hilft in Krisenzeiten.',                  emoji:'🌱' },
   { id:692, de:'Kausalität',       mn:'шалтгаан үр дагаврын холбоо', level:'C1', type:'noun', gender:'die', example:'Kausalität und Korrelation sind verschieden.',  emoji:'🔗' },
   { id:693, de:'Korrelation',      mn:'хамаарал',                 level:'C1', type:'noun', gender:'die', example:'Zwischen diesen Werten besteht eine Korrelation.',  emoji:'📊' },
   { id:694, de:'Analogie',         mn:'зүйрлэл',                  level:'C1', type:'noun', gender:'die', example:'Kannst du eine Analogie nennen?',                   emoji:'🔄' },
