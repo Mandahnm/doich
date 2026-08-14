@@ -35,7 +35,7 @@ const DEFAULT_STATE = {
   learnedWords: [],
   completedStages: {},
   mistakes: {},
-  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, storyVocabCorrect: 0, storyVocabTotal: 0, dailyCount: 0, srs: {}, customWords: {} },
+  stats: { flashcardsCorrect: 0, flashcardsTotal: 0, genderCorrect: 0, genderTotal: 0, matchCorrect: 0, matchTotal: 0, fillblankCorrect: 0, fillblankTotal: 0, conjugationCorrect: 0, conjugationTotal: 0, adjectiveCorrect: 0, adjectiveTotal: 0, listeningCorrect: 0, listeningTotal: 0, sentenceCorrect: 0, sentenceTotal: 0, storyVocabCorrect: 0, storyVocabTotal: 0, ctestCorrect: 0, ctestTotal: 0, dailyCount: 0, srs: {}, customWords: {} },
   xp: 0,
   streak: 0,
   lastStreakDate: null,

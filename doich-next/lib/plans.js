@@ -2,6 +2,7 @@
 
 export const FREE_STAGES_PER_LEVEL  = 10; // first 10 stages per game type per CEFR level
 export const FREE_STORIES_PER_LEVEL = 1;  // first story per CEFR level
+export const FREE_CTESTS            = 2;  // first 2 C-Tests
 export const FREE_AI_TUTOR_DAILY    = 5;  // AI tutor messages per day
 export const PRO_AI_TUTOR_DAILY     = 500;
 
@@ -17,6 +18,7 @@ export const PRICING = [
 export const PRO_FEATURES = [
   'Бүх шатны тоглоом (11-р шатаас)',
   'Бүх уншлагын өгүүллэг',
+  'Бүх C-Test шалгалт (3-аас дээш)',
   'AI Багшт хязгааргүй чат',
   'Дүрмийн шалгуур',
   'Дуудлагын дасгал (Whisper)',
@@ -32,6 +34,11 @@ export function stageIsProLocked(plan, stageIndex) {
 // 0-based story index within a CEFR level — returns true if locked
 export function storyIsProLocked(plan, storyIndexInLevel) {
   return !isPro(plan) && storyIndexInLevel >= FREE_STORIES_PER_LEVEL;
+}
+
+// 0-based C-Test index — returns true if locked
+export function ctestIsProLocked(plan, testIndex) {
+  return !isPro(plan) && testIndex >= FREE_CTESTS;
 }
 
 // Returns true if the game type is Pro-only regardless of stage index

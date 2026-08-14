@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft, Mic, Crown } from 'lucide-react';
+import { ArrowLeft, Lock, MapPin, Star, Play, Layers, Tag, PenLine, Shuffle, RefreshCw, Pencil, Headphones, AlignLeft, Mic, Crown, FileText } from 'lucide-react';
 import { LEVELS, CEFR_META, getStages } from '@/lib/vocab';
 import { stageIsProLocked, gameIsProOnly } from '@/lib/plans';
 import { calcStageXP } from '@/lib/xp';
@@ -14,6 +14,7 @@ import AdjectiveDeclensionCard  from '@/components/shared/AdjectiveDeclensionCar
 import ListeningCard             from '@/components/shared/ListeningCard';
 import SentenceBuilderCard from '@/components/shared/SentenceBuilderCard';
 import SpeakingCard        from '@/components/shared/SpeakingCard';
+import CTestScreen         from '@/components/screens/CTestScreen';
 import { getConjugationStages } from '@/lib/conjugation';
 import { getAdjectiveStages }   from '@/lib/adjective';
 import ResultScreen from '@/components/shared/ResultScreen';
@@ -31,6 +32,7 @@ const GAME_SUBTITLE = {
   listening:   'Сонсох дасгал',
   sentence:    'Өгүүлбэр зохиох',
   speaking:    'Дуудлага хийх',
+  ctest:       'C-Test',
 };
 
 const STAT_KEY = {
@@ -43,6 +45,7 @@ const STAT_KEY = {
   listening:   'listening',
   sentence:    'sentence',
   speaking:    'speaking',
+  ctest:       'ctest',
 };
 
 // ─── Main coordinator ──────────────────────────────────────────────────────────
@@ -97,9 +100,18 @@ function GamesScreenInner({ t, state, plan, onUpgrade, recordStat, completeStage
       onSelect={(type, level) => {
         if (gameIsProOnly(plan, type)) { onUpgrade(); return; }
         setGameType(type);
+        // C-Test has no CEFR levels and no stage path — it opens its own screen
+        if (type === 'ctest') { setActiveCefr(null); setView('ctest'); return; }
         setActiveCefr(CONJ_TYPES.has(type) ? null : level);
         setView('stages');
       }} />
+  );
+
+  if (view === 'ctest') return (
+    <CTestScreen t={t} state={state} plan={plan} onUpgrade={onUpgrade}
+      onBack={() => setView('hub')}
+      recordStat={recordStat} completeStage={completeStage}
+      addXP={addXP} checkStreak={checkStreak} />
   );
 
   if (view === 'stages') {
@@ -188,6 +200,7 @@ const ALL_GAMES = [
   { type: 'listening',   title: 'Сонсох дасгал',        sub: 'Сонсоод бичнэ үү',      Icon: Headphones, iconColor: '#db2777', bg: '#fce7f3' },
   { type: 'sentence',    title: 'Өгүүлбэр зохиох',     sub: 'Үгсийн дараалал',       Icon: AlignLeft,  iconColor: '#059669', bg: '#d1fae5' },
   { type: 'speaking',   title: 'Дуудлага хийх',        sub: 'Микрофонд дуудлага хий', Icon: Mic,        iconColor: '#7c3aed', bg: '#f3e8ff' },
+  { type: 'ctest',      title: 'C-Test',               sub: 'Текст нөхөх шалгалт',   Icon: FileText,   iconColor: '#b45309', bg: '#fef3c7', badge: 'B1+' },
 ];
 
 function GamesHub({ t, state, userLevel, plan, onSelect }) {
@@ -258,6 +271,16 @@ function GamesHub({ t, state, userLevel, plan, onSelect }) {
                 }}>
                   <Crown size={10} color="#fff" />
                   <span style={{ fontSize: 10, color: '#fff', fontWeight: 800 }}>PRO</span>
+                </div>
+              )}
+              {/* Level badge (e.g. C-Test → B1+) */}
+              {!isProOnly && g.badge && (
+                <div style={{
+                  position: 'absolute', top: 10, right: 10,
+                  background: t.bgTag, border: `1px solid ${t.border}`,
+                  borderRadius: 8, padding: '3px 8px',
+                }}>
+                  <span style={{ fontSize: 10, color: t.textMid, fontWeight: 800 }}>{g.badge}</span>
                 </div>
               )}
               {/* Icon box */}

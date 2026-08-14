@@ -7,7 +7,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  overscroll-behavior: none;
+  /* `contain` keeps the native rubber-band / glow at the edges but still blocks
+     pull-to-refresh and scroll chaining to the browser chrome. `none` kills the
+     bounce too, which makes scrolling feel rigid on phones. */
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
   background-color: #faf9f7;
 }
 
